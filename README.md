@@ -1,0 +1,36 @@
+# Skill Up Platform (Front-End)
+
+Next.js 기반 웹 프론트엔드 프로젝트 🚀
+
+## 📌 기술 스택
+- Framework: Next.js 14 (App Router)
+- Language: TypeScript
+- Linting: ESLint + Prettier
+
+## 📂 프로젝트 구조
+```
+📦public
+ ┣ 📂fonts
+ ┣ 📂images
+ ┗ 📜favicon.ico
+
+📦src
+ ┣ 📂app
+ ┃ ┣ 📂login
+ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┣ 📂signup
+ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┣ 📜layout.tsx
+ ┃ ┗ 📜page.tsx
+ ┣ 📂components
+ ┃ ┣ 📜Footer.tsx
+ ┃ ┗ 📜Header.tsx
+ ┣ 📂lib
+ ┗ 📂styles
+ ┃ ┗ 📜global.css
+ 
+ ```
+
+## 🚀 실행 방법
+```bash
+npm run dev
