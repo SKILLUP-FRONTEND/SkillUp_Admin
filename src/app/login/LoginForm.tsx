@@ -10,7 +10,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import skillUpIcon from "@/assets/skillUpIcon.svg";
+import SkillUpIcon from "@/assets/skillUp_black.svg";
 import styles from "./login.module.css";
 
 export default function LoginForm() {
@@ -23,7 +23,7 @@ export default function LoginForm() {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.logoContainer}>
-        <Image src={skillUpIcon} alt="logo" width={172} height={26} />
+        <Image src={SkillUpIcon} alt="logo" width={172} height={26} />
         <p>ADMIN</p>
       </div>
       <div className={styles.formContainer}>

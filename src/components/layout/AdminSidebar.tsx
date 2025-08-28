@@ -8,21 +8,44 @@
 "use client";
 
 import Image from "next/image";
-import skillUpWhiteIcon from "@/assets/skillUpWhiteIcon.svg";
+import SkillUpWhiteIcon from "@/assets/skillUp_white.svg";
 import styles from "./adminLayout.module.css";
 import Link from "next/link";
-import dashboardIcon from "@/assets/dashboardIcon.svg";
-import userEnableIcon from "@/assets/userEnableIcon.svg";
-import bannerIcon from "@/assets/bannerIcon.svg";
-import eventIcon from "@/assets/eventIcon.svg";
+import LayoutActiveIcon from "@/assets/layout_active.svg";
+import LayoutInactiveIcon from "@/assets/layout_inactive.svg";
+import LayerActiveIcon from "@/assets/layer_active.svg";
+import LayerInactiveIcon from "@/assets/layer_inactive.svg";
+import BoardActiveIcon from "@/assets/board_active.svg";
+import BoardInactiveIcon from "@/assets/board_inactive.svg";
+import PersonInactiveIcon from "@/assets/person_inactive.svg";
+import PersonActiveIcon from "@/assets/person_active.svg";
 import { usePathname } from "next/navigation";
 
-// TODO : 추후 enable, disabled 아이콘 추가 필요
 const navItems = [
-  { label: "Dashboard", href: "/admin/dashboard", icon: dashboardIcon },
-  { label: "행사관리", href: "/admin/events", icon: eventIcon },
-  { label: "배너관리", href: "/admin/banners", icon: bannerIcon },
-  { label: "회원관리", href: "/admin/members", icon: userEnableIcon },
+  {
+    label: "Dashboard",
+    href: "/admin/dashboard",
+    activeIcon: LayoutActiveIcon,
+    inactiveIcon: LayoutInactiveIcon,
+  },
+  {
+    label: "행사관리",
+    href: "/admin/events",
+    activeIcon: LayerActiveIcon,
+    inactiveIcon: LayerInactiveIcon,
+  },
+  {
+    label: "배너관리",
+    href: "/admin/banners",
+    activeIcon: BoardActiveIcon,
+    inactiveIcon: BoardInactiveIcon,
+  },
+  {
+    label: "회원관리",
+    href: "/admin/members",
+    activeIcon: PersonActiveIcon,
+    inactiveIcon: PersonInactiveIcon,
+  },
 ];
 
 export default function AdminSidebar() {
@@ -31,7 +54,7 @@ export default function AdminSidebar() {
   return (
     <div className={styles.adminSidebar}>
       <div className={styles.adminLogo}>
-        <Image src={skillUpWhiteIcon} alt="logo" width={138} height={21} />
+        <Image src={SkillUpWhiteIcon} alt="logo" width={138} height={21} />
         <p>ADMIN</p>
       </div>
       <div className={styles.adminMenu}>
@@ -45,7 +68,14 @@ export default function AdminSidebar() {
               }`}
               key={index}
             >
-              <Image src={item.icon} alt={item.label} width={16} height={16} />
+              <Image
+                src={
+                  pathname === item.href ? item.activeIcon : item.inactiveIcon
+                }
+                alt={item.label}
+                width={16}
+                height={16}
+              />
               <span>{item.label}</span>
             </Link>
           ))}
