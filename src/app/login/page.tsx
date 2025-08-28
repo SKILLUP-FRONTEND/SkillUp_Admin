@@ -4,16 +4,19 @@
   최종 수정일 : 2025-08-27
 */
 
+import Link from "next/link";
+import LoginForm from "@/app/login/LoginForm";
+import styles from "./login.module.css";
+
 export default function Login() {
   return (
     <div id="wrap">
       <p id="skipNav" className="hide">
-        <a href="/">본문 바로가기</a>
+        <Link href="/">본문 바로가기</Link>
       </p>
-      
-      <div className="content">
-        <h2>로그인 페이지</h2>
-        <p>여기에 로그인 폼 추가 예정</p>
+
+      <div className={styles.loginPage}>
+        <LoginForm />
       </div>
     </div>
   );

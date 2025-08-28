@@ -6,14 +6,15 @@
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <div id="wrap">
       <p id="skipNav" className="hide">
-        <a href="/">본문 바로가기</a>
+        <Link href="/">본문 바로가기</Link>
       </p>
-      <Header/>
+      <Header />
 
       <section id="container" className="main">
         <div className="content">
@@ -23,7 +24,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer/>
+      <Footer />
     </div>
   );
 }
