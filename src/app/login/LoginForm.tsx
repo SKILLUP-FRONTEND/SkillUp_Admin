@@ -6,11 +6,20 @@
   최종 수정일 : 2025-08-27
 */
 
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import skillUpIcon from "@/assets/skillUpIcon.svg";
 import styles from "./login.module.css";
 
 export default function LoginForm() {
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = () => {
+    setLoading(true);
+  };
+
   return (
     <div className={styles.loginContainer}>
       <div className={styles.logoContainer}>
@@ -43,6 +52,7 @@ export default function LoginForm() {
               />
             </div>
           </div>
+          {/* TODO : 추후 분기 필요 */}
           <div className={styles.errorMessage}>
             <p>등록된 계정이 아니에요</p>
           </div>
@@ -55,7 +65,13 @@ export default function LoginForm() {
           </label>
         </div>
         <div className={styles.buttonWrap}>
-          <button className={styles.loginButton}>로그인</button>
+          <button
+            className={styles.loginButton}
+            onClick={handleLogin}
+            disabled={loading}
+          >
+            {loading ? "로그인 중..." : "로그인"}
+          </button>
         </div>
       </div>
     </div>

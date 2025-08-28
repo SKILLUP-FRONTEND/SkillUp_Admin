@@ -133,4 +133,10 @@
   line-height: 0.875rem;
   letter-spacing: -0.02625rem;
   width: 100%;
+  cursor: pointer;
+}
+
+.loginButton:disabled {
+  cursor: not-allowed;
+  background: #cbd5e1;
 }
