@@ -1,0 +1,125 @@
+/* src/components/layout/adminLayout.module.css */
+
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-08-28
+  최종 수정일 : 2025-08-28
+*/
+
+/* admin sidebar */
+.adminSidebar {
+  display: flex;
+  flex-direction: column;
+  width: 16rem;
+  background: #212b36;
+  padding: 2rem 1.5rem;
+  gap: 2.5rem;
+}
+
+.adminLogo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.adminLogo p {
+  color: #fff;
+  text-align: center;
+  font-size: 0.85rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 144%;
+}
+
+.adminMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.adminMenuTitle {
+  color: #637381;
+  font-size: 0.8125rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.01625rem;
+  text-transform: uppercase;
+}
+
+.adminMenuList {
+  display: flex;
+  flex-direction: column;
+}
+
+.adminMenuLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  border-radius: 0.5rem;
+  color: #919eab;
+  font-size: 0.9375rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 144%;
+}
+
+.active {
+  color: #fff;
+  font-size: 0.9375rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 144%;
+}
+
+/* admin header */
+.adminHeader {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 2rem;
+  background: #fff;
+  box-shadow: 0 2px 4px 0 rgba(13, 23, 33, 0.08),
+    0 1px 2px 0 rgba(21, 30, 40, 0.08);
+  justify-content: flex-end;
+}
+
+.adminHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.adminHeaderNotification {
+  display: flex;
+  padding: 0.5625rem;
+  align-items: flex-start;
+  position: relative;
+  cursor: pointer;
+}
+
+.adminHeaderNotificationCount {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  background: #ff0000;
+  border-radius: 50%;
+  width: 0.75rem;
+  height: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.625rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.adminHeaderRight h5 {
+  color: #0f172a;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

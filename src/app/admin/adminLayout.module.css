@@ -1,0 +1,25 @@
+/* src/app/admin/adminLayout.module.css */
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-08-28
+  최종 수정일 : 2025-08-28
+*/
+
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+  border-radius: 0.5rem;
+  background: #f4f6f8;
+}
+
+.contentArea {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  padding: 2rem;
+  background-color: #f5f5f7;
+  height: 100%;
+}
