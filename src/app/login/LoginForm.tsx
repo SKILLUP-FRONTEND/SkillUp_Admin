@@ -15,7 +15,7 @@ export default function LoginForm() {
     <div className={styles.loginContainer}>
       <div className={styles.logoContainer}>
         <Image src={skillUpIcon} alt="logo" width={172} height={26} />
-        <p>ADMIN</p>
+        <p >ADMIN</p>
       </div>
       <div className={styles.formContainer}>
         <div className={styles.formWrap}>
@@ -42,7 +42,7 @@ export default function LoginForm() {
             />
           </div>
           <div className={styles.checkWrap}>
-            <input type="checkbox" id="autoLogin" />
+            <input type="checkbox" id="autoLogin" className={styles.checkInput} />
             <label className={styles.checkLabel} htmlFor="autoLogin">
               자동 로그인
             </label>
