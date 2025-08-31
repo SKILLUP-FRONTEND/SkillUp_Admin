@@ -31,3 +31,36 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.membersTable {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.membersTableMain {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  border-radius: 0.75rem;
+  background: #fff;
+
+  box-shadow: 0 2px 4px 0 rgba(13, 23, 33, 0.08),
+    0 1px 2px 0 rgba(21, 30, 40, 0.08);
+}
+
+.membersTableHeader {
+  display: flex;
+  padding: 1.5rem 1rem;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: stretch;
+}
+
+.membersTableHeaderTitle {
+  color: #0f172a;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
