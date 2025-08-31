@@ -1,0 +1,53 @@
+/* src/components/members/MemberFilterToggle/style.module.css */
+
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-08-31
+  최종 수정일 : 2025-08-31
+*/
+
+.toggleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  user-select: none;
+}
+
+.labelText {
+  color: #838383;
+  font-size: 1.125rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.01125rem;
+}
+
+.toggle {
+  width: 48px;
+  height: 28px;
+  border-radius: 9999px;
+  background-color: #dfeaf2;
+  position: relative;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.circle {
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: left 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.toggle.active {
+  background-color: #d2e4ff;
+}
+
+.toggle.active .circle {
+  left: 23px;
+}
