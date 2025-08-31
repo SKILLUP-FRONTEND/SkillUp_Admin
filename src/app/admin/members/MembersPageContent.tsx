@@ -13,6 +13,7 @@ import MemberSearchInput from "@/components/members/MemberSearchInput";
 import styles from "./members.module.css";
 import { useState } from "react";
 import MemberTable from "@/components/members/MemberTable";
+import MemberPagination from "@/components/members/MemberPagination";
 
 export default function MembersPageContent() {
   const [selected, setSelected] = useState("all");
@@ -36,14 +37,13 @@ export default function MembersPageContent() {
 
         {/* TODO : 테이블 메인 부분 */}
         <div className={styles.membersTableMain}>
-          {/* TODO : 테이블 헤더 부분 */}
           <div className={styles.membersTableHeader}>
             <h5 className={styles.membersTableHeaderTitle}>회원</h5>
             <h5 className={styles.membersTableHeaderTitle}>150명</h5>
           </div>
-          {/* TODO : 테이블 바디 부분 */}
           <MemberTable />
           {/* TODO : 테이블 페이지네이션 부분 */}
+          <MemberPagination />
         </div>
       </div>
     </section>
