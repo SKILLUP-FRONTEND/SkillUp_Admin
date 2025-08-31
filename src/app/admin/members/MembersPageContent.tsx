@@ -5,20 +5,33 @@
   최종 수정일 : 2025-08-31
 */
 
+"use client";
+
 import MemberFilterToggle from "@/components/members/MemberFilterToggle";
+import MemberFilterTabs from "@/components/members/MemberFilterTabs";
 import styles from "./members.module.css";
+import { useState } from "react";
 
 export default function MembersPageContent() {
+  const [selected, setSelected] = useState("all");
+
+  const onSelect = (key: string) => {
+    setSelected(key);
+  };
+
   return (
     <section className={styles.membersSection}>
       <div className={styles.membersHeader}>
         <h2 className={styles.membersTitle}>회원관리</h2>
-        {/* TODO : 필터링 */}
         <MemberFilterToggle />
       </div>
       {/* TODO : 테이블 전체 부분 */}
       <div className={styles.membersTable}>
-        {/* TODO : 테이블 필터, 검색 부분 */}
+        <div className={styles.membersTableFilter}>
+          {/* TODO : 테이블 필터, 검색 부분 */}
+          <MemberFilterTabs selected={selected} onSelect={onSelect} />
+        </div>
+
         {/* TODO : 테이블 메인 부분 */}
 
         {/* TODO : 테이블 페이지네이션 부분 */}
