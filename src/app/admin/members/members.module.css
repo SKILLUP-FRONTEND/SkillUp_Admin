@@ -25,3 +25,9 @@
   font-weight: 700;
   line-height: normal;
 }
+
+.membersTableFilter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

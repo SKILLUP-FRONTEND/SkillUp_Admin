@@ -9,6 +9,7 @@
 
 import MemberFilterToggle from "@/components/members/MemberFilterToggle";
 import MemberFilterTabs from "@/components/members/MemberFilterTabs";
+import MemberSearchInput from "@/components/members/MemberSearchInput";
 import styles from "./members.module.css";
 import { useState } from "react";
 
@@ -28,8 +29,8 @@ export default function MembersPageContent() {
       {/* TODO : 테이블 전체 부분 */}
       <div className={styles.membersTable}>
         <div className={styles.membersTableFilter}>
-          {/* TODO : 테이블 필터, 검색 부분 */}
           <MemberFilterTabs selected={selected} onSelect={onSelect} />
+          <MemberSearchInput />
         </div>
 
         {/* TODO : 테이블 메인 부분 */}
