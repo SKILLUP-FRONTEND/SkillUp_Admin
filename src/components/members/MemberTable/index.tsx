@@ -9,16 +9,20 @@
 import MemberHeader from "../MemberHeader";
 import styles from "./style.module.css";
 import MemberTableRow from "../MemberTableRow";
+import { Member } from "@/types/member";
 
-export default function MemberTable() {
+interface Props {
+  members: Member[];
+}
+
+export default function MemberTable({ members }: Props) {
   return (
     <div className={styles.memberTable}>
       <table>
         <MemberHeader />
-        {/* TODO : 추후 서버에서 받은 데이터로 변경 */}
         <tbody>
-          {Array.from({ length: 10 }).map((_, index) => (
-            <MemberTableRow key={index} />
+          {members.map((member, index) => (
+            <MemberTableRow key={index} member={member} />
           ))}
         </tbody>
       </table>

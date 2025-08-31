@@ -14,6 +14,7 @@ import styles from "./members.module.css";
 import { useState } from "react";
 import MemberTable from "@/components/members/MemberTable";
 import MemberPagination from "@/components/members/MemberPagination";
+import { MEMBERS } from "@/mocks/members.mock";
 
 export default function MembersPageContent() {
   const [selected, setSelected] = useState("all");
@@ -22,27 +23,28 @@ export default function MembersPageContent() {
     setSelected(key);
   };
 
+  const members = MEMBERS;
+
   return (
     <section className={styles.membersSection}>
       <div className={styles.membersHeader}>
         <h2 className={styles.membersTitle}>회원관리</h2>
         <MemberFilterToggle />
       </div>
-      {/* TODO : 테이블 전체 부분 */}
       <div className={styles.membersTable}>
         <div className={styles.membersTableFilter}>
           <MemberFilterTabs selected={selected} onSelect={onSelect} />
           <MemberSearchInput />
         </div>
 
-        {/* TODO : 테이블 메인 부분 */}
         <div className={styles.membersTableMain}>
           <div className={styles.membersTableHeader}>
             <h5 className={styles.membersTableHeaderTitle}>회원</h5>
-            <h5 className={styles.membersTableHeaderTitle}>150명</h5>
+            <h5 className={styles.membersTableHeaderTitle}>
+              {members.length}명
+            </h5>
           </div>
-          <MemberTable />
-          {/* TODO : 테이블 페이지네이션 부분 */}
+          <MemberTable members={members} />
           <MemberPagination />
         </div>
       </div>

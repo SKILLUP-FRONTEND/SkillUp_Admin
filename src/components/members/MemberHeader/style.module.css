@@ -25,32 +25,32 @@
   white-space: nowrap;
 }
 
-th:first-child {
+.memberHeader th:first-child {
   width: 4.25rem;
   padding-left: 1rem;
 }
 
-th:nth-child(2) {
+.memberHeader th:nth-child(2) {
   width: 8.75rem;
 }
 
-th:nth-child(3) {
+.memberHeader th:nth-child(3) {
   width: 15rem;
 }
 
-th:nth-child(4) {
+.memberHeader th:nth-child(4) {
   width: 13rem;
 }
 
-th:nth-child(5) {
+.memberHeader th:nth-child(5) {
   width: 9.25rem;
 }
 
-th:nth-child(6) {
+.memberHeader th:nth-child(6) {
   width: 7.5rem;
 }
 
-th:last-child {
+.memberHeader th:last-child {
   width: 7.5rem;
   padding-right: 1rem;
 }

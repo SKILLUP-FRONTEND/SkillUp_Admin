@@ -7,32 +7,40 @@
 */
 
 import styles from "./style.module.css";
+import { Member } from "@/types/member";
 
-export default function MemberTableRow() {
+interface Props {
+  member: Member;
+}
+
+export default function MemberTableRow({ member }: Props) {
   return (
     <tr className={styles.memberTableRow}>
       <td>
-        <div className={styles.ellipsis}>20</div>
+        <div className={styles.ellipsis}>{member.id}</div>
       </td>
       <td>
-        <div className={styles.ellipsis}>홍길동</div>
+        <div className={styles.ellipsis}>{member.name}</div>
       </td>
       <td>
-        <div className={styles.ellipsis}>example@gmail.com</div>
+        <div className={styles.ellipsis}>{member.email}</div>
       </td>
       <td>
-        <div className={styles.ellipsis}>2025/12/12 13:00</div>
+        <div className={styles.ellipsis}>{member.createdAt}</div>
       </td>
       <td>
-        <div className={styles.ellipsis}>카카오</div>
+        <div className={styles.ellipsis}>{member.loginMethod}</div>
       </td>
       <td>
-        <div className={styles.ellipsis}>기획</div>
+        <div className={styles.ellipsis}>{member.job}</div>
       </td>
-      {/* TODO : 추후 서버에서 받은 데이터로 변경 */}
       <td>
-        <span className={`${styles.statusBadge} ${styles.inactive}`}>
-          {"탈퇴"}
+        <span
+          className={`${styles.statusBadge} ${
+            member.status === "active" ? styles.active : styles.inactive
+          }`}
+        >
+          {member.status === "active" ? "활동" : "탈퇴"}
         </span>
       </td>
     </tr>
