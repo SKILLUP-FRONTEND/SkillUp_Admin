@@ -28,7 +28,7 @@ export default function MembersPageContent() {
   return (
     <section className={styles.membersSection}>
       <div className={styles.membersHeader}>
-        <h2 className={styles.membersTitle}>회원관리</h2>
+        <h1 className={styles.membersTitle}>회원관리</h1>
         <MemberFilterToggle />
       </div>
       <div className={styles.membersTable}>
