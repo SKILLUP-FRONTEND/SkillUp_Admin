@@ -6,6 +6,7 @@
   최종 수정일 : 2025-08-31
 */
 
+import { useRouter } from "next/navigation";
 import styles from "./style.module.css";
 import { Member } from "@/types/member";
 
@@ -14,8 +15,12 @@ interface Props {
 }
 
 export default function MemberTableRow({ member }: Props) {
+  const router = useRouter();
   return (
-    <tr className={styles.memberTableRow}>
+    <tr
+      className={styles.memberTableRow}
+      onClick={() => router.push(`/admin/members/${member.id}`)}
+    >
       <td>
         <div className={styles.ellipsis}>{member.id}</div>
       </td>
