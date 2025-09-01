@@ -82,3 +82,11 @@ export const MEMBERS: Member[] = [
     status: "inactive",
   },
 ];
+
+export const DONUT_CHART_DATA = [
+  { name: "기획", value: 100 },
+  { name: "디자인", value: 200 },
+  { name: "개발", value: 300 },
+];
+
+export const BAR_CHART_DATA = [{ month: "1월", value: 100 }];

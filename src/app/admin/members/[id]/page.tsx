@@ -10,16 +10,16 @@
 
 import styles from "./memberDetail.module.css";
 import MemberProfileCard from "@/components/members/detail/MemberProfileCard";
+import MemberActivityStats from "@/components/members/detail/MemberActivityStats";
 
 export default function MemberDetail() {
   return (
     <div className={styles.memberDetail}>
       <h1 className={styles.memberDetailTitle}>회원 상세</h1>
       <div className={styles.memberDetailContent}>
-        {/* TODO : 회원 상세 내용 */}
         <MemberProfileCard />
 
-        {/* TODO : 회원 활동 내역 차트 */}
+        <MemberActivityStats />
       </div>
     </div>
   );
