@@ -1,0 +1,87 @@
+/* src/components/members/MemberTableRow/style.module.css */
+
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-08-31
+  최종 수정일 : 2025-09-02
+*/
+
+.memberTableRow {
+  height: 3.25rem;
+  background: #fff;
+  color: #475569;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.25rem;
+
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.memberTableRow:hover {
+  background-color: #f1f5f9;
+}
+
+td:first-child .ellipsis {
+  width: 4.25rem;
+  padding-left: 1rem;
+}
+
+td:nth-child(2) .ellipsis {
+  width: 8.75rem;
+}
+
+td:nth-child(3) .ellipsis {
+  width: 15rem;
+}
+
+td:nth-child(4) .ellipsis {
+  width: 13rem;
+}
+
+td:nth-child(5) .ellipsis {
+  width: 9.25rem;
+}
+
+td:nth-child(6) .ellipsis {
+  width: 7.5rem;
+}
+
+td:last-child .ellipsis {
+  width: 7.5rem;
+  padding-right: 1rem;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.statusBadge {
+  width: fit-content;
+  display: flex;
+  padding: 0.25rem 0.625rem;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.125rem;
+  background: #e8e7ff;
+  color: #5a23ff;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.00813rem;
+}
+
+.statusBadge.active {
+  background: #e8e7ff;
+  color: #5a23ff;
+}
+
+.statusBadge.inactive {
+  background: #efefef;
+  color: #55555c;
+}

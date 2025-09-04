@@ -1,0 +1,118 @@
+/* src/components/members/detail/MemberActivityStats/style.module.css */
+
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-09-02
+  최종 수정일 : 2025-09-02
+*/
+
+.memberActivityStats {
+  width: 45.2rem;
+  display: flex;
+  padding: 1.5rem 1.25rem;
+  flex-direction: column;
+  flex: 1 0 0;
+  gap: 2rem;
+  align-self: stretch;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 0 2px 4px 0 rgba(13, 23, 33, 0.08),
+    0 1px 2px 0 rgba(21, 30, 40, 0.08);
+}
+
+.memberActivityStatsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-self: stretch;
+  padding-bottom: 2rem;
+  border-bottom: 0.25rem solid #5a23ff;
+}
+
+.memberActivityStatsHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.memberActivityStatsHeaderLeftTitle {
+  color: #343434;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 130%;
+  letter-spacing: 0.00625rem;
+}
+
+.memberActivityStatsHeaderLeftContent {
+  display: flex;
+  gap: 2rem;
+}
+
+.memberActivityStatsHeaderLeftContentItem {
+  display: flex;
+  width: 8.25rem;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.memberActivityStatsHeaderLeftContentItem h4 {
+  color: #323c47;
+  font-size: 1.75rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.0175rem;
+}
+
+.memberActivityStatsHeaderLeftContentItem span {
+  color: #323c47;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0.00875rem;
+}
+
+.memberActivityStatsHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+}
+
+.memberActivityStatsHeaderRightText {
+  color: #7a7a7a;
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 300;
+  line-height: normal;
+  letter-spacing: 0.0075rem;
+}
+
+.memberActivityStatsBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.memberActivityStatsBodyItem {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  cursor: pointer;
+}
+
+.memberActivityStatsBodyItem span {
+  color: #323c47;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.01rem;
+}
+
+.memberActivityStatsBodyChart {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}

@@ -1,0 +1,25 @@
+/* src/components/members/MemberSearchInput/style.module.css */
+
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-08-31
+  최종 수정일 : 2025-08-31
+*/
+
+.searchInputWrapper {
+  width: 17.625rem;
+}
+
+.searchInput {
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #dfe3e8;
+  background: #fff;
+  padding: 0.75rem 1.25rem;
+  color: #16151c;
+  outline: none;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

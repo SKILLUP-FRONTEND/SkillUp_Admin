@@ -2,7 +2,7 @@
 /* 
   담당자 : 김은혜
   최초 작성일 : 2025-08-28
-  최종 수정일 : 2025-08-28
+  최종 수정일 : 2025-09-02
 */
 
 "use client";
@@ -64,13 +64,15 @@ export default function AdminSidebar() {
             <Link
               href={item.href}
               className={`${styles.adminMenuLink} ${
-                pathname === item.href ? styles.active : ""
+                pathname.includes(item.href) ? styles.active : ""
               }`}
               key={index}
             >
               <Image
                 src={
-                  pathname === item.href ? item.activeIcon : item.inactiveIcon
+                  pathname.includes(item.href)
+                    ? item.activeIcon
+                    : item.inactiveIcon
                 }
                 alt={item.label}
                 width={16}

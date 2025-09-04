@@ -1,0 +1,56 @@
+/* src/components/members/MemberPagination/style.module.css */
+
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-09-01
+  최종 수정일 : 2025-09-01
+*/
+
+.paginationContainer {
+  display: flex;
+  padding: 1rem;
+  justify-content: center;
+  align-self: stretch;
+  border-top: 1px solid #e2e8f0;
+}
+
+.paginationWrapper {
+  display: flex;
+  padding: 1.5rem 0;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.paginationButton {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  color: #3c3a39;
+  text-align: center;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.02188rem;
+}
+
+.active {
+  color: #5a23ff;
+  border-radius: 9999px;
+  background: #e8e7ff;
+}
+
+.ellipsis {
+  color: #adaaaa;
+  text-align: center;
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.02188rem;
+}

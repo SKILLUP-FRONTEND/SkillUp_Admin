@@ -1,0 +1,33 @@
+/* src/components/members/MemberFilterTabs/style.module.css */
+
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-08-31
+  최종 수정일 : 2025-08-31
+*/
+
+.tabWrapper {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tabItem {
+  background: none;
+  border: none;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  color: #16151c;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.5rem;
+  box-sizing: border-box;
+  height: 3rem;
+}
+
+.tabItem.active {
+  color: #5a23ff;
+  font-weight: 600;
+  line-height: 1.5rem;
+  border-bottom: 2px solid #5a23ff;
+}

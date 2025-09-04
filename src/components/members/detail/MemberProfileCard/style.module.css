@@ -1,0 +1,48 @@
+/* src/components/members/detail/MemberProfileCard/style.module.css */
+
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-09-02
+  최종 수정일 : 2025-09-02
+*/
+
+.memberProfileCard {
+  width: 22.6rem;
+  display: flex;
+  padding: 1.5rem 1.25rem 2rem 1.25rem;
+  flex-direction: column;
+  gap: 2.5rem;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: 0 2px 4px 0 rgba(13, 23, 33, 0.08),
+    0 1px 2px 0 rgba(21, 30, 40, 0.08);
+}
+
+.memberProfileCardHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3125rem;
+}
+
+.memberProfileCardHeaderStatus {
+  color: #7779ff;
+  font-size: 0.8125rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 144%;
+  letter-spacing: 0.00625rem;
+}
+
+.memberProfileCardHeaderTitle {
+  color: #000;
+  font-size: 1.625rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2.0625rem;
+}
+
+.memberProfileCardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
