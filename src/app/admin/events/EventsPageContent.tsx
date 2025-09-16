@@ -11,6 +11,7 @@ import styles from "./events.module.css";
 import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
 import CategoryFilterTabs from "@/components/common/filter/CategoryFilterTabs";
 import { useState } from "react";
+import SearchInput from "@/components/common/input/SearchInput";
 
 const categories = [
   { label: "전체", count: 150, value: "all" },
@@ -49,11 +50,14 @@ export default function EventsPageContent() {
         </div>
       </div>
       <div className={styles.eventsTable}>
-        <CategoryFilterTabs
-          categories={categories}
-          selected={selected}
-          onSelect={onSelect}
-        />
+        <div className={styles.eventsTableFilter}>
+          <CategoryFilterTabs
+            categories={categories}
+            selected={selected}
+            onSelect={onSelect}
+          />
+          <SearchInput />
+        </div>
       </div>
     </div>
   );
