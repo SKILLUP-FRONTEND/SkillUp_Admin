@@ -18,6 +18,7 @@ import { EVENTS } from "@/mocks/events.mock";
 import Pagination from "@/components/common/pagination/Pagination";
 import StatusBadge from "@/components/common/badge/StatusBadge";
 import { Event } from "@/types/event.type";
+import Dropdown from "@/components/common/dropdown/Dropdown";
 
 const mockEvents = EVENTS;
 
@@ -48,6 +49,7 @@ const eventColumns = [
 export default function EventsPageContent() {
   const [selected, setSelected] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedStatus, setSelectedStatus] = useState("all");
   const onSelect = (value: string) => {
     setSelected(value);
   };
@@ -84,10 +86,26 @@ export default function EventsPageContent() {
         </div>
         <div className={styles.eventsTableMain}>
           <div className={styles.eventsTableHeader}>
-            <h5 className={styles.eventsTableHeaderTitle}>등록된 행사</h5>
-            <h5 className={styles.eventsTableHeaderTitle}>
-              {mockEvents.length}개
-            </h5>
+            <div className={styles.eventsTableHeaderLeft}>
+              <h5 className={styles.eventsTableHeaderTitle}>등록된 행사</h5>
+              <h5 className={styles.eventsTableHeaderTitle}>
+                {mockEvents.length}개
+              </h5>
+            </div>
+            <div className={styles.eventsTableHeaderRight}>
+              <Dropdown
+                options={[
+                  { label: "전체", value: "all" },
+                  { label: "모임예정 행사", value: "RECRUITING_EXPECTED" },
+                  { label: "모집중인 행사", value: "RECRUITING" },
+                  { label: "모집마감 행사", value: "RECRUITING_CLOSED" },
+                  { label: "진행중인 행사", value: "ENDED" },
+                ]}
+                value={selectedStatus}
+                onChange={setSelectedStatus}
+                placeholder="상태 선택"
+              />
+            </div>
           </div>
           <DataTable
             columns={eventColumns}

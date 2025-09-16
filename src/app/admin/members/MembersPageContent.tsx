@@ -17,11 +17,12 @@ import { DataTable } from "@/components/common/table/DataTable";
 import { Member } from "@/types/member.type";
 import Pagination from "@/components/common/pagination/Pagination";
 import StatusBadge from "@/components/common/badge/StatusBadge";
+import { useRouter } from "next/navigation";
 
 export default function MembersPageContent() {
   const [selected, setSelected] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-
+  const router = useRouter();
   const onSelect = (key: string) => {
     setSelected(key);
   };
@@ -76,6 +77,9 @@ export default function MembersPageContent() {
           <DataTable
             columns={userColumns}
             data={members.slice((currentPage - 1) * 5, currentPage * 5)}
+            onRowClick={(item: Member) => {
+              router.push(`/admin/members/${item.id}`);
+            }}
           />
           <Pagination
             currentPage={currentPage}
