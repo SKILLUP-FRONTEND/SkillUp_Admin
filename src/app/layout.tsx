@@ -8,8 +8,8 @@ import { ReactNode } from "react";
 import "../styles/global.css";
 
 export const metadata = {
-  title: "Skill Up User Front",
-  description: "스킬업 웹페이지 구축 프로젝트",
+  title: "SkillUp Admin",
+  description: "스킬업 어드민 웹페이지",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
