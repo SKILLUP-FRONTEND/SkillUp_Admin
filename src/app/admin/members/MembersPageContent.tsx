@@ -15,6 +15,7 @@ import { useState } from "react";
 import MemberTable from "@/components/members/MemberTable";
 import MemberPagination from "@/components/members/MemberPagination";
 import { MEMBERS } from "@/mocks/members.mock";
+import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
 
 export default function MembersPageContent() {
   const [selected, setSelected] = useState("all");
@@ -29,7 +30,7 @@ export default function MembersPageContent() {
     <section className={styles.membersSection}>
       <div className={styles.membersHeader}>
         <h1 className={styles.membersTitle}>회원관리</h1>
-        <MemberFilterToggle />
+        <ToggleSwitch label="탈퇴 회원 포함" />
       </div>
       <div className={styles.membersTable}>
         <div className={styles.membersTableFilter}>
