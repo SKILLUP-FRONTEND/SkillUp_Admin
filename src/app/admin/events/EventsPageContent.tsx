@@ -9,8 +9,24 @@
 import SummaryCard from "@/components/events/SummaryCard";
 import styles from "./events.module.css";
 import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
+import CategoryFilterTabs from "@/components/common/filter/CategoryFilterTabs";
+import { useState } from "react";
+
+const categories = [
+  { label: "전체", count: 150, value: "all" },
+  { label: "컨퍼런스/세미나", count: 40, value: "conference" },
+  { label: "공모전/해커톤", count: 32, value: "competition" },
+  { label: "부트캠프/동아리", count: 78, value: "bootcamp" },
+  { label: "네트워킹/멘토링", count: 78, value: "networking" },
+];
 
 export default function EventsPageContent() {
+  const [selected, setSelected] = useState("all");
+
+  const onSelect = (value: string) => {
+    setSelected(value);
+  };
+
   return (
     <div className={styles.eventsSection}>
       <div className={styles.eventsHeader}>
@@ -31,6 +47,13 @@ export default function EventsPageContent() {
           />
           <SummaryCard items={[{ title: "등록 가능한 행사 수", count: 23 }]} />
         </div>
+      </div>
+      <div className={styles.eventsTable}>
+        <CategoryFilterTabs
+          categories={categories}
+          selected={selected}
+          onSelect={onSelect}
+        />
       </div>
     </div>
   );
