@@ -9,16 +9,17 @@
 
 import styles from "./members.module.css";
 import { useState } from "react";
-import MemberPagination from "@/components/members/MemberPagination";
 import { MEMBERS } from "@/mocks/members.mock";
 import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
 import CategoryFilterTabs from "@/components/common/filter/CategoryFilterTabs";
 import SearchInput from "@/components/common/input/SearchInput";
 import { DataTable } from "@/components/common/table/DataTable";
 import { Member } from "@/types/member";
+import Pagination from "@/components/common/pagination/Pagination";
 
 export default function MembersPageContent() {
   const [selected, setSelected] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const onSelect = (key: string) => {
     setSelected(key);
@@ -77,8 +78,18 @@ export default function MembersPageContent() {
               {members.length}명
             </h5>
           </div>
-          <DataTable columns={userColumns} data={members} />
-          <MemberPagination />
+          <DataTable
+            columns={userColumns}
+            data={members.slice((currentPage - 1) * 5, currentPage * 5)}
+          />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(members.length / 5)}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+            }}
+            hideIfSinglePage={false}
+          />
         </div>
       </div>
     </section>

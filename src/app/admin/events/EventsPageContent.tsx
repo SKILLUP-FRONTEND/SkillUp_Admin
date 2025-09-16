@@ -15,6 +15,7 @@ import SearchInput from "@/components/common/input/SearchInput";
 import { DataTable } from "@/components/common/table/DataTable";
 
 import { EVENTS } from "@/mocks/events.mock";
+import Pagination from "@/components/common/pagination/Pagination";
 
 const mockEvents = EVENTS;
 
@@ -43,7 +44,7 @@ const eventColumns = [
 
 export default function EventsPageContent() {
   const [selected, setSelected] = useState("all");
-
+  const [currentPage, setCurrentPage] = useState(1);
   const onSelect = (value: string) => {
     setSelected(value);
   };
@@ -85,7 +86,18 @@ export default function EventsPageContent() {
               {mockEvents.length}개
             </h5>
           </div>
-          <DataTable columns={eventColumns} data={mockEvents} />
+          <DataTable
+            columns={eventColumns}
+            data={mockEvents.slice((currentPage - 1) * 5, currentPage * 5)}
+          />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(mockEvents.length / 5)}
+            onPageChange={(page) => {
+              setCurrentPage(page);
+            }}
+            hideIfSinglePage={false}
+          />
         </div>
       </div>
     </div>
