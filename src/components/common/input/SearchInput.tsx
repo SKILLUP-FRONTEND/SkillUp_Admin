@@ -8,6 +8,8 @@
 
 import styles from "./SearchInput.module.css";
 
+// TODO : 검색 기능 추가
+
 export default function SearchInput() {
   return (
     <div className={styles.searchInputWrapper}>

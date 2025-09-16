@@ -12,6 +12,11 @@ import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
 import CategoryFilterTabs from "@/components/common/filter/CategoryFilterTabs";
 import { useState } from "react";
 import SearchInput from "@/components/common/input/SearchInput";
+import { DataTable } from "@/components/common/table/DataTable";
+
+import { EVENTS } from "@/mocks/events.mock";
+
+const mockEvents = EVENTS;
 
 const categories = [
   { label: "전체", count: 150, value: "all" },
@@ -19,6 +24,21 @@ const categories = [
   { label: "공모전/해커톤", count: 32, value: "competition" },
   { label: "부트캠프/동아리", count: 78, value: "bootcamp" },
   { label: "네트워킹/멘토링", count: 78, value: "networking" },
+];
+
+const eventColumns = [
+  { key: "id", header: "No", width: "50px" },
+  { key: "title", header: "행사명", width: "200px" },
+  { key: "category", header: "카테고리", width: "150px" },
+  { key: "period", header: "행사 기간", width: "200px" },
+  { key: "views", header: "조회수", width: "80px" },
+  { key: "likes", header: "관심수", width: "80px" },
+  {
+    key: "status",
+    header: "상태",
+    width: "100px",
+  },
+  { key: "createdAt", header: "등록일", width: "160px" },
 ];
 
 export default function EventsPageContent() {
@@ -57,6 +77,15 @@ export default function EventsPageContent() {
             onSelect={onSelect}
           />
           <SearchInput />
+        </div>
+        <div className={styles.eventsTableMain}>
+          <div className={styles.eventsTableHeader}>
+            <h5 className={styles.eventsTableHeaderTitle}>등록된 행사</h5>
+            <h5 className={styles.eventsTableHeaderTitle}>
+              {mockEvents.length}개
+            </h5>
+          </div>
+          <DataTable columns={eventColumns} data={mockEvents} />
         </div>
       </div>
     </div>

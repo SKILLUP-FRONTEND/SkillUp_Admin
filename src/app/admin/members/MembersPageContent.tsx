@@ -7,14 +7,15 @@
 
 "use client";
 
-import MemberSearchInput from "@/components/members/MemberSearchInput";
 import styles from "./members.module.css";
 import { useState } from "react";
-import MemberTable from "@/components/members/MemberTable";
 import MemberPagination from "@/components/members/MemberPagination";
 import { MEMBERS } from "@/mocks/members.mock";
 import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
 import CategoryFilterTabs from "@/components/common/filter/CategoryFilterTabs";
+import SearchInput from "@/components/common/input/SearchInput";
+import { DataTable } from "@/components/common/table/DataTable";
+import { Member } from "@/types/member";
 
 export default function MembersPageContent() {
   const [selected, setSelected] = useState("all");
@@ -28,6 +29,27 @@ export default function MembersPageContent() {
     { label: "기획", count: 40, value: "plan" },
     { label: "디자인", count: 32, value: "design" },
     { label: "개발", count: 78, value: "dev" },
+  ];
+
+  const userColumns = [
+    { key: "id", header: "No", width: "50px" },
+    { key: "name", header: "이름", width: "100px" },
+    { key: "email", header: "이메일", width: "220px" },
+    { key: "createdAt", header: "가입일", width: "180px" },
+    { key: "loginMethod", header: "로그인 방법", width: "100px" },
+    { key: "job", header: "직군", width: "100px" },
+    {
+      key: "status",
+      header: "상태",
+      width: "80px",
+      render: (item: Member) => (
+        <div className="flex gap-1">
+          <button className="btn-sm">
+            {item.status === "active" ? "활동" : "탈퇴"}
+          </button>
+        </div>
+      ),
+    },
   ];
 
   const members = MEMBERS;
@@ -45,7 +67,7 @@ export default function MembersPageContent() {
             selected={selected}
             onSelect={onSelect}
           />
-          <MemberSearchInput />
+          <SearchInput />
         </div>
 
         <div className={styles.membersTableMain}>
@@ -55,7 +77,7 @@ export default function MembersPageContent() {
               {members.length}명
             </h5>
           </div>
-          <MemberTable members={members} />
+          <DataTable columns={userColumns} data={members} />
           <MemberPagination />
         </div>
       </div>
