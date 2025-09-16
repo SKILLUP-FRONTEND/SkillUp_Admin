@@ -6,7 +6,9 @@
   최종 수정일 : 2025-09-16
 */
 
-export const EVENTS = [
+import { Event } from "@/types/event.type";
+
+export const EVENTS: Event[] = [
   {
     id: 1,
     title: "행사1",
@@ -14,7 +16,7 @@ export const EVENTS = [
     period: "2025-01-01",
     views: 100,
     likes: 100,
-    status: "active",
+    status: "RECRUITING",
     createdAt: "2025-01-01",
   },
   {
@@ -24,7 +26,7 @@ export const EVENTS = [
     period: "2025-01-01",
     views: 100,
     likes: 100,
-    status: "active",
+    status: "RECRUITING_EXPECTED",
     createdAt: "2025-01-01",
   },
   {
@@ -34,7 +36,7 @@ export const EVENTS = [
     period: "2025-01-01",
     views: 100,
     likes: 100,
-    status: "active",
+    status: "RECRUITING_CLOSED",
     createdAt: "2025-01-01",
   },
   {
@@ -44,7 +46,7 @@ export const EVENTS = [
     period: "2025-01-01",
     views: 100,
     likes: 100,
-    status: "active",
+    status: "ENDED",
     createdAt: "2025-01-01",
   },
   {
@@ -54,7 +56,7 @@ export const EVENTS = [
     period: "2025-01-01",
     views: 100,
     likes: 100,
-    status: "active",
+    status: "RECRUITING",
     createdAt: "2025-01-01",
   },
 ];

@@ -14,8 +14,9 @@ import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
 import CategoryFilterTabs from "@/components/common/filter/CategoryFilterTabs";
 import SearchInput from "@/components/common/input/SearchInput";
 import { DataTable } from "@/components/common/table/DataTable";
-import { Member } from "@/types/member";
+import { Member } from "@/types/member.type";
 import Pagination from "@/components/common/pagination/Pagination";
+import StatusBadge from "@/components/common/badge/StatusBadge";
 
 export default function MembersPageContent() {
   const [selected, setSelected] = useState("all");
@@ -43,13 +44,7 @@ export default function MembersPageContent() {
       key: "status",
       header: "상태",
       width: "80px",
-      render: (item: Member) => (
-        <div className="flex gap-1">
-          <button className="btn-sm">
-            {item.status === "active" ? "활동" : "탈퇴"}
-          </button>
-        </div>
-      ),
+      render: (item: Member) => <StatusBadge status={item.status} />,
     },
   ];
 

@@ -16,6 +16,8 @@ import { DataTable } from "@/components/common/table/DataTable";
 
 import { EVENTS } from "@/mocks/events.mock";
 import Pagination from "@/components/common/pagination/Pagination";
+import StatusBadge from "@/components/common/badge/StatusBadge";
+import { Event } from "@/types/event.type";
 
 const mockEvents = EVENTS;
 
@@ -38,6 +40,7 @@ const eventColumns = [
     key: "status",
     header: "상태",
     width: "100px",
+    render: (item: Event) => <StatusBadge status={item.status} />,
   },
   { key: "createdAt", header: "등록일", width: "160px" },
 ];

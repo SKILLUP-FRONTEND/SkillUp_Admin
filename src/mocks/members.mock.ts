@@ -6,7 +6,7 @@
   최종 수정일 : 2025-09-01
 */
 
-import { Member } from "@/types/member";
+import { Member } from "@/types/member.type";
 
 export const MEMBERS: Member[] = [
   {
@@ -16,7 +16,7 @@ export const MEMBERS: Member[] = [
     createdAt: "2025-09-01",
     loginMethod: "카카오",
     job: "기획",
-    status: "active",
+    status: "ACTIVE",
   },
   {
     id: 2,
@@ -25,7 +25,7 @@ export const MEMBERS: Member[] = [
     createdAt: "2025-09-01",
     loginMethod: "카카오",
     job: "디자인",
-    status: "inactive",
+    status: "INACTIVE",
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ export const MEMBERS: Member[] = [
     createdAt: "2025-09-01",
     loginMethod: "카카오",
     job: "개발",
-    status: "active",
+    status: "ACTIVE",
   },
   {
     id: 4,
@@ -43,7 +43,7 @@ export const MEMBERS: Member[] = [
     createdAt: "2025-09-01",
     loginMethod: "카카오",
     job: "마케팅",
-    status: "inactive",
+    status: "INACTIVE",
   },
   {
     id: 5,
@@ -52,7 +52,7 @@ export const MEMBERS: Member[] = [
     createdAt: "2025-09-01",
     loginMethod: "카카오",
     job: "개발",
-    status: "active",
+    status: "ACTIVE",
   },
   {
     id: 6,
@@ -61,7 +61,7 @@ export const MEMBERS: Member[] = [
     createdAt: "2025-09-01",
     loginMethod: "카카오",
     job: "디자인",
-    status: "inactive",
+    status: "INACTIVE",
   },
   {
     id: 7,
@@ -70,7 +70,7 @@ export const MEMBERS: Member[] = [
     createdAt: "2025-09-01",
     loginMethod: "카카오",
     job: "마케팅",
-    status: "active",
+    status: "ACTIVE",
   },
   {
     id: 8,
@@ -79,7 +79,7 @@ export const MEMBERS: Member[] = [
     createdAt: "2025-09-01",
     loginMethod: "카카오",
     job: "개발",
-    status: "inactive",
+    status: "INACTIVE",
   },
 ];
 
