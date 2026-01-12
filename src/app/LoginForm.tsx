@@ -12,12 +12,25 @@ import { useState } from "react";
 import Image from "next/image";
 import SkillUpIcon from "@/assets/skillUp_black.svg";
 import styles from "./login.module.css";
+import { adminLogin } from "@/api/instance";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
     setLoading(true);
+  };
+
+  const handleApiTest = async () => {
+    try {
+      console.log("API 테스트 시작...");
+      const response = await adminLogin();
+      console.log("API 응답 성공:", response);
+      alert(`API 테스트 성공!\n${JSON.stringify(response, null, 2)}`);
+    } catch (error) {
+      console.error("API 에러:", error);
+      alert(`API 테스트 실패!\n${error}`);
+    }
   };
 
   return (
@@ -71,6 +84,13 @@ export default function LoginForm() {
             disabled={loading}
           >
             {loading ? "로그인 중..." : "로그인"}
+          </button>
+          <button
+            className={styles.loginButton}
+            onClick={handleApiTest}
+            style={{ marginTop: '10px', backgroundColor: '#6B7280' }}
+          >
+            API 테스트
           </button>
         </div>
       </div>

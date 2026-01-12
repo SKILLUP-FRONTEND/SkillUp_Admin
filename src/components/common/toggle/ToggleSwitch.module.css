@@ -1,9 +1,9 @@
-/* src/components/members/MemberFilterToggle/style.module.css */
+/* src/components/common/toggle/ToggleSwitch.module.css */
 
 /* 
   담당자 : 김은혜
-  최초 작성일 : 2025-08-31
-  최종 수정일 : 2025-08-31
+  최초 작성일 : 2025-09-16
+  최종 수정일 : 2025-09-16
 */
 
 .toggleWrapper {
@@ -16,7 +16,6 @@
 .labelText {
   color: #838383;
   font-size: 1.125rem;
-  font-style: normal;
   font-weight: 500;
   line-height: normal;
   letter-spacing: 0.01125rem;

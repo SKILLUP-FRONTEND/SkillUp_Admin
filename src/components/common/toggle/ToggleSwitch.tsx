@@ -1,17 +1,15 @@
-// src/components/members/MemberFilterToggle/index.tsx
+// src/components/common/toggle/ToggleSwitch.tsx
 
 /* 
   담당자 : 김은혜
-  최초 작성일 : 2025-08-31
-  최종 수정일 : 2025-08-31
+  최초 작성일 : 2025-09-16
+  최종 수정일 : 2025-09-16
 */
 
-"use client";
-
 import { useState } from "react";
-import styles from "./style.module.css";
+import styles from "./ToggleSwitch.module.css";
 
-export default function MemberFilterToggle() {
+export default function ToggleSwitch({ label }: { label: string }) {
   const [checked, setChecked] = useState(false);
 
   const onChange = (checked: boolean) => {
@@ -20,7 +18,7 @@ export default function MemberFilterToggle() {
 
   return (
     <label className={styles.toggleWrapper}>
-      <span className={styles.labelText}>탈퇴 회원 포함</span>
+      <span className={styles.labelText}>{label}</span>
       <div
         className={`${styles.toggle} ${checked ? styles.active : ""}`}
         onClick={() => onChange(!checked)}

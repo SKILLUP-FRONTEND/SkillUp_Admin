@@ -9,10 +9,11 @@
 import styles from "./style.module.css";
 import UpdateIcon from "@/assets/update.svg";
 import Image from "next/image";
-import ChevronDownIcon from "@/assets/chevron_down.svg";
 import BarChartComponent from "@/components/common/chart/BarChart";
 import DonutChart from "@/components/common/chart/DonutChart";
 import { DONUT_CHART_DATA, BAR_CHART_DATA } from "@/mocks/members.mock";
+import Dropdown from "@/components/common/dropdown/Dropdown";
+import { useState } from "react";
 
 const memberActivityStatsHeaderLeftContent = [
   {
@@ -32,6 +33,7 @@ const memberActivityStatsHeaderLeftContent = [
 ];
 
 export default function MemberActivityStats() {
+  const [selectedCategory, setSelectedCategory] = useState("category1");
   return (
     <div className={styles.memberActivityStats}>
       <div className={styles.memberActivityStatsHeader}>
@@ -59,14 +61,15 @@ export default function MemberActivityStats() {
         </div>
       </div>
       <div className={styles.memberActivityStatsBody}>
-        {/* TODO : 추후 드롭다운 추가 */}
         <div className={styles.memberActivityStatsBodyItem}>
-          <span>카테고리별 조회한 행사</span>
-          <Image
-            src={ChevronDownIcon}
-            alt="chevron down"
-            width={13}
-            height={8}
+          <Dropdown
+            options={[
+              { label: "카테고리별 조회한 행사", value: "category1" },
+              { label: "카테고리별 저장한 행사", value: "category2  " },
+              { label: "카테고리별 신청한 행사", value: "category3" },
+            ]}
+            value={selectedCategory}
+            onChange={setSelectedCategory}
           />
         </div>
         {/* TODO : 추후 차트 데이터 구체화되면 추가 필요*/}

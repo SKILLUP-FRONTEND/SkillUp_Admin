@@ -1,0 +1,55 @@
+/* src/components/common/dropdown/Dropdown.module.css */
+
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-09-16
+  최종 수정일 : 2025-09-16
+*/
+
+.dropdown {
+  position: relative;
+  width: fit-content;
+  min-width: 10rem;
+}
+
+.dropdownButton {
+  width: 100%;
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 0.75rem 1.25rem;
+
+  border: 1px solid #dfe3e8;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropdownButtonText {
+  color: #333;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.dropdownList {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 0.5rem;
+  border: 1px solid #dfe3e8;
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.dropdownItem {
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background: #f1f5f9;
+}
