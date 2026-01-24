@@ -6,7 +6,7 @@
   최종 수정일 : 2025-08-28
 */
 
-/* admin sidebar */
+/* (admin) sidebar */
 .adminSidebar {
   display: flex;
   flex-direction: column;
@@ -73,7 +73,7 @@
   line-height: 144%;
 }
 
-/* admin header */
+/* (admin) header */
 .adminHeader {
   display: flex;
   align-items: center;

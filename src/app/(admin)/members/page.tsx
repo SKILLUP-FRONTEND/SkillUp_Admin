@@ -1,4 +1,4 @@
-// src/app/admin/members/page.tsx
+// src/app/(admin)/members/page.tsx
 /* 
   담당자 : 김은혜
   최초 작성일 : 2025-08-28

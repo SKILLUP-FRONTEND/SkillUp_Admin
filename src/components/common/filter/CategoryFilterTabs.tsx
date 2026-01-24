@@ -7,7 +7,6 @@
 */
 
 import styles from "./CategoryFilterTabs.module.css";
-
 interface Category {
   label: string;
   count: number;
@@ -22,7 +21,7 @@ interface CategoryFilterTabsProps {
 
 export default function CategoryFilterTabs({ categories, selected, onSelect }: CategoryFilterTabsProps) {
   return (
-    <div className={styles.categoryFilterTabs}>
+    <div className="boxFlex">
       {categories.map((category) => (
         <button
           key={category.value}

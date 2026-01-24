@@ -19,70 +19,70 @@ import BoardActiveIcon from "@/assets/board_active.svg";
 import BoardInactiveIcon from "@/assets/board_inactive.svg";
 import PersonInactiveIcon from "@/assets/person_inactive.svg";
 import PersonActiveIcon from "@/assets/person_active.svg";
-import { usePathname } from "next/navigation";
+import {usePathname} from "next/navigation";
 
 const navItems = [
-  {
-    label: "Dashboard",
-    href: "/admin/dashboard",
-    activeIcon: LayoutActiveIcon,
-    inactiveIcon: LayoutInactiveIcon,
-  },
-  {
-    label: "행사관리",
-    href: "/admin/events",
-    activeIcon: LayerActiveIcon,
-    inactiveIcon: LayerInactiveIcon,
-  },
-  {
-    label: "배너관리",
-    href: "/admin/banners",
-    activeIcon: BoardActiveIcon,
-    inactiveIcon: BoardInactiveIcon,
-  },
-  {
-    label: "회원관리",
-    href: "/admin/members",
-    activeIcon: PersonActiveIcon,
-    inactiveIcon: PersonInactiveIcon,
-  },
+    {
+        label: "Dashboard",
+        href: "/dashboard",
+        activeIcon: LayoutActiveIcon,
+        inactiveIcon: LayoutInactiveIcon,
+    },
+    {
+        label: "행사관리",
+        href: "/events",
+        activeIcon: LayerActiveIcon,
+        inactiveIcon: LayerInactiveIcon,
+    },
+    {
+        label: "배너관리",
+        href: "/banners",
+        activeIcon: BoardActiveIcon,
+        inactiveIcon: BoardInactiveIcon,
+    },
+    {
+        label: "회원관리",
+        href: "/members",
+        activeIcon: PersonActiveIcon,
+        inactiveIcon: PersonInactiveIcon,
+    },
 ];
 
 export default function AdminSidebar() {
-  const pathname = usePathname();
+    const pathname = usePathname();
 
-  return (
-    <div className={styles.adminSidebar}>
-      <div className={styles.adminLogo}>
-        <Image src={SkillUpWhiteIcon} alt="logo" width={138} height={21} />
-        <p>ADMIN</p>
-      </div>
-      <div className={styles.adminMenu}>
-        <span className={styles.adminMenuTitle}>PAGES</span>
-        <nav className={styles.adminMenuList}>
-          {navItems.map((item, index) => (
-            <Link
-              href={item.href}
-              className={`${styles.adminMenuLink} ${
-                pathname.includes(item.href) ? styles.active : ""
-              }`}
-              key={index}
-            >
-              <Image
-                src={
-                  pathname.includes(item.href)
-                    ? item.activeIcon
-                    : item.inactiveIcon
-                }
-                alt={item.label}
-                width={16}
-                height={16}
-              />
-              <span>{item.label}</span>
-            </Link>
-          ))}
-        </nav>
-      </div>
-    </div>
-  );
+    return (
+        <div className={styles.adminSidebar}>
+            <div className={styles.adminLogo}>
+                <Image src={SkillUpWhiteIcon} alt="logo" width={138} height={21}/>
+                <p>ADMIN</p>
+            </div>
+            <div className={styles.adminMenu}>
+                <span className={styles.adminMenuTitle}>PAGES</span>
+                <nav className={styles.adminMenuList}>
+                    {navItems.map((item, index) => (
+                        <Link
+                            href={item.href}
+                            className={`${styles.adminMenuLink} ${
+                                pathname.includes(item.href) ? styles.active : ""
+                            }`}
+                            key={index}
+                        >
+                            <Image
+                                src={
+                                    pathname.includes(item.href)
+                                        ? item.activeIcon
+                                        : item.inactiveIcon
+                                }
+                                alt={item.label}
+                                width={16}
+                                height={16}
+                            />
+                            <span>{item.label}</span>
+                        </Link>
+                    ))}
+                </nav>
+            </div>
+        </div>
+    );
 }

@@ -1,4 +1,4 @@
-// src/app/admin/members/[id]/page.tsx
+// src/app/(admin)/members/[id]/page.tsx
 
 /* 
   담당자 : 김은혜

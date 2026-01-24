@@ -1,4 +1,4 @@
-// src/app/admin/events/EventsPageContent.tsx
+// src/app/(admin)/events/EventsPageContent.tsx
 /* 
   담당자 : 김은혜
   최초 작성일 : 2025-09-16

@@ -7,6 +7,9 @@
 */
 
 /* login page */
+
+@use "@/styles/_variables.scss" as v;
+
 .loginPage {
   display: flex;
   flex-direction: column;
@@ -122,18 +125,13 @@
   width: 100%;
 }
 
-.loginButton {
-  padding: 0.875rem 1.25rem;
-  border-radius: 0.5rem;
-  background: #5a23ff;
-  color: #fff;
-  text-align: center;
-  font-size: 0.875rem;
+.btnLogin {
+  height: 42px;
+  font-size: 14px;
+  color: white;
   font-weight: 600;
-  line-height: 0.875rem;
-  letter-spacing: -0.02625rem;
-  width: 100%;
-  cursor: pointer;
+  background: v.$main-blue;
+  border-radius: 8px;
 }
 
 .loginButton:disabled {

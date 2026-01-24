@@ -1,4 +1,4 @@
-// src/app/admin/banner/page.tsx
+// src/app/(admin)/banner/page.tsx
 /* 
   담당자 : 
   최초 작성일 : 2025-08-28

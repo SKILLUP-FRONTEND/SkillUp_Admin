@@ -1,0 +1,29 @@
+@use "variables" as v;
+
+@for $i from 0 through 2000 {
+    .mt#{$i} {
+        margin-top: #{$i}px;
+    }
+    .gap#{$i} {
+        gap: #{$i}px;
+    }
+}
+
+.boxFlex{
+    display: flex;
+}
+
+.btnTap{
+    height: 48px;
+    color: v.$black-16;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 0 8px;
+    border-bottom: 2px solid transparent;
+    &.active{
+        color: v.$main-blue;
+        border-color: v.$main-blue;
+        font-weight: 600;
+
+    }
+}

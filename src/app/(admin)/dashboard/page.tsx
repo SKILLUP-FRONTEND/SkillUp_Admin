@@ -1,4 +1,4 @@
-// src/app/admin/dashboard/page.tsx
+// src/app/(admin)/dashboard/page.tsx
 /* 
   담당자 : 
   최초 작성일 : 2025-08-28
