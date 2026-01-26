@@ -23,28 +23,32 @@ import {usePathname} from "next/navigation";
 
 const navItems = [
     {
-        label: "Dashboard",
-        href: "/dashboard",
-        activeIcon: LayoutActiveIcon,
-        inactiveIcon: LayoutInactiveIcon,
-    },
-    {
         label: "행사관리",
         href: "/events",
         activeIcon: LayerActiveIcon,
         inactiveIcon: LayerInactiveIcon,
+        className: 'event',
+    },
+    {
+        label: "아티클 관리",
+        href: "/article",
+        activeIcon: LayerActiveIcon,
+        inactiveIcon: LayerInactiveIcon,
+        className: 'article',
     },
     {
         label: "배너관리",
         href: "/banners",
         activeIcon: BoardActiveIcon,
         inactiveIcon: BoardInactiveIcon,
+        className: 'banner',
     },
     {
         label: "회원관리",
         href: "/members",
         activeIcon: PersonActiveIcon,
         inactiveIcon: PersonInactiveIcon,
+        className: 'member',
     },
 ];
 
@@ -57,27 +61,17 @@ export default function AdminSidebar() {
                 <Image src={SkillUpWhiteIcon} alt="logo" width={138} height={21}/>
                 <p>ADMIN</p>
             </div>
-            <div className={styles.adminMenu}>
+            <div>
                 <span className={styles.adminMenuTitle}>PAGES</span>
-                <nav className={styles.adminMenuList}>
+                <nav>
                     {navItems.map((item, index) => (
                         <Link
                             href={item.href}
-                            className={`${styles.adminMenuLink} ${
+                            className={`${styles.adminMenuLink}  ${styles[item.className]} ${
                                 pathname.includes(item.href) ? styles.active : ""
-                            }`}
+                            } `}
                             key={index}
                         >
-                            <Image
-                                src={
-                                    pathname.includes(item.href)
-                                        ? item.activeIcon
-                                        : item.inactiveIcon
-                                }
-                                alt={item.label}
-                                width={16}
-                                height={16}
-                            />
                             <span>{item.label}</span>
                         </Link>
                     ))}

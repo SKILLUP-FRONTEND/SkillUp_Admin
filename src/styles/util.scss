@@ -4,26 +4,108 @@
     .mt#{$i} {
         margin-top: #{$i}px;
     }
+    .mb#{$i} {
+        margin-bottom: #{$i}px;
+    }
     .gap#{$i} {
         gap: #{$i}px;
     }
+    .w#{$i} {
+        width: #{$i}px;
+    }
+    .pa#{$i} {
+        padding: #{$i}px;
+    }
+    .pt#{$i} {
+        padding-top: #{$i}px;
+    }
+    .pb#{$i} {
+        padding-bottom: #{$i}px;
+    }
+    .pl#{$i} {
+        padding-left: #{$i}px;
+    }
+    .pr#{$i} {
+        padding-right: #{$i}px;
+    }
+    .fs#{$i} {
+        font-size: #{$i}px;
+    }
+
+    .fw#{$i}{
+        font-weight: #{$i};
+    }
+    .lh#{$i}{
+        line-height: #{$i};
+    }
+
+    .fg#{$i}{
+        flex-grow: #{$i};
+    }
+
 }
 
-.boxFlex{
+.ml-auto {
+    margin-left: auto;
+}
+
+.mr-auto {
+    margin-right: auto;
+}
+
+.box-flex {
     display: flex;
+    &.a-start {
+        align-items: flex-start;
+    }
+    &.a-center {
+        align-items: center;
+    }
+
+    &.j-center {
+        justify-content: center;
+    }
 }
 
-.btnTap{
+.btnTap {
     height: 48px;
     color: v.$black-16;
     font-weight: 500;
     font-size: 16px;
     padding: 0 8px;
     border-bottom: 2px solid transparent;
-    &.active{
+
+    &.active {
         color: v.$main-blue;
         border-color: v.$main-blue;
         font-weight: 600;
 
     }
 }
+
+.title-page {
+    font-size: 32px;
+    font-weight: 700;
+    color: v.$black-21;
+    line-height: 1;
+}
+
+.btnDefault {
+    height: 45px;
+    padding: 0 16px;
+    border-radius: 6px;
+    background-color: v.$main-blue;
+    font-weight: 600;
+    color: #fff;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+
+}
+
+.color-black32{
+    color: v.$black-32;
+}
+

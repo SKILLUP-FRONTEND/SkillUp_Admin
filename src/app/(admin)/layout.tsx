@@ -7,16 +7,18 @@
 
 import {ReactNode} from "react";
 import AdminSidebar from "@/components/layout/AdminSidebar";
-import styles from "./adminLayout.module.css";
+import styles from "./adminLayout.module.scss";
 import AdminHeader from "@/components/layout/AdminHeader";
 
 export default function AdminLayout({children}: { children: ReactNode }) {
     return (
-        <div className={styles.wrapper}>
-            <AdminSidebar/>
-            <div className={styles.contentArea}>
-                <AdminHeader/>
-                <main className={styles.mainContent}>{children}</main>
+        <div className={styles.container}>
+            <div className={styles.wrapper}>
+                <AdminSidebar/>
+                <div className={styles.contentArea}>
+                    <AdminHeader/>
+                    <main className={styles.mainContent}>{children}</main>
+                </div>
             </div>
         </div>
     );

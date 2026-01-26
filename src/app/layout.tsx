@@ -8,7 +8,8 @@ import {ReactNode} from "react";
 import "@/styles/global.scss";
 import "@/styles/util.scss"
 import GlobalLoading from "@/components/common/loading/GlobalLoading";
-// import Providers from "./providers";
+import GlobalModal from "@/components/common/modal/GlobalModal";
+
 
 export const metadata = {
     title: "SkillUp Admin",
@@ -27,8 +28,10 @@ export default function RootLayout({children}: { children: ReactNode }) {
             />
         </head>
         <body>
-        <GlobalLoading />
-            {children}
+        <GlobalLoading/>
+        <GlobalModal/>
+        {children}
+
         </body>
         </html>
     );

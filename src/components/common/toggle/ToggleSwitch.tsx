@@ -6,25 +6,30 @@
   최종 수정일 : 2025-09-16
 */
 
-import { useState } from "react";
+import {useState} from "react";
 import styles from "./ToggleSwitch.module.css";
 
-export default function ToggleSwitch({ label }: { label: string }) {
-  const [checked, setChecked] = useState(false);
+interface ToggleProps {
+    active: boolean;
+    label: string;
+    onToggleChange: (active: boolean) => void;
+}
 
-  const onChange = (checked: boolean) => {
-    setChecked(checked);
-  };
 
-  return (
-    <label className={styles.toggleWrapper}>
-      <span className={styles.labelText}>{label}</span>
-      <div
-        className={`${styles.toggle} ${checked ? styles.active : ""}`}
-        onClick={() => onChange(!checked)}
-      >
-        <div className={styles.circle} />
-      </div>
-    </label>
-  );
+export default function ToggleSwitch({label, active, onToggleChange}: ToggleProps) {
+    const onChange = (checked: boolean) => {
+        onToggleChange(checked);
+    };
+
+    return (
+        <label className={styles.toggleWrapper}>
+            <span className={styles.labelText}>{label}</span>
+            <div
+                className={`${styles.toggle} ${active ? styles.active : ""}`}
+                onClick={() => onChange(!active)}
+            >
+                <div className={styles.circle}/>
+            </div>
+        </label>
+    );
 }

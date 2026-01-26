@@ -1,19 +1,32 @@
 // src/components/common/input/SearchInput.tsx
-
-/* 
-  담당자 : 김은혜
-  최초 작성일 : 2025-09-16
-  최종 수정일 : 2025-09-16
-*/
+"use client";
 
 import styles from "./SearchInput.module.css";
+import { useState } from "react";
 
-// TODO : 검색 기능 추가
+interface SearchInputProps {
+    onSearch?: (keyword: string) => void;
+}
 
-export default function SearchInput() {
-  return (
-    <div className={styles.searchInputWrapper}>
-      <input type="text" placeholder="Search" className={styles.searchInput} />
-    </div>
-  );
+export default function SearchInput({ onSearch }: SearchInputProps) {
+    const [value, setValue] = useState("");
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+            onSearch?.(value.trim());
+        }
+    };
+
+    return (
+        <div className={styles.searchInputWrapper}>
+            <input
+                type="text"
+                placeholder="Search"
+                className={styles.searchInput}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+            />
+        </div>
+    );
 }

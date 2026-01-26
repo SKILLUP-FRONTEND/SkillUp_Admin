@@ -34,7 +34,7 @@ export default function LoginForm() {
         try {
             const result = await adminLogin(userId, password);
             if (result.code == 'SUCCESS') {
-                await setAuthSession(result.data.accessToken,autoLogin);
+                setAuthSession(result.data.accessToken, autoLogin);
                 router.replace("/");
             } else {
                 setErrorMsg('잠시 후 다시 시도해주세요');

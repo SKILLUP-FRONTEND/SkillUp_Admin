@@ -1,22 +1,19 @@
-// app/actions/auth.ts
-'use server';
+'use client';
 
-import {cookies} from 'next/headers';
+import { deleteCookie,  setCookie } from 'cookies-next';
 
-export async function setAuthSession(userToken: string, autoLogin: boolean) {
-    const cookieStore = await cookies();
-    cookieStore.set('userSession', JSON.stringify(userToken), {
-        httpOnly: true,
+export function setAuthSession(userToken: string, autoLogin: boolean) {
+    setCookie('userSession', userToken, {
         path: '/',
         sameSite: 'lax',
-        ...(autoLogin
-            ? {maxAge: 60 * 60 * 24 * 30}
-            : {}),
+        secure: process.env.NODE_ENV === 'production',
+        ...(autoLogin ? { maxAge: 60 * 60 * 24 * 30 } : {}),
     });
 }
 
-export async function removeAuthSession() {
-    const cookieStore = await cookies();
-
-    cookieStore.delete('userSession');
+export function removeAuthSession() {
+    deleteCookie('userSession', {
+        path: '/',
+    });
 }
+

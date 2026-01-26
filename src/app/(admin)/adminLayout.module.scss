@@ -1,0 +1,47 @@
+/* src/app/(admin)/adminLayout.module.css */
+/* 
+  담당자 : 김은혜
+  최초 작성일 : 2025-08-28
+  최종 수정일 : 2025-08-28
+*/
+.container{
+  overflow-x: auto;
+  height: 100vh;
+  overflow-y: hidden;
+
+  &::-webkit-scrollbar {
+    height: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    border-radius: 500px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+
+}
+.wrapper {
+  min-width: 1280px;
+  height: 100vh;
+  background: #f4f6f8;
+  display: flex;
+}
+
+.contentArea {
+  position: relative;
+  flex-grow: 1;
+}
+
+.mainContent {
+  flex-grow: 1;
+  background-color: #f5f5f7;
+  overflow-y: scroll;
+  padding: 107px 32px 100px;
+}

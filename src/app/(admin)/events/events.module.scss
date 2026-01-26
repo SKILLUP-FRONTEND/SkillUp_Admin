@@ -1,0 +1,15 @@
+@use "@/styles/variables" as v;
+
+.boxCard {
+    padding: 28px 20px;
+}
+.titleCard{
+    color: v.$black-32;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+.textCard {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+}

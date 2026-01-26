@@ -17,11 +17,12 @@ interface CategoryFilterTabsProps {
   categories: Category[];
   selected: string;
   onSelect: (value: string) => void;
+  className?: string;
 }
 
-export default function CategoryFilterTabs({ categories, selected, onSelect }: CategoryFilterTabsProps) {
+export default function CategoryFilterTabs({ categories, selected, onSelect,className }: CategoryFilterTabsProps) {
   return (
-    <div className="boxFlex">
+    <div className={`box-flex ${className ?? ''}`} >
       {categories.map((category) => (
         <button
           key={category.value}

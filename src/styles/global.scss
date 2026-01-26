@@ -1,27 +1,29 @@
+@use "variables" as v;
+
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html {
-  font-size: 100%;
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
 }
 
 body {
-  overflow-x: hidden;
-  position: relative;
-  line-height: 1.6;
-  font-family: "Pretendard Variable", Pretendard, -apple-system,
+    overflow: hidden;
+    position: relative;
+    line-height: 1.6;
+    font-family: "Pretendard Variable", Pretendard, -apple-system,
     BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 h1,
@@ -37,67 +39,80 @@ dl,
 dd,
 ol,
 ul {
-  margin: 0;
+    margin: 0;
 }
 
 ul,
 ol {
-  list-style: none;
+    list-style: none;
 }
 
 a {
-  text-decoration: none;
-  color: #333;
-  cursor: pointer;
-  background-color: transparent;
+    text-decoration: none;
+    color: #333;
+    cursor: pointer;
+    background-color: transparent;
 }
 
 button,
 .btn {
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 0;
-  color: #333;
-  line-height: 1.6;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    color: #333;
+    line-height: 1.6;
 }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
 }
 
 img,
 video,
 iframe {
-  max-width: 100%;
-  height: auto;
-  border: 0;
+    max-width: 100%;
+    height: auto;
+    border: 0;
 }
 
 .hide {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* 공통 컴포넌트 css */
 #header {
 }
 
-#container {
+.container-default {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px 0 #0D172114;
 }
+
+.title-table {
+    height: 68px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    font-weight: 500;
+    color: v.$black-16;
+}
+
 .comtent {
 }
 
 #footer {
-  position: fixed;
-  bottom: 10px;
+    position: fixed;
+    bottom: 10px;
 }

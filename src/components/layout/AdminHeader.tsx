@@ -35,7 +35,7 @@ export default function AdminHeader() {
 
     const handleLogout = async () => {
         setUser(null);
-        await removeAuthSession();
+        removeAuthSession();
         router.replace("/login");
     };
 
