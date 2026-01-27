@@ -16,8 +16,6 @@ export function DataTable<T>({
                                  onRowClick,
                                  children,
                              }: DataTableProps<T>) {
-
-    // ⭐ children → column 정의 추출
     const columns = React.Children.toArray(children)
         .filter(Boolean)
         .map((child) => {
@@ -30,7 +28,7 @@ export function DataTable<T>({
             <thead>
             <tr>
                 {columns.map((col,index) => (
-                    <th key={index} style={{width: col.width}}>
+                    <th key={index} style={{width: `${col.width}px`}}>
                         <div className={styles.tableCell}>
                             {col.label}
                         </div>

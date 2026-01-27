@@ -11,7 +11,7 @@ import styles from "./adminLayout.module.css";
 import bellIcon from "@/assets/bellIcon.svg";
 import { useUserStore } from "@/store/userStore";
 import {useRouter} from "next/navigation";
-import {removeAuthSession} from "@/actions/auth";
+import {removeAuthSession} from "@/sessions/auth";
 import Swal from "sweetalert2";
 
 export default function AdminHeader() {
@@ -34,8 +34,7 @@ export default function AdminHeader() {
     };
 
     const handleLogout = async () => {
-        setUser(null);
-        removeAuthSession();
+        await fetch("/api/logout", { method: "POST" });
         router.replace("/login");
     };
 

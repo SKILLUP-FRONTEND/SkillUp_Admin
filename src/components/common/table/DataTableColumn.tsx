@@ -3,7 +3,7 @@
 export interface DataTableColumnProps<T> {
     prop?: keyof T;
     label: string;
-    width?: string;
+    width?: number;
     children?: React.ReactNode | ((row: T,index?: number) => React.ReactNode);
 }
 export function DataTableColumn<T>(_: DataTableColumnProps<T>) {

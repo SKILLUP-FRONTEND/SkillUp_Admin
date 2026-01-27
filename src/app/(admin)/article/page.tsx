@@ -1,4 +1,4 @@
-// src/app/(admin)/article/page.tsx
+// src/app/(admin)/articles/page.tsx
 /* 
   담당자 : 김은혜
   최초 작성일 : 2025-08-28
@@ -7,7 +7,7 @@
 
 "use client";
 
-import styles from "./members.module.css";
+import styles from "./article.module.css";
 import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
 import CategoryFilterTabs from "@/components/common/filter/CategoryFilterTabs";
 import {Member} from "@/types/member.type";
@@ -17,15 +17,13 @@ import SearchInput from "@/components/common/input/SearchInput";
 import {DataTable} from "@/components/common/table/DataTable";
 import {useRouter, useSearchParams} from "next/navigation";
 import Pagination from "@/components/common/pagination/Pagination";
-import { getArticle} from "@/api/instance";
+import {getArticle} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
 import Dropdown from "@/components/common/dropdown/Dropdown";
 import Image from "next/image";
-import { useModalStore } from "@/store/modalStore";
 
 export default function Article() {
-    const { openModal } = useModalStore();
     const [data, setData] = useState([]);
     const [selectedStatus, setSelectedStatus] = useState("게시일순");
 
@@ -40,7 +38,7 @@ export default function Article() {
     ]);
     const searchParams = useSearchParams();
 
-    const page = Number(searchParams.get('page') ?? 1);
+    const page = Number(searchParams.get('page') ?? 0);
     const keyword = searchParams.get('keyword') ?? ''
 
     const [filterData, setFilterData] = useState({
@@ -50,6 +48,7 @@ export default function Article() {
     const [selected, setSelected] = useState("PUBLISHED");
 
     const onSelect = (key: string) => {
+        setPageFilter(0);
         setSelected(key);
     };
 
@@ -91,7 +90,6 @@ export default function Article() {
     };
 
 
-
     const setRouterFilter = () => {
         const params = new URLSearchParams(searchParams.toString());
         Object.entries(filterData).forEach(([key, value]) => {
@@ -100,9 +98,27 @@ export default function Article() {
         router.replace(`?${params.toString()}`);
     };
 
-    const moveCreate = ()=>{
+    const moveCreate = () => {
         router.push('/article/create');
     }
+
+    const returnTotalCount = () => {
+        switch (selected) {
+            case "PUBLISHED":
+                return categories.find(category => category.value === "PUBLISHED")?.count;
+            case "DRAFT":
+                return categories.find(category => category.value === "DRAFT")?.count;
+            default:
+                return 0;
+        }
+    }
+
+    const returnIndex= (index?:number)=>{
+
+        return (returnTotalCount() ?? 0) - (page * 10) - (index ?? 0);
+
+    }
+
     useEffect(() => {
         initData().then();
     }, [filterData, selected]);
@@ -132,7 +148,7 @@ export default function Article() {
 
                 <div className="box-flex a-center">
                     <div className="title-table mr-auto">
-                        등록된 아티클 {data.length}개
+                        등록된 아티클 {returnTotalCount()}개
                     </div>
 
                     <Dropdown
@@ -146,9 +162,9 @@ export default function Article() {
                     />
                 </div>
                 <DataTable data={data} onRowClick={(row) => console.log(row)}>
-                    <DataTableColumn label="No" width="84px">
+                    <DataTableColumn label="No" width={84}>
                         {(row, index) => {
-                            return index;
+                            return returnIndex(index);
                         }}
                     </DataTableColumn>
                     <DataTableColumn prop="thumbnailUrl" label="썸네일">
@@ -167,14 +183,27 @@ export default function Article() {
                     </DataTableColumn>
                     <DataTableColumn prop="title" label="제목"/>
                     <DataTableColumn prop="source" label="출처"/>
-                    <DataTableColumn prop="originalPublishedDate" label="원문 게시일"/>
-                    <DataTableColumn prop="targetRoles" label="직군"/>
-                    <DataTableColumn prop="status" label="상태">
-                        {(row)=><div>{row.status}</div>}
+                    <DataTableColumn prop="originalPublishedDate" label="원문 게시일" width={120}/>
+                    <DataTableColumn prop="targetRoles" label="직군" width={100}>
+
+                        {(row) =>
+                            <div>
+                                {row.targetRoles.map((targetRole: string) => (
+
+                                    <div key={targetRole}>
+                                        {targetRole}
+                                    </div>
+                                ))}
+                            </div>
+                        }
+
                     </DataTableColumn>
-                    <DataTableColumn prop="createdAt" label="등록일" width="175px"/>
-                    <DataTableColumn
-                        label="액션">
+                    <DataTableColumn prop="status" label="상태" width={88}>
+                        {(row) => <StatusBadge status={row.status}></StatusBadge>}
+                    </DataTableColumn>
+                    <DataTableColumn prop="createdAt" label="등록일" width={175}/>
+                    <DataTableColumn width={108}
+                                     label="액션">
 
                     </DataTableColumn>
                 </DataTable>

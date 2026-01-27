@@ -45,7 +45,7 @@ export default function Pagination({
     );
 
     // 페이지 번호
-    for (let i = 1; i <= totalPages; i++) {
+    for (let i = 0; i < totalPages; i++) {
       pageNumbers.push(
         <button
           key={i}
@@ -54,7 +54,7 @@ export default function Pagination({
           }`}
           onClick={() => handlePageChange(i)}
         >
-          {i}
+          {i + 1}
         </button>
       );
     }

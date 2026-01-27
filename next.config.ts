@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-
+import path from "path";
 const nextConfig: NextConfig = {
     images: {
         remotePatterns: [
@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
                 hostname: 'picsum.photos',
             },
         ],
+    },
+    sassOptions: {
+        includePaths: [path.join(process.cwd(), "src")],
     },
 };
 

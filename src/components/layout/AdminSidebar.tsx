@@ -31,7 +31,7 @@ const navItems = [
     },
     {
         label: "아티클 관리",
-        href: "/article",
+        href: "/articles",
         activeIcon: LayerActiveIcon,
         inactiveIcon: LayerInactiveIcon,
         className: 'article',

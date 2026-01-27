@@ -1,0 +1,25 @@
+@use "@/styles/variables.scss" as v;
+
+
+.titleCard{
+    color: v.$black-0f;
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+.textRequired{
+    font-size: 14px;
+    font-weight: 500;
+    color: v.$black-32;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+
+    &:after{
+        content: " *";
+        color: red;
+        margin-left: 4px;
+    }
+
+
+}

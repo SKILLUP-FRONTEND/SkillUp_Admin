@@ -10,20 +10,18 @@
 import styles from "./members.module.css";
 import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
 import CategoryFilterTabs from "@/components/common/filter/CategoryFilterTabs";
-import {Member} from "@/types/member.type";
 import StatusBadge from "@/components/common/badge/StatusBadge";
 import {useCallback, useEffect, useState} from "react";
 import SearchInput from "@/components/common/input/SearchInput";
-import {MEMBERS} from "@/mocks/members.mock";
 import {DataTable} from "@/components/common/table/DataTable";
 import {useRouter, useSearchParams} from "next/navigation";
 import Pagination from "@/components/common/pagination/Pagination";
-import {getAllMembers} from "@/api/instance";
+import {getAllMembers} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
 
 export default function Members() {
-    const [data,setData] = useState(MEMBERS);
+    const [data,setData] = useState([]);
 
     const router = useRouter();
     const showLoading = useLoadingStore((s) => s.show);
@@ -57,7 +55,39 @@ export default function Members() {
             showLoading();
             setRouterFilter();
             const result = await getAllMembers(filterData);
-            console.log(result);
+
+            setCategories(prev =>
+                prev.map(category => {
+                    if (category.value === "all") {
+                        return {...category, count: result.data.usersCount};
+                    }
+                    if (category.value === "plan") {
+                        return {...category, count: result.data.pmUsersCount};
+                    }
+                    if (category.value === "design") {
+                        return {...category, count: result.data.designerUsersCount};
+                    }
+                    if (category.value === "dev") {
+                        return {...category, count: result.data.devUsersCount};
+                    }
+                    return category;
+                })
+            );
+
+            // {
+            //     "users": [],
+            //     "devUsers": [],
+            //     "designerUsers": [],
+            //     "pmUsers": [],
+            //     "pageInfoResponse": {
+            //     "currentPage": 2,
+            //         "pageSize": 20,
+            //         "totalPages": 0
+            // },
+            //
+            // }
+
+
         } catch (error) {
             console.log(error);
         } finally {
@@ -111,7 +141,7 @@ export default function Members() {
                     회원 {data.length}명
                 </div>
                 <DataTable data={data} onRowClick={(row) => console.log(row)}>
-                    <DataTableColumn prop="id" label="No" width="84px" />
+                    <DataTableColumn prop="id" label="No" width={84} />
                     <DataTableColumn prop="name" label="이름" />
                     <DataTableColumn prop="email" label="이메일" />
                     <DataTableColumn prop="createdAt" label="가입일" />

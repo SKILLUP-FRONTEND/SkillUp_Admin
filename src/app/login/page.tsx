@@ -12,11 +12,11 @@ import {useState} from "react";
 import Image from "next/image";
 import SkillUpIcon from "@/assets/skillUp_black.svg";
 import styles from "./login.module.scss";
-import {adminLogin} from "@/api/instance";
+import {login} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {useRouter} from "next/navigation";
 import {useUserStore} from "@/store/userStore";
-import {setAuthSession} from "@/actions/auth";
+
 
 export default function LoginForm() {
     const router = useRouter();
@@ -32,11 +32,10 @@ export default function LoginForm() {
     const handleLogin = async () => {
         showLoading();
         try {
-            const result = await adminLogin(userId, password);
-            if (result.code == 'SUCCESS') {
-                setAuthSession(result.data.accessToken, autoLogin);
+            const response =  await login(userId, password);
+            if(response.code == "SUCCESS") {
                 router.replace("/");
-            } else {
+            }else{
                 setErrorMsg('잠시 후 다시 시도해주세요');
             }
         } catch (error) {

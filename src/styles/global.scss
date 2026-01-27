@@ -116,3 +116,15 @@ iframe {
     position: fixed;
     bottom: 10px;
 }
+.input-default{
+    width: 100%;
+    border: 1px solid v.$gray-df;
+    border-radius: 6px;
+    min-height: 48px;
+    padding: 0 16px;
+    font-size: 14px;
+
+    &::placeholder {
+        color: #0f172b88;
+    }
+}
