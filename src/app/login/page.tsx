@@ -12,7 +12,7 @@ import {useState} from "react";
 import Image from "next/image";
 import SkillUpIcon from "@/assets/skillUp_black.svg";
 import styles from "./login.module.scss";
-import {login} from "@/api/client";
+import {login} from "@/client/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {useRouter} from "next/navigation";
 import {useUserStore} from "@/store/userStore";

@@ -1,4 +1,4 @@
-import { cookies } from "next/headers";
+import {cookies} from "next/headers";
 
 export async function serverFetch(
     url: string,
@@ -8,8 +8,12 @@ export async function serverFetch(
     const cookieStore = await cookies();
     const token = cookieStore.get("userSession")?.value;
 
+    const isFormData = options.body instanceof FormData;
+
+    console.log(token)
+
     const headers: Record<string, string> = {
-        "Content-Type": "application/json",
+        ...(isFormData ? {} : { "Content-Type": "application/json" }),
         ...(options.headers as Record<string, string> || {}),
     };
 

@@ -9,45 +9,29 @@
 
 import Image from "next/image";
 import SkillUpWhiteIcon from "@/assets/skillUp_white.svg";
-import styles from "./adminLayout.module.css";
+import styles from "./adminLayout.module.scss";
 import Link from "next/link";
-import LayoutActiveIcon from "@/assets/layout_active.svg";
-import LayoutInactiveIcon from "@/assets/layout_inactive.svg";
-import LayerActiveIcon from "@/assets/layer_active.svg";
-import LayerInactiveIcon from "@/assets/layer_inactive.svg";
-import BoardActiveIcon from "@/assets/board_active.svg";
-import BoardInactiveIcon from "@/assets/board_inactive.svg";
-import PersonInactiveIcon from "@/assets/person_inactive.svg";
-import PersonActiveIcon from "@/assets/person_active.svg";
 import {usePathname} from "next/navigation";
 
 const navItems = [
     {
         label: "행사관리",
         href: "/events",
-        activeIcon: LayerActiveIcon,
-        inactiveIcon: LayerInactiveIcon,
         className: 'event',
     },
     {
         label: "아티클 관리",
         href: "/articles",
-        activeIcon: LayerActiveIcon,
-        inactiveIcon: LayerInactiveIcon,
         className: 'article',
     },
     {
         label: "배너관리",
         href: "/banners",
-        activeIcon: BoardActiveIcon,
-        inactiveIcon: BoardInactiveIcon,
         className: 'banner',
     },
     {
         label: "회원관리",
         href: "/members",
-        activeIcon: PersonActiveIcon,
-        inactiveIcon: PersonInactiveIcon,
         className: 'member',
     },
 ];

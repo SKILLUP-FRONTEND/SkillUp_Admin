@@ -128,3 +128,18 @@ iframe {
         color: #0f172b88;
     }
 }
+
+.textarea-default{
+    width: 100%;
+    border: 1px solid v.$gray-df;
+    border-radius: 6px;
+
+    resize: none;
+    padding: 12px 16px;
+    font-size: 14px;
+
+    &::placeholder {
+        color: #0f172b88;
+    }
+
+}

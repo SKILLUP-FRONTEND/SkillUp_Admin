@@ -1,0 +1,64 @@
+@use "@/styles/variables.scss" as v;
+@use "@/styles/mixins.scss" as mixin;
+
+
+.titleCard {
+    color: v.$black-0f;
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.textRequired {
+    font-size: 14px;
+    font-weight: 500;
+    color: v.$black-32;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+
+    &:after {
+        content: " *";
+        color: red;
+        margin-left: 4px;
+    }
+
+    &.noneRequired{
+        &:after{
+            display: none;
+        }
+    }
+}
+
+.errorText {
+    color: #ff4d4f;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+.btnOption {
+    width: 28px;
+    height: 28px;
+    @include mixin.back-center($size: 16px);
+
+
+    &.edit {
+        background-image: url("/images/iconPen.svg");
+    }
+
+    &.delete {
+        background-image: url("/images/iconTrash.svg");
+    }
+}
+.boxDetail{
+    border: 1px solid #dfe3e8 ;
+
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    padding: 12px 16px;
+    display: flex;
+    min-height: 47px;
+    align-items: center;
+    font-size: 14px;
+    color: #45556c;
+}

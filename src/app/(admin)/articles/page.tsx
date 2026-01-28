@@ -7,21 +7,22 @@
 
 "use client";
 
-import styles from "./article.module.css";
-import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
+import styles from "./article.module.scss";
 import CategoryFilterTabs from "@/components/common/filter/CategoryFilterTabs";
-import {Member} from "@/types/member.type";
 import StatusBadge from "@/components/common/badge/StatusBadge";
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import SearchInput from "@/components/common/input/SearchInput";
 import {DataTable} from "@/components/common/table/DataTable";
 import {useRouter, useSearchParams} from "next/navigation";
 import Pagination from "@/components/common/pagination/Pagination";
-import {getArticle} from "@/api/client";
+import {getArticle} from "@/client/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
 import Dropdown from "@/components/common/dropdown/Dropdown";
 import Image from "next/image";
+import Swal from "sweetalert2";
+import {ArticleModel} from "@/types/article.type";
+
 
 export default function Article() {
     const [data, setData] = useState([]);
@@ -99,7 +100,7 @@ export default function Article() {
     };
 
     const moveCreate = () => {
-        router.push('/article/create');
+        router.push('/articles/create');
     }
 
     const returnTotalCount = () => {
@@ -113,10 +114,29 @@ export default function Article() {
         }
     }
 
-    const returnIndex= (index?:number)=>{
+    const returnIndex = (index?: number) => {
 
         return (returnTotalCount() ?? 0) - (page * 10) - (index ?? 0);
 
+    }
+
+    const moveDetail = (row: ArticleModel) => {
+        router.push(`/articles/1`);
+        // router.push(`/articles/${row.id}`);
+    }
+
+    const showDelete = async (row: unknown) => {
+        const result = await Swal.fire({
+            title: '아이템을 삭제하시겠어요?',
+            showCancelButton: true,
+            confirmButtonText: '삭제',
+            cancelButtonText: '취소',
+            confirmButtonColor: '#d33',
+        });
+
+        if (result.value) {
+
+        }
     }
 
     useEffect(() => {
@@ -161,7 +181,7 @@ export default function Article() {
                         placeholder="상태 선택"
                     />
                 </div>
-                <DataTable data={data} onRowClick={(row) => console.log(row)}>
+                <DataTable<ArticleModel> data={data} onRowClick={(row) => console.log(row)}>
                     <DataTableColumn label="No" width={84}>
                         {(row, index) => {
                             return returnIndex(index);
@@ -169,6 +189,8 @@ export default function Article() {
                     </DataTableColumn>
                     <DataTableColumn prop="thumbnailUrl" label="썸네일">
                         {(row) =>
+
+
                             row.thumbnailUrl ? (
                                 <Image
                                     src={row.thumbnailUrl}
@@ -201,10 +223,28 @@ export default function Article() {
                     <DataTableColumn prop="status" label="상태" width={88}>
                         {(row) => <StatusBadge status={row.status}></StatusBadge>}
                     </DataTableColumn>
-                    <DataTableColumn prop="createdAt" label="등록일" width={175}/>
+                    <DataTableColumn prop="createdAt" label="등록일" width={175}>
+                        {(row) => {
+                            const date = new Date(row.createdAt);
+                            const formatted = date.toLocaleDateString("ko-KR", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                            });
+                            return <div>{formatted}</div>;
+                        }}
+
+                    </DataTableColumn>
                     <DataTableColumn width={108}
                                      label="액션">
-
+                        {(row: ArticleModel) => {
+                            return <div className="box-flex gap8">
+                                <button onClick={() => moveDetail(row)}
+                                        className={`${styles.btnOption} ${styles.edit}`}></button>
+                                <button onClick={() => showDelete(row)}
+                                        className={`${styles.btnOption} ${styles.delete}`}></button>
+                            </div>
+                        }}
                     </DataTableColumn>
                 </DataTable>
                 <Pagination

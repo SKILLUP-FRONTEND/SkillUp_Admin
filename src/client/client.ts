@@ -1,5 +1,6 @@
-// src/api/client.ts
+// src/client/client.ts
 import axios from "axios";
+import {ArticleFormType} from "@/validators/article";
 
 const client = axios.create({
     baseURL: "/api",
@@ -28,7 +29,6 @@ export const login =async (email: string, password: string) =>{
     return response.data;
 }
 
-
 export const getAllMembers = async (params: object) => {
     const response = await client.get("/members", {
         params: params
@@ -39,6 +39,33 @@ export const getAllMembers = async (params: object) => {
 
 export const getArticle = async (params: object) => {
     const response = await client.get("/articles", {
+        params: params
+    });
+
+    return response.data;
+}
+
+export const createArticle = async (params:ArticleFormType, file?: File | null) => {
+
+    const formData = new FormData();
+
+    formData.append("request", JSON.stringify(params));
+    if(file){
+        formData.append("thumbnailImage", file);
+    }
+
+    const response = await client.post("/articles/create", formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+        );
+    return response.data;
+};
+
+export const getArticleDetail = async (params: object) => {
+    const response = await client.get("/articles/detail", {
         params: params
     });
 

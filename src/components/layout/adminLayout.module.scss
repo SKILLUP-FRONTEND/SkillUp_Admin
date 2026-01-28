@@ -1,6 +1,6 @@
-/* src/components/layout/adminLayout.module.scss */
+/* src/components/layout/adminLayout.module.css */
 
-/* 
+/*
   담당자 : 김은혜
   최초 작성일 : 2025-08-28
   최종 수정일 : 2025-08-28
@@ -61,25 +61,25 @@
 
     &.event {
         &:before {
-            background-image: url("@/assets/layer_inactive.svg");
+            background-image: url("/images/layer_inactive.svg");
         }
     }
-
+    
     &.article {
         &:before {
-            background-image: url("@/assets/layout_inactive.svg");
+            background-image: url("/images/layout_inactive.svg");
         }
     }
-
+    
     &.banner {
         &:before {
-            background-image: url("@/assets/board_inactive.svg");
+            background-image: url("/images/board_inactive.svg");
         }
     }
-
+    
     &.member {
-        &:before {
-            background-image: url("@/assets/person_inactive.svg");
+       &:before {
+            background-image: url("/images/person_inactive.svg");
         }
     }
 
@@ -93,22 +93,22 @@
 
         &.event {
             &:before {
-                background-image: url("@/assets/layer_active.svg");
+                background-image: url("/images/layer_active.svg");
             }
         }
         &.article {
             &:before {
-                background-image: url("@/assets/layout_active.svg");
+                background-image: url("/images/layout_active.svg");
             }
         }
         &.banner {
             &:before {
-                background-image: url("@/assets/board_active.svg");
+                background-image: url("/images/board_active.svg");
             }
         }
         &.member {
             &:before {
-                background-image: url("@/assets/person_active.svg");
+                background-image: url("/images/person_active.svg");
             }
         }
     }
@@ -130,10 +130,6 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     overflow: visible;
     justify-content: flex-end;
-
-    box-shadow: 0px 1px 2px 0px #151E2814;
-
-    box-shadow: 0px 2px 4px 0px #0D172114;
 
 }
 

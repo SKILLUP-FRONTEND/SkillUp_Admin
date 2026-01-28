@@ -13,6 +13,9 @@
     .w#{$i} {
         width: #{$i}px;
     }
+    .w#{$i}p {
+        width: $i * 1%;
+    }
     .pa#{$i} {
         padding: #{$i}px;
     }
@@ -32,16 +35,22 @@
         font-size: #{$i}px;
     }
 
-    .fw#{$i}{
+    .fw#{$i} {
         font-weight: #{$i};
     }
-    .lh#{$i}{
+    .lh#{$i} {
         line-height: #{$i};
     }
 
-    .fg#{$i}{
+    .fg#{$i} {
         flex-grow: #{$i};
+
     }
+
+    .flex#{$i} {
+        flex: #{$i};
+    }
+
 
 }
 
@@ -55,9 +64,11 @@
 
 .box-flex {
     display: flex;
+
     &.a-start {
         align-items: flex-start;
     }
+
     &.a-center {
         align-items: center;
     }
@@ -65,6 +76,10 @@
     &.j-center {
         justify-content: center;
     }
+}
+
+.fw-wrap {
+    flex-wrap: wrap;
 }
 
 .btnTap {
@@ -105,7 +120,20 @@
 
 }
 
-.color-black32{
+.btnBorder {
+    height: 45px;
+    padding: 0 16px;
+    border-radius: 6px;
+    border: 1px solid #cad5e2;
+    font-weight: 600;
+    color: v.$black-32;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.color-black32 {
     color: v.$black-32;
 }
 

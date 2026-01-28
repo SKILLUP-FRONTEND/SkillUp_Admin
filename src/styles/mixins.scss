@@ -1,0 +1,10 @@
+@mixin back-center($fit: contain,$size: null, ) {
+    background-position: center;
+    background-repeat: no-repeat;
+
+    @if $size != null {
+        background-size: $size;
+    } @else {
+        background-size: $fit;
+    }
+}

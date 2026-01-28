@@ -10,12 +10,12 @@ interface DataTableProps<T> {
     children: ReactNode;
 }
 
-export function DataTable<T>({
-                                 data,
-                                 emptyText = "데이터가 없습니다.",
-                                 onRowClick,
-                                 children,
-                             }: DataTableProps<T>) {
+export function DataTable<T extends object>({
+                                                data,
+                                                emptyText = "데이터가 없습니다.",
+                                                onRowClick,
+                                                children,
+                                            }: DataTableProps<T>) {
     const columns = React.Children.toArray(children)
         .filter(Boolean)
         .map((child) => {
@@ -27,7 +27,7 @@ export function DataTable<T>({
         <table className={styles.tableDefault}>
             <thead>
             <tr>
-                {columns.map((col,index) => (
+                {columns.map((col, index) => (
                     <th key={index} style={{width: `${col.width}px`}}>
                         <div className={styles.tableCell}>
                             {col.label}
@@ -53,7 +53,7 @@ export function DataTable<T>({
                         className={styles.dataTableRow}
                         onClick={() => onRowClick?.(row)}
                     >
-                        {columns.map((col,index) => (
+                        {columns.map((col, index) => (
                             <td key={index}>
                                 <div className={styles.tableCell}>
                                     {typeof col.children === "function"

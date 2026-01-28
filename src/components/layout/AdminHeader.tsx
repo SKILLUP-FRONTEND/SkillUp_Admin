@@ -7,7 +7,7 @@
 "use client"
 
 import Image from "next/image";
-import styles from "./adminLayout.module.css";
+import styles from "./adminLayout.module.scss";
 import bellIcon from "@/assets/bellIcon.svg";
 import { useUserStore } from "@/store/userStore";
 import {useRouter} from "next/navigation";

@@ -6,7 +6,7 @@
   최종 수정일 : 2025-09-16
 */
 
-export interface article {
+export interface ArticleModel {
   id: number;
   name: string;
   email: string;
@@ -14,6 +14,18 @@ export interface article {
   loginMethod: string;
   job: string;
   status: ArticleStatus;
+}
+
+export interface ArticleDetailModel {
+  clickCount: number;
+  createdAt: string | null;
+  originalPublishedDate: string;   // "2025-11-20"
+  originalUrl: string;
+  source: string;
+  summary: string;
+  targetRoles: string[];           // ['기획자']
+  thumbnailUrl: string;
+  title: string;
 }
 
 export type ArticleStatus = "PUBLISHED" | "DRAFT";
