@@ -11,6 +11,8 @@
   border-radius: 2px;
   font-size: 13px;
   font-weight: 500;
+  display: inline-flex;
+align-items: center;
 }
 
 .active {

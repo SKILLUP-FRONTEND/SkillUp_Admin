@@ -19,7 +19,8 @@ import {createArticle, getArticle, getArticleDetail, login} from "@/client/clien
 import {router} from "next/dist/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import Swal from "sweetalert2";
-import {ArticleDetailModel, ArticleModel} from "@/types/article.type";
+import {ArticleDetailModel, ArticleModel, ArticleStatus} from "@/types/article.type";
+import StatusBadge from "@/components/common/badge/StatusBadge";
 
 interface Props {
     params: {
@@ -54,9 +55,14 @@ export default function ArticleDetailPage() {
 
     return (
         <>
-            <div className="box-flex mb32">
-                <div className="title-page">
+            <div className="box-flex mb32 a-center">
+                <div className="title-page mr12">
                     아티클 상세
+                </div>
+                <StatusBadge status={'PUBLISHED'}></StatusBadge>
+                <div className="box-flex ml-auto gap8">
+                    <button className="btnBorder delete w90">삭제</button>
+                    <button className="btnDefault w90">수정하기</button>
                 </div>
             </div>
 

@@ -7,6 +7,9 @@
     .mb#{$i} {
         margin-bottom: #{$i}px;
     }
+    .mr#{$i} {
+        margin-right: #{$i}px;
+    }
     .gap#{$i} {
         gap: #{$i}px;
     }
@@ -131,6 +134,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    background-color: white;
+
+    &.delete{
+        border-color: #ffa2a2;
+        color: #e7000b;
+    }
 }
 
 .color-black32 {
