@@ -46,12 +46,12 @@ export default function Events() {
     const searchParams = useSearchParams();
     const page = Number(searchParams.get('page') ?? 1);
     const deleted = searchParams.get('deleted') === 'true';
-    const keyword = searchParams.get('keyWard') ?? ''
+    const keyword = searchParams.get('keyword') ?? ''
 
     const [filterData, setFilterData] = useState({
         page: page,
         deleted: deleted,
-        keyWard: keyword,
+        keyword: keyword,
     });
 
     const setDeleteFilter = (value: boolean) => {
@@ -159,7 +159,7 @@ export default function Events() {
 
                 <DataTable
                     data={data}>
-                    <DataTableColumn prop="id" label="No" width="84px">
+                    <DataTableColumn prop="id" label="No" width={84}>
                     </DataTableColumn>
                     <DataTableColumn prop="title" label="행사명"/>
                     <DataTableColumn prop="category" label="카테고리"/>

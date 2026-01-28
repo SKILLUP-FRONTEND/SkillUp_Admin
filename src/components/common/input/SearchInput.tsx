@@ -6,10 +6,11 @@ import { useState } from "react";
 
 interface SearchInputProps {
     onSearch?: (keyword: string) => void;
+    initialValue?: string;
 }
 
-export default function SearchInput({ onSearch }: SearchInputProps) {
-    const [value, setValue] = useState("");
+export default function SearchInput({ initialValue,onSearch }: SearchInputProps) {
+    const [value, setValue] = useState(initialValue ?? '');
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {

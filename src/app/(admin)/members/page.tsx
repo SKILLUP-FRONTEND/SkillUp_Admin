@@ -7,11 +7,10 @@
 
 "use client";
 
-import styles from "./members.module.css";
 import ToggleSwitch from "@/components/common/toggle/ToggleSwitch";
 import CategoryFilterTabs from "@/components/common/filter/CategoryFilterTabs";
 import StatusBadge from "@/components/common/badge/StatusBadge";
-import {useCallback, useEffect, useState} from "react";
+import { useEffect, useState} from "react";
 import SearchInput from "@/components/common/input/SearchInput";
 import {DataTable} from "@/components/common/table/DataTable";
 import {useRouter, useSearchParams} from "next/navigation";
@@ -19,9 +18,11 @@ import Pagination from "@/components/common/pagination/Pagination";
 import {getAllMembers} from "@/client/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
+import {AllMemberModel, MemberModel} from "@/types/member.type";
 
 export default function Members() {
-    const [data,setData] = useState([]);
+    const [allUserData, setAllUserData] = useState<AllMemberModel | null>(null);
+    const [userData, setUserData] = useState<MemberModel[]>([]);
 
     const router = useRouter();
     const showLoading = useLoadingStore((s) => s.show);
@@ -35,14 +36,14 @@ export default function Members() {
     ]);
     const searchParams = useSearchParams();
 
-    const page = Number(searchParams.get('page') ?? 1);
+    const page = Number(searchParams.get('page') ?? 0);
     const deleted = searchParams.get('deleted') === 'true';
-    const keyword = searchParams.get('keyWard') ?? ''
+    const keyword = searchParams.get('keyword') ?? ''
 
     const [filterData, setFilterData] = useState({
         page: page,
         deleted: deleted,
-        keyWard: keyword,
+        keyword: keyword,
     });
     const [selected, setSelected] = useState("all");
 
@@ -50,12 +51,31 @@ export default function Members() {
         setSelected(key);
     };
 
+    const setCategoryUserData=()=>{
+        if(allUserData){
+            switch (selected) {
+                case "all":
+                    setUserData(allUserData.users);
+                    break;
+                case "plan":
+                    setUserData(allUserData.pmUsers);
+                    break;
+                case "design":
+                    setUserData(allUserData.designerUsers);
+                    break;
+                case "dev":
+                    setUserData(allUserData.devUsers);
+                    break;
+            }
+        }
+    }
+
     const initData = async () => {
         try {
+            setUserData([]);
             showLoading();
             setRouterFilter();
             const result = await getAllMembers(filterData);
-
             setCategories(prev =>
                 prev.map(category => {
                     if (category.value === "all") {
@@ -73,21 +93,7 @@ export default function Members() {
                     return category;
                 })
             );
-
-            // {
-            //     "users": [],
-            //     "devUsers": [],
-            //     "designerUsers": [],
-            //     "pmUsers": [],
-            //     "pageInfoResponse": {
-            //     "currentPage": 2,
-            //         "pageSize": 20,
-            //         "totalPages": 0
-            // },
-            //
-            // }
-
-
+            setAllUserData(result.data);
         } catch (error) {
             console.log(error);
         } finally {
@@ -101,6 +107,10 @@ export default function Members() {
     const setPageFilter = (value: number) => {
         setFilterData(prev => ({...prev, page: value}));
     };
+    const setKeywordFilter = (value: string) => {
+        setFilterData(prev => ({...prev, keyword: value}));
+    };
+
 
     const setRouterFilter = () => {
         const params = new URLSearchParams(searchParams.toString());
@@ -109,9 +119,36 @@ export default function Members() {
         });
         router.replace(`?${params.toString()}`);
     };
+
+    const returnIndex = (index?: number) => {
+        return (returnTotalCount() ?? 0) - (page * 10) - (index ?? 0);
+    }
+
+    const returnTotalCount = () => {
+
+        switch (selected) {
+            case "all":
+                return categories.find(category => category.value === "all")?.count;
+            case "plan":
+                return categories.find(category => category.value === "plan")?.count;
+            case "design":
+                return categories.find(category => category.value === "design")?.count;
+            case "dev":
+                return categories.find(category => category.value === "dev")?.count;
+            default:
+                return 0;
+        }
+    }
+
+
     useEffect(() => {
         initData().then();
     }, [filterData]);
+
+    useEffect(() => {
+        setCategoryUserData();
+    }, [allUserData,selected]);
+
 
 
     return (
@@ -134,31 +171,36 @@ export default function Members() {
                     onSelect={onSelect}
                     className="mr-auto"
                 />
-                <SearchInput/>
+                <SearchInput onSearch={(keyword) =>{
+                    setKeywordFilter(keyword);
+                }}
+                             initialValue={filterData.keyword}
+                />
             </div>
             <div className="container-default">
                 <div className="title-table">
-                    회원 {data.length}명
+                    회원 {userData.length}명
                 </div>
-                <DataTable data={data} onRowClick={(row) => console.log(row)}>
-                    <DataTableColumn prop="id" label="No" width={84} />
-                    <DataTableColumn prop="name" label="이름" />
-                    <DataTableColumn prop="email" label="이메일" />
-                    <DataTableColumn prop="createdAt" label="가입일" />
-                    <DataTableColumn prop="loginMethod" label="로그인 방법" />
-                    <DataTableColumn prop="job" label="직군" ></DataTableColumn>
+                <DataTable<MemberModel> data={userData} onRowClick={(row) => console.log(row)}>
+                    <DataTableColumn label="No" width={84}>
+                        {(row, index) => {
+                            return returnIndex(index);
+                        }}
+                    </DataTableColumn>
+                    <DataTableColumn prop="name" label="이름"/>
+                    <DataTableColumn prop="email" label="이메일"/>
+                    <DataTableColumn prop="createdAt" label="가입일"/>
+                    <DataTableColumn prop="socialLoginType" label="로그인 방법"/>
+                    <DataTableColumn prop="role" label="직군"></DataTableColumn>
                     <DataTableColumn
                         prop="status"
-                        label="상태"
-
-                    >
-                        {(row) => <StatusBadge status={row.status} />}
-
+                        label="상태">
+                        {(row) => <StatusBadge status={(row.status == "활성") ? "ACTIVE":"INACTIVE"}/>}
                     </DataTableColumn>
                 </DataTable>
                 <Pagination
                     currentPage={filterData.page}
-                    totalPages={Math.ceil(data.length / 5)}
+                    totalPages={Math.ceil(userData.length / 5)}
                     onPageChange={(page) => {
                         setPageFilter(page);
                     }}

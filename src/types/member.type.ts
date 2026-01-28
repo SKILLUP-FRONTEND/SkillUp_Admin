@@ -6,14 +6,23 @@
   최종 수정일 : 2025-09-16
 */
 
-export interface Member {
-  id: number;
+export interface AllMemberModel {
+  users: MemberModel[];
+  devUsers: MemberModel[];
+  designerUsers: MemberModel[];
+  pmUsers: MemberModel[];
+}
+
+
+export interface MemberModel {
+  userId: number;
   name: string;
   email: string;
   createdAt: string;
-  loginMethod: string;
-  job: string;
+  socialLoginType: string;
+  role: string;
   status: MemberStatus;
 }
+
 
 export type MemberStatus = "ACTIVE" | "INACTIVE";
