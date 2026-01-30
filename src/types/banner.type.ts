@@ -9,6 +9,7 @@ export interface BannerModel {
     endAt: string;
 
     bannerType: string;
+    id:number
 }
 
 export interface BannerDetailModel {

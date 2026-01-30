@@ -139,3 +139,8 @@ export const createBanner = async (params: object, file?: File | null) => {
     );
     return response.data;
 };
+
+export const updateBanner = async (params:object) => {
+    const response = await client.patch("/banners/order", params);
+    return response.data;
+}

@@ -11,18 +11,17 @@ import {DataTableColumn} from "@/components/common/table/DataTableColumn";
 
 import StatusBadge from "@/components/common/badge/StatusBadge";
 import {useEffect, useState} from "react";
-import {getArticle, getBanner} from "@/api/client";
+import {getArticle, getBanner, updateBanner} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {useRouter, useSearchParams} from "next/navigation";
 import Pagination from "@/components/common/pagination/Pagination";
 import {BannerModel} from "@/types/banner.type";
 
 
-
 export default function Banners() {
     const router = useRouter();
-    const [currentBanner,setCurrentBanner] = useState([]);
-    const [prevBanner,setPrevBanner] = useState([]);
+    const [currentBanner, setCurrentBanner] = useState<BannerModel[]>([]);
+    const [prevBanner, setPrevBanner] = useState<BannerModel[]>([]);
     const showLoading = useLoadingStore((s) => s.show);
     const hideLoading = useLoadingStore((s) => s.hide);
 
@@ -66,9 +65,45 @@ export default function Banners() {
         }
     };
 
-    const moveCreate = ()=>{
+
+
+    const moveDetail = (row:BannerModel) => {
+        router.push(`/banners/${row.id}`);
+    }
+
+    const moveCreate = () => {
         router.push(`/banners/create`);
     }
+
+    const handleOrderChange = (newData: BannerModel[]) => {
+        setCurrentBanner(newData)
+        updateBannerOrder().then();
+
+
+    };
+
+    const updateBannerOrder = async () => {
+        try {
+            showLoading();
+            setRouterFilter();
+            const params = {
+                bannerIds: prevBanner.map((e) => {
+                    return e.id
+                }),
+            };
+            console.log(params);
+
+
+            const result = await updateBanner(params);
+
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            hideLoading();
+        }
+    }
+
     useEffect(() => {
         initData().then();
     }, [filterData]);
@@ -76,44 +111,61 @@ export default function Banners() {
         <>
             <div className="box-flex mb32">
                 <div className="title-page mr-auto">배너 관리</div>
-                <button className="btnDefault" onClick={()=>moveCreate()}>+ 신규 등록</button>
+                <button className="btnDefault" onClick={() => moveCreate()}>+ 신규 등록</button>
 
             </div>
-            {/*"displayOrder": 0,*/}
-            {/*"title": "string",*/}
-            {/*"bannerImageUrl": "string",*/}
-            {/*"bannerLink": "string",*/}
-            {/*"bannerType": "string",*/}
-            {/*"startAt": "2026-01-30",*/}
-            {/*"endAt": "2026-01-30"*/}
             <div className="container-default mb60">
-                <DataTable<BannerModel> data={currentBanner} >
-
-                    <DataTableColumn prop="displayOrder" label="순서"  width={84}>
-
+                <DataTable<BannerModel> data={currentBanner}
+                                        draggable
+                                        onOrderChange={handleOrderChange}
+                >
+                    <DataTableColumn label="" width={84}>
+                        {(row, index, drag) => (
+                            <div
+                                draggable
+                                onDragStart={drag!.startDrag}
+                                style={{cursor: "grab", fontSize: 18}}
+                            >
+                                ☰
+                            </div>
+                        )}
                     </DataTableColumn>
-                    <DataTableColumn prop="title" label="제목" />
-                    <DataTableColumn prop="startAt" label="업로드일" />
+                    <DataTableColumn prop="displayOrder" label="순서" width={84}/>
+                    <DataTableColumn prop="title" label="제목"/>
+                    <DataTableColumn label="업로드일">
+                        {(row: BannerModel) => (
+                            <div
+
+                            >
+                                {row.startAt} ~ {row.endAt}
+                            </div>
+                        )}
+                    </DataTableColumn>
                     <DataTableColumn
                         prop="status"
                         label="클릭수"
                     />
                     <DataTableColumn
-                        prop="status"
+                        width={100}
                         label="상세"
-                    />
+                    >
+                        {(row: BannerModel) => (
+                            <button className="btnOption" onClick={()=>moveDetail(row)}>상세</button>
+                        )}
+
+                    </DataTableColumn>
                 </DataTable>
             </div>
             <div className="title-page mb24">이전 배너</div>
 
 
             <div className="container-default mb60 ">
-                <DataTable data={prevBanner} >
+                <DataTable data={prevBanner}>
                     <DataTableColumn label="순서" width={84}>
 
                     </DataTableColumn>
-                    <DataTableColumn prop="name" label="제목" />
-                    <DataTableColumn prop="email" label="업로드일" />
+                    <DataTableColumn prop="name" label="제목"/>
+                    <DataTableColumn prop="email" label="업로드일"/>
                     <DataTableColumn
                         prop="status"
                         label="클릭수"
