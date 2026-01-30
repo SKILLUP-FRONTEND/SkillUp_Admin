@@ -49,6 +49,10 @@
         flex-grow: #{$i};
 
     }
+    .fs-#{$i} {
+        flex-shrink: #{$i};
+
+    }
 
     .flex#{$i} {
         flex: #{$i};

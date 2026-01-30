@@ -40,6 +40,15 @@ export const getAllMembers = async (params: object) => {
 
     return response.data;
 }
+
+export const getMemberDetail = async (params: object) => {
+    const response = await client.get("/members/detail", {
+        params: params
+    });
+
+    return response.data;
+}
+
 //FOR ARTICLE
 export const getArticle = async (params: object) => {
     const response = await client.get("/articles", {

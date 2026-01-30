@@ -24,5 +24,16 @@ export interface MemberModel {
   status: MemberStatus;
 }
 
+export interface MemberDetailModel {
+  userId: number;
+  name: string;
+  email: string;
+
+  socialLoginType: string;
+  role: string;
+  status: string;
+  lastLoginAt: string
+}
+
 
 export type MemberStatus = "ACTIVE" | "INACTIVE";

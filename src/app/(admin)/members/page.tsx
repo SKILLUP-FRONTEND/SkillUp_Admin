@@ -47,6 +47,10 @@ export default function Members() {
     });
     const [selected, setSelected] = useState("all");
 
+    const moveDetail = (row: MemberModel) => {
+        router.push(`/members/${row.userId}`)
+    }
+
     const onSelect = (key: string) => {
         setSelected(key);
     };
@@ -181,7 +185,7 @@ export default function Members() {
                 <div className="title-table">
                     회원 {userData.length}명
                 </div>
-                <DataTable<MemberModel> data={userData} onRowClick={(row) => console.log(row)}>
+                <DataTable<MemberModel> data={userData} onRowClick={(row) => moveDetail(row)}>
                     <DataTableColumn label="No" width={84}>
                         {(row, index) => {
                             return returnIndex(index);
