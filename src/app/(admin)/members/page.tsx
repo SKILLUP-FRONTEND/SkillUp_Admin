@@ -15,7 +15,7 @@ import SearchInput from "@/components/common/input/SearchInput";
 import {DataTable} from "@/components/common/table/DataTable";
 import {useRouter, useSearchParams} from "next/navigation";
 import Pagination from "@/components/common/pagination/Pagination";
-import {getAllMembers} from "@/client/client";
+import {getAllMembers} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
 import {AllMemberModel, MemberModel} from "@/types/member.type";

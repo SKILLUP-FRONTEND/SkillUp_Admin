@@ -62,3 +62,23 @@
     font-size: 14px;
     color: #45556c;
 }
+.inputImg{
+   display: none;
+}
+.uploadBox{
+    width: 100%;
+    aspect-ratio: 526/226;
+    overflow: hidden;
+    display: flex;
+    border-radius: 8px;
+    border: 2px solid #cad5e2;
+    background-color: #f1f5f9;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    img{
+        object-fit: cover;
+        width: 100%;
+    }
+}

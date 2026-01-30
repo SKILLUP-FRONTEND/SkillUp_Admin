@@ -8,14 +8,18 @@
 
 "use client";
 
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Image from "next/image";
 import SkillUpIcon from "@/assets/skillUp_black.svg";
 import styles from "./login.module.scss";
-import {login} from "@/client/client";
+import {adminLogin, } from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {useRouter} from "next/navigation";
-import {useUserStore} from "@/store/userStore";
+
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {LoginFormType, loginSchema} from "@/validators/login";
+
 
 
 export default function LoginForm() {
@@ -23,20 +27,39 @@ export default function LoginForm() {
     const showLoading = useLoadingStore((s) => s.show);
     const hideLoading = useLoadingStore((s) => s.hide);
     const [errorMsg, setErrorMsg] = useState('');
-    const [userId, setUserId] = useState("");
-    const [password, setPassword] = useState("");
     const [autoLogin, setAutoLogin] = useState(false);
 
-    const setUser = useUserStore((s) => s.setUser);
 
-    const handleLogin = async () => {
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: {errors},
+    } = useForm<LoginFormType>({
+        resolver: zodResolver(loginSchema),
+        mode: "onChange",
+    });
+
+    useEffect(() => {
+        const subscription = watch((value, {name, type}) => {
+            setErrorMsg('');
+        });
+
+        return () => subscription.unsubscribe();
+    }, [watch]);
+
+
+    const onSubmit = async (data: LoginFormType) => {
         showLoading();
         try {
-            const response =  await login(userId, password);
-            if(response.code == "SUCCESS") {
+            const response = await adminLogin({
+                ...data,
+                ...{autoLogin: autoLogin}
+            });
+            if (response.code == "SUCCESS") {
                 router.replace("/");
-            }else{
-                setErrorMsg('잠시 후 다시 시도해주세요');
+            } else {
+                setErrorMsg(response.message);
             }
         } catch (error) {
             setErrorMsg('잠시 후 다시 시도해주세요');
@@ -44,6 +67,7 @@ export default function LoginForm() {
             hideLoading();
         }
     };
+
     return (
         <div className={styles.loginPage}>
             <div className={styles.loginContainer}>
@@ -51,60 +75,60 @@ export default function LoginForm() {
                     <Image src={SkillUpIcon} alt="logo" width={172} height={26}/>
                     <p>ADMIN</p>
                 </div>
-                <div className={styles.formContainer}>
-                    <div className={styles.formContent}>
-                        <div className={styles.formItemWrap}>
-                            <div className={styles.formItem}>
-                                <label className={styles.formItemLabel} htmlFor="userId">
-                                    UserID
-                                </label>
-                                <input
-                                    className={styles.formInput}
-                                    placeholder="아이디를 입력해주세요."
-                                    value={userId}
-                                    onChange={(e) => {
-                                        setErrorMsg('');
-                                        setUserId(e.target.value);
-                                    }}
-                                />
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className={styles.formContainer}>
+                        <div className={styles.formContent}>
+
+                            <div className={styles.formItemWrap}>
+                                <div className={styles.formItem}>
+                                    <label className={styles.formItemLabel} htmlFor="userId">
+                                        UserID
+                                    </label>
+                                    <input
+                                        {...register("id")}
+                                        className={styles.formInput}
+                                        placeholder="아이디를 입력해주세요."
+                                    />
+                                    {errors.id && <div className={styles.errorMessage}>{errors.id.message}</div>}
+                                </div>
+                                <div className={styles.formItem}>
+                                    <label className={styles.formItemLabel} htmlFor="password">
+                                        Password
+                                    </label>
+                                    <input
+                                        type="password"
+                                        {...register("password")}
+                                        className={styles.formInput}
+                                        placeholder="비밀번호를 입력해주세요."
+                                    />
+                                    {errors.password &&
+                                        <div className={styles.errorMessage}>{errors.password.message}</div>}
+                                </div>
                             </div>
-                            <div className={styles.formItem}>
-                                <label className={styles.formItemLabel} htmlFor="password">
-                                    Password
-                                </label>
-                                <input
-                                    type="password"
-                                    className={styles.formInput}
-                                    value={password}
-                                    onChange={(e) => {
-                                        setErrorMsg('');
-                                        setPassword(e.target.value);
-                                    }}
-                                    placeholder="비밀번호를 입력해주세요."
-                                />
-                            </div>
+
+
                         </div>
-                        {errorMsg && (<div className={styles.errorMessage}>
-                            <p>{errorMsg}</p>
-                        </div>)}
+                        {errorMsg && <div className={styles.errorMessage}>{errorMsg}</div>}
+
+
+                        <div className={styles.checkWrap}>
+                            <input type="checkbox" checked={autoLogin}
+                                   onChange={(e) => setAutoLogin(e.target.checked)}
+                                   className={styles.checkInput}/>
+                            <label className={styles.checkLabel} htmlFor="autoLogin">
+                                자동 로그인
+                            </label>
+                        </div>
+                        <button
+                            className={styles.btnLogin}
+                            type="submit"
+
+                        >
+                            로그인
+                        </button>
 
                     </div>
-
-                    <div className={styles.checkWrap}>
-                        <input type="checkbox" checked={autoLogin}
-                               onChange={(e) => setAutoLogin(e.target.checked)}
-                               className={styles.checkInput}/>
-                        <label className={styles.checkLabel} htmlFor="autoLogin">
-                            자동 로그인
-                        </label>
-                    </div>
-                    <button
-                        className={styles.btnLogin}
-                        onClick={handleLogin}
-                    >
-                        로그인
-                    </button>
-                </div>
+                </form>
             </div>
         </div>
     );

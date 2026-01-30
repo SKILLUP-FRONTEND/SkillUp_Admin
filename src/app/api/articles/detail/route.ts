@@ -1,15 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { serverFetch } from "@/lib/serverFetch";
-import client from "@/client/client";
 
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
-
-
     const articleId = searchParams.get('id');
-
     const res = await serverFetch(`/articles/${articleId}/admin`);
-    const data = await res.json();
-
+    const text = await res.text();
+    let data: unknown;
+    try {
+        data = text ? JSON.parse(text) : null;
+    } catch {
+        data = { message: "Invalid JSON from server", raw: text };
+    }
     return NextResponse.json(data, { status: res.status });
 }

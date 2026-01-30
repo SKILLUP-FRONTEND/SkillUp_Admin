@@ -7,7 +7,13 @@ export async function GET(req: NextRequest) {
     const queryString = searchParams.toString();
 
     const res = await serverFetch(`/admin/users?${queryString}`);
-    const data = await res.json();
+    const text = await res.text();
+    let data: unknown;
+    try {
+        data = text ? JSON.parse(text) : null;
+    } catch {
+        data = { message: "Invalid JSON from server", raw: text };
+    }
 
     return NextResponse.json(data, { status: res.status });
 }

@@ -6,22 +6,23 @@
 */
 "use client";
 
-import React, {useState} from "react";
-import styles from "../article.module.scss"
+import React, {useEffect, useState} from "react";
+import styles from "../../article.module.scss"
 
 import {ArticleFormType, articleSchema} from "@/validators/article";
 
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {CheckboxGroup} from "@/components/common/checkbox/CheckboxGroup";
-import {createArticle} from "@/api/client";
+import {createArticle, getArticleDetail, updateArticle} from "@/api/client";
 
 import {useLoadingStore} from "@/store/loadingStore";
 import Swal from "sweetalert2";
-import {useRouter} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 
 
-export default function ArticleCreatePage() {
+export default function ArticleUpdatePage() {
+    const params = useParams();
     const router = useRouter();
     const showLoading = useLoadingStore((s) => s.show);
     const hideLoading = useLoadingStore((s) => s.hide);
@@ -30,7 +31,7 @@ export default function ArticleCreatePage() {
         handleSubmit,
         setValue,
         watch,
-        formState: {errors,isValid,isSubmitted},
+        formState: {errors},
     } = useForm<ArticleFormType>({
         resolver: zodResolver(articleSchema),
         mode: "onChange",
@@ -55,37 +56,37 @@ export default function ArticleCreatePage() {
         reader.readAsDataURL(file);
     };
 
-    const handleActionSubmit = async (status: string) => {
-
-
-        setValue("status", status);
-        await handleSubmit(onSubmit)();
-
+    const handleActionSubmit = async () => {
+        await handleSubmit(
+            onSubmit,
+            (errors) => {
+                console.log("❌ 검증 실패", errors);
+            }
+        )();
     }
 
     const onSubmit = async (data: ArticleFormType) => {
-        if(!thumbnail){
-            return;
-        }
-
+        console.log(333)
         showLoading();
         try {
-            const response = await createArticle(data, thumbnail);
+            const articleId = Array.isArray(params.id) ? params.id[0] : params.id;
+            const response = await updateArticle(data, articleId!, thumbnail,);
             if (response.code == "SUCCESS") {
                 Swal.fire({
-                    title: '등록되었습니다',
+                    title: '수정되었습니다',
                     confirmButtonText: '확인',
                 }).then();
                 router.back();
             } else {
                 Swal.fire({
-                    title: '등록에 실패했습니다',
+                    title: '수정에 실패했습니다',
                     confirmButtonText: '확인',
                 }).then();
             }
         } catch (error) {
+            console.log(error);
             Swal.fire({
-                title: '등록에 실패했습니다',
+                title: '수정에 실패했습니다',
                 confirmButtonText: '확인',
             }).then();
         } finally {
@@ -94,10 +95,36 @@ export default function ArticleCreatePage() {
     };
     const targetRoles = watch("targetRoles");
 
+    const initData = async () => {
+        try {
+            showLoading();
+            const result = await getArticleDetail({id: params.id});
+            const data = result.data;
+            setValue("title", data.title, {shouldValidate: true});
+            setValue("originalUrl", data.originalUrl, {shouldValidate: true});
+            setValue("summary", data.summary, {shouldValidate: true});
+            setValue("source", data.source, {shouldValidate: true});
+            setValue("originalPublishedDate", data.originalPublishedDate, {shouldValidate: true});
+            setValue("targetRoles", data.targetRoles, {shouldValidate: true});
+            setValue("status", data.status, {shouldValidate: true});
+            setPreview(data.thumbnailUrl);
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            hideLoading();
+        }
+    };
+
+
+    useEffect(() => {
+        initData().then();
+    }, []);
+
     return (
         <>
             <div className="title-page mb32">
-                아티클 등록
+                아티클 수정
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="box-flex gap24 a-start">
@@ -126,6 +153,7 @@ export default function ArticleCreatePage() {
                             </div>
                             <textarea {...register("summary")} maxLength={30} className="textarea-default" rows={5}
                                       placeholder="30자 이내로 요약을 입력하세요"/>
+
                             {errors.summary && <div className={styles.errorText}>{errors.summary.message}</div>}
 
                             <div className={`${styles.textRequired} mt16`}>
@@ -154,7 +182,6 @@ export default function ArticleCreatePage() {
                                     "썸네일 업로드"
                                 )}
                             </label>
-                            {!thumbnail && isSubmitted? <div className={styles.errorText}>썸네일을 등록해주세요</div> : null}
                         </div>
                     </div>
                     <div className="flex2">
@@ -201,11 +228,11 @@ export default function ArticleCreatePage() {
                             <div className={styles.titleCard}>
                                 관리
                             </div>
-                            <button type="button" onClick={() => handleActionSubmit('PUBLISHED')}
-                                    className="btnDefault w100p mb12">등록하기
+                            <button type="button" onClick={() => handleActionSubmit()}
+                                    className="btnDefault w100p mb12">수정하기
                             </button>
-                            <button type="button" onClick={() => handleActionSubmit('DRAFT')}
-                                    className="btnBorder w100p">임시 저장
+                            <button type="button" onClick={() => router.back()}
+                                    className="btnBorder w100p">취소
                             </button>
                         </div>
                     </div>

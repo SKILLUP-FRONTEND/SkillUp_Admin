@@ -1,4 +1,4 @@
-'use client';
+'use api';
 
 import { deleteCookie,  setCookie } from 'cookies-next';
 

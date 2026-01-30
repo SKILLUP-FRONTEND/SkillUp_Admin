@@ -15,7 +15,7 @@ import SearchInput from "@/components/common/input/SearchInput";
 import {DataTable} from "@/components/common/table/DataTable";
 import {useRouter, useSearchParams} from "next/navigation";
 import Pagination from "@/components/common/pagination/Pagination";
-import {getArticle} from "@/client/client";
+import { deleteArticle, getArticle} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
 import Dropdown from "@/components/common/dropdown/Dropdown";
@@ -121,13 +121,15 @@ export default function Article() {
     }
 
     const moveDetail = (row: ArticleModel) => {
-        router.push(`/articles/1`);
-        // router.push(`/articles/${row.id}`);
+        router.push(`/articles/${row.id}`);
+    }
+    const moveUpdate = (row: ArticleModel) => {
+        router.push(`/articles/${row.id}/update`);
     }
 
-    const showDelete = async (row: unknown) => {
+    const showDelete = async (row: ArticleModel) => {
         const result = await Swal.fire({
-            title: '아이템을 삭제하시겠어요?',
+            title: '아티클을 삭제하시겠어요?',
             showCancelButton: true,
             confirmButtonText: '삭제',
             cancelButtonText: '취소',
@@ -135,7 +137,34 @@ export default function Article() {
         });
 
         if (result.value) {
+            onDelete(row.id);
 
+        }
+    }
+
+    const onDelete = async (id: number) => {
+        showLoading();
+        try {
+            const response = await deleteArticle(id);
+            if (response.code == "SUCCESS") {
+                Swal.fire({
+                    title: '삭제되었습니다.',
+                    confirmButtonText: '확인',
+                }).then();
+                initData().then();
+            } else {
+                Swal.fire({
+                    title: '삭제에 실패했습니다',
+                    confirmButtonText: '확인',
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                title: '삭제에 실패했습니다',
+                confirmButtonText: '확인',
+            });
+        } finally {
+            hideLoading();
         }
     }
 
@@ -181,7 +210,7 @@ export default function Article() {
                         placeholder="상태 선택"
                     />
                 </div>
-                <DataTable<ArticleModel> data={data} onRowClick={(row) => console.log(row)}>
+                <DataTable<ArticleModel> data={data} onRowClick={(row) => moveDetail(row)}>
                     <DataTableColumn label="No" width={84}>
                         {(row, index) => {
                             return returnIndex(index);
@@ -189,8 +218,6 @@ export default function Article() {
                     </DataTableColumn>
                     <DataTableColumn prop="thumbnailUrl" label="썸네일">
                         {(row) =>
-
-
                             row.thumbnailUrl ? (
                                 <Image
                                     src={row.thumbnailUrl}
@@ -239,9 +266,15 @@ export default function Article() {
                                      label="액션">
                         {(row: ArticleModel) => {
                             return <div className="box-flex gap8">
-                                <button onClick={() => moveDetail(row)}
+                                <button  onClick={(e) => {
+                                    e.stopPropagation()
+                                    moveUpdate(row)
+                                }}
                                         className={`${styles.btnOption} ${styles.edit}`}></button>
-                                <button onClick={() => showDelete(row)}
+                                <button onClick={(e) => {
+                                    e.stopPropagation()
+                                    showDelete(row)
+                                }}
                                         className={`${styles.btnOption} ${styles.delete}`}></button>
                             </div>
                         }}

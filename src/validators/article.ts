@@ -30,6 +30,7 @@ export const articleSchema = z.object({
 
     status : z.string(),
 
+
 });
 
 export type ArticleFormType = z.infer<typeof articleSchema>;

@@ -8,28 +8,20 @@
 
 import React, {useEffect, useState} from "react";
 import styles from "../article.module.scss"
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 
-import {ArticleFormType, articleSchema} from "@/validators/article";
-
-import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
 import {CheckboxGroup} from "@/components/common/checkbox/CheckboxGroup";
-import {createArticle, getArticle, getArticleDetail, login} from "@/client/client";
-import {router} from "next/dist/client";
+import {deleteArticle, getArticleDetail} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
-import Swal from "sweetalert2";
-import {ArticleDetailModel, ArticleModel, ArticleStatus} from "@/types/article.type";
+import {ArticleDetailModel} from "@/types/article.type";
 import StatusBadge from "@/components/common/badge/StatusBadge";
+import Swal from "sweetalert2";
 
-interface Props {
-    params: {
-        id: string;
-    };
-}
+
 
 export default function ArticleDetailPage() {
     const params = useParams();
+    const router = useRouter();
     const showLoading = useLoadingStore((s) => s.show);
     const hideLoading = useLoadingStore((s) => s.hide);
 
@@ -48,6 +40,51 @@ export default function ArticleDetailPage() {
         }
     };
 
+    const moveUpdate = async () => {
+        router.push(`/articles/${params.id}/update`);
+    }
+
+    const showDelete = async () => {
+        const result = await Swal.fire({
+            title: '아티클을 삭제하시겠어요?',
+            showCancelButton: true,
+            confirmButtonText: '삭제',
+            cancelButtonText: '취소',
+            confirmButtonColor: '#d33',
+        });
+
+        if (result.value) {
+            onDelete(Number(params.id));
+
+        }
+    }
+
+    const onDelete = async (id: number) => {
+        showLoading();
+        try {
+            const response = await deleteArticle(id);
+            if (response.code == "SUCCESS") {
+                Swal.fire({
+                    title: '삭제되었습니다.',
+                    confirmButtonText: '확인',
+                }).then();
+                router.back();
+            } else {
+                Swal.fire({
+                    title: '삭제에 실패했습니다',
+                    confirmButtonText: '확인',
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                title: '삭제에 실패했습니다',
+                confirmButtonText: '확인',
+            });
+        } finally {
+            hideLoading();
+        }
+    }
+
 
     useEffect(() => {
         initData().then();
@@ -59,10 +96,10 @@ export default function ArticleDetailPage() {
                 <div className="title-page mr12">
                     아티클 상세
                 </div>
-                <StatusBadge status={'PUBLISHED'}></StatusBadge>
+                <StatusBadge status={detailData?.status ?? 'PUBLISHED'}></StatusBadge>
                 <div className="box-flex ml-auto gap8">
-                    <button className="btnBorder delete w90">삭제</button>
-                    <button className="btnDefault w90">수정하기</button>
+                    <button className="btnBorder delete w90" onClick={()=>showDelete()}>삭제</button>
+                    <button className="btnDefault w90" onClick={()=>moveUpdate()}>수정하기</button>
                 </div>
             </div>
 

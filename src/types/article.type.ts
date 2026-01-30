@@ -7,25 +7,26 @@
 */
 
 export interface ArticleModel {
-  id: number;
-  name: string;
-  email: string;
-  createdAt: string;
-  loginMethod: string;
-  job: string;
-  status: ArticleStatus;
+    id: number;
+    name: string;
+    email: string;
+    createdAt: string;
+    loginMethod: string;
+    job: string;
+    status: ArticleStatus;
 }
 
 export interface ArticleDetailModel {
-  clickCount: number;
-  createdAt: string | null;
-  originalPublishedDate: string;   // "2025-11-20"
-  originalUrl: string;
-  source: string;
-  summary: string;
-  targetRoles: string[];           // ['기획자']
-  thumbnailUrl: string;
-  title: string;
+    clickCount: number;
+    createdAt: string | null;
+    originalPublishedDate: string;
+    originalUrl: string;
+    source: string;
+    summary: string;
+    targetRoles: string[];
+    thumbnailUrl: string;
+    title: string;
+    status: ArticleStatus;
 }
 
 export type ArticleStatus = "PUBLISHED" | "DRAFT";

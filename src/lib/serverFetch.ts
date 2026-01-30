@@ -5,12 +5,11 @@ export async function serverFetch(
     options: RequestInit = {},
     attachToken = true
 ) {
+
+
     const cookieStore = await cookies();
     const token = cookieStore.get("userSession")?.value;
-
     const isFormData = options.body instanceof FormData;
-
-    console.log(token)
 
     const headers: Record<string, string> = {
         ...(isFormData ? {} : { "Content-Type": "application/json" }),
