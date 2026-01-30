@@ -8,48 +8,132 @@
 
 import {DataTable} from "@/components/common/table/DataTable";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
-import {Member} from "@/types/member.type";
-import StatusBadge from "@/components/common/badge/StatusBadge";
-import {useState} from "react";
 
-const userColumns = [
-    {key: "id", header: "No", width: "50px"},
-    {key: "name", header: "이름", width: "100px"},
-    {key: "email", header: "이메일", width: "220px"},
-    {key: "createdAt", header: "가입일", width: "180px"},
-    {key: "loginMethod", header: "로그인 방법", width: "100px"},
-    {key: "job", header: "직군", width: "100px"},
-    {
-        key: "status",
-        header: "상태",
-        width: "80px",
-        render: (item: Member) => <StatusBadge status={item.status}/>,
-    },
-];
+import StatusBadge from "@/components/common/badge/StatusBadge";
+import {useEffect, useState} from "react";
+import {getArticle, getBanner} from "@/api/client";
+import {useLoadingStore} from "@/store/loadingStore";
+import {useRouter, useSearchParams} from "next/navigation";
+import Pagination from "@/components/common/pagination/Pagination";
+import {BannerModel} from "@/types/banner.type";
+
+
 
 export default function Banners() {
-    const [data,setData] = useState([]);
+    const router = useRouter();
+    const [currentBanner,setCurrentBanner] = useState([]);
+    const [prevBanner,setPrevBanner] = useState([]);
+    const showLoading = useLoadingStore((s) => s.show);
+    const hideLoading = useLoadingStore((s) => s.hide);
+
+    const searchParams = useSearchParams();
+    const page = Number(searchParams.get('page') ?? 1);
+
+    const [filterData, setFilterData] = useState({
+        page: page,
+    });
+
+    const setRouterFilter = () => {
+        const params = new URLSearchParams(searchParams.toString());
+        Object.entries(filterData).forEach(([key, value]) => {
+            params.set(key, String(value));
+        });
+        router.replace(`?${params.toString()}`);
+    };
+
+    const setPageFilter = (value: number) => {
+        setFilterData(prev => ({...prev, page: value}));
+    };
+
+    const initData = async () => {
+        try {
+            showLoading();
+
+            setRouterFilter();
+            const filterParams = {
+                ...filterData,
+            };
+
+            const result = await getBanner(filterParams);
+
+            setCurrentBanner(result.data.eventActiveBannerList);
+            setPrevBanner(result.data.eventPastBannerList);
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            hideLoading();
+        }
+    };
+
+    const moveCreate = ()=>{
+        router.push(`/banners/create`);
+    }
+    useEffect(() => {
+        initData().then();
+    }, [filterData]);
     return (
         <>
             <div className="box-flex mb32">
                 <div className="title-page mr-auto">배너 관리</div>
-                <button className="btnDefault">+ 신규 등록</button>
+                <button className="btnDefault" onClick={()=>moveCreate()}>+ 신규 등록</button>
 
             </div>
+            {/*"displayOrder": 0,*/}
+            {/*"title": "string",*/}
+            {/*"bannerImageUrl": "string",*/}
+            {/*"bannerLink": "string",*/}
+            {/*"bannerType": "string",*/}
+            {/*"startAt": "2026-01-30",*/}
+            {/*"endAt": "2026-01-30"*/}
+            <div className="container-default mb60">
+                <DataTable<BannerModel> data={currentBanner} >
 
-            <div className="container-default">
-                <DataTable data={data} onRowClick={(row) => console.log(row)}>
-                    <DataTableColumn prop="id" label="No" width="50px" />
-                    <DataTableColumn prop="name" label="이름" />
-                    <DataTableColumn prop="email" label="이메일" />
+                    <DataTableColumn prop="displayOrder" label="순서"  width={84}>
+
+                    </DataTableColumn>
+                    <DataTableColumn prop="title" label="제목" />
+                    <DataTableColumn prop="startAt" label="업로드일" />
                     <DataTableColumn
                         prop="status"
-                        label="상태"
+                        label="클릭수"
+                    />
+                    <DataTableColumn
+                        prop="status"
+                        label="상세"
                     />
                 </DataTable>
-
-
             </div>
+            <div className="title-page mb24">이전 배너</div>
+
+
+            <div className="container-default mb60 ">
+                <DataTable data={prevBanner} >
+                    <DataTableColumn label="순서" width={84}>
+
+                    </DataTableColumn>
+                    <DataTableColumn prop="name" label="제목" />
+                    <DataTableColumn prop="email" label="업로드일" />
+                    <DataTableColumn
+                        prop="status"
+                        label="클릭수"
+                    />
+                    <DataTableColumn
+                        prop="status"
+                        label="상세"
+                    />
+                </DataTable>
+            </div>
+
+            <Pagination
+                currentPage={filterData.page}
+                totalPages={Math.ceil(prevBanner.length / 5)}
+                onPageChange={(page) => {
+                    setPageFilter(page);
+                }}
+                hideIfSinglePage={false}
+            />
+
         </>
     );
 }

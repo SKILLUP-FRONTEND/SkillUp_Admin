@@ -6,7 +6,6 @@
   최종 수정일 : 2025-09-16
 */
 
-import {useState} from "react";
 import styles from "./ToggleSwitch.module.css";
 
 interface ToggleProps {

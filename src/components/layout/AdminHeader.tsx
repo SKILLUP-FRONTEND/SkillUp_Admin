@@ -11,13 +11,11 @@ import styles from "./adminLayout.module.scss";
 import bellIcon from "@/assets/bellIcon.svg";
 import { useUserStore } from "@/store/userStore";
 import {useRouter} from "next/navigation";
-import {removeAuthSession} from "@/sessions/auth";
 import Swal from "sweetalert2";
 
 export default function AdminHeader() {
     const router = useRouter();
     const user = useUserStore((s) => s.user);
-    const setUser = useUserStore((s) => s.setUser);
 
     const confirmLogout = async () => {
         const result = await Swal.fire({

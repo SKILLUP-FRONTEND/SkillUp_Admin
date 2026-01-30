@@ -1,5 +1,6 @@
 import axios from "axios";
 import {ArticleFormType} from "@/validators/article";
+import {BannerFormType} from "@/validators/banner";
 
 const client = axios.create({
     baseURL: "/api",
@@ -23,11 +24,15 @@ client.interceptors.response.use(
 
 export default client;
 
+
+//FOR AUTH
 export const adminLogin = async (params: object) => {
     const response = await client.post("/login", params);
     return response.data;
 }
 
+
+//FOR MEMBER
 export const getAllMembers = async (params: object) => {
     const response = await client.get("/members", {
         params: params
@@ -35,7 +40,7 @@ export const getAllMembers = async (params: object) => {
 
     return response.data;
 }
-
+//FOR ARTICLE
 export const getArticle = async (params: object) => {
     const response = await client.get("/articles", {
         params: params
@@ -99,3 +104,29 @@ export const deleteArticle = async (id: number) => {
     return response.data;
 }
 
+
+//FOR BANNER
+export const getBanner = async (params:object) => {
+    const response = await client.get("/banners", params);
+    return response.data;
+}
+
+export const createBanner = async (params: object, file?: File | null) => {
+
+    const formData = new FormData();
+
+
+    formData.append("request", JSON.stringify(params));
+    if (file) {
+        formData.append("bannerImage", file);
+    }
+
+    const response = await client.post("/banners/create", formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
+    return response.data;
+};
