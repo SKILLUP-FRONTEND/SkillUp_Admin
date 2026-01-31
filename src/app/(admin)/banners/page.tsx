@@ -9,9 +9,8 @@
 import {DataTable} from "@/components/common/table/DataTable";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
 
-import StatusBadge from "@/components/common/badge/StatusBadge";
 import {useEffect, useState} from "react";
-import {getArticle, getBanner, updateBanner} from "@/api/client";
+import { getBanner, updateBanner} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {useRouter, useSearchParams} from "next/navigation";
 import Pagination from "@/components/common/pagination/Pagination";

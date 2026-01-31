@@ -14,7 +14,6 @@ import {useState} from "react";
 import SearchInput from "@/components/common/input/SearchInput";
 import {DataTable} from "@/components/common/table/DataTable";
 
-import {EVENTS} from "@/mocks/events.mock";
 import Pagination from "@/components/common/pagination/Pagination";
 import StatusBadge from "@/components/common/badge/StatusBadge";
 import {Event} from "@/types/event.type";
@@ -34,7 +33,7 @@ const categories = [
 
 export default function Events() {
 
-    const [data, setData] = useState(EVENTS);
+    const [data, setData] = useState([]);
 
     const [selected, setSelected] = useState("all");
     const [currentPage, setCurrentPage] = useState(1);
