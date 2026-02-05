@@ -20,7 +20,7 @@ import {EventModel} from "@/types/event.type";
 import Dropdown from "@/components/common/dropdown/Dropdown";
 import {useRouter, useSearchParams} from "next/navigation";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
-import {getBanner, getEvents} from "@/api/client";
+import {getBanner, getEventDraft, getEvents} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 
 
@@ -106,6 +106,8 @@ export default function Events() {
                 ...filterData,
             };
 
+
+            // getEventDraft();
 
             const result = await getEvents(filterParams);
 

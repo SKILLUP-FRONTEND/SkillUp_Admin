@@ -87,7 +87,7 @@ export const createArticle = async (params: ArticleFormType, file?: File | null)
     return response.data;
 };
 
-export const updateArticle = async (params: ArticleFormType,  id:string,file?: File | null,) => {
+export const updateArticle = async (params: ArticleFormType, id: string, file?: File | null,) => {
 
     const formData = new FormData();
 
@@ -108,7 +108,7 @@ export const updateArticle = async (params: ArticleFormType,  id:string,file?: F
 
 export const deleteArticle = async (id: number) => {
     const response = await client.delete("/articles/delete", {
-        params: {articleId:id}
+        params: {articleId: id}
     });
 
     return response.data;
@@ -116,7 +116,7 @@ export const deleteArticle = async (id: number) => {
 
 
 //FOR BANNER
-export const getBanner = async (params:object) => {
+export const getBanner = async (params: object) => {
     const response = await client.get("/banners", {
         params: params
     });
@@ -153,7 +153,7 @@ export const createBanner = async (params: object, file?: File | null) => {
 };
 
 
-export const updateBanner = async (params: object,  id:string,file?: File | null,) => {
+export const updateBanner = async (params: object, id: string, file?: File | null,) => {
 
     const formData = new FormData();
 
@@ -174,21 +174,21 @@ export const updateBanner = async (params: object,  id:string,file?: File | null
 
 export const deleteBanner = async (id: number) => {
     const response = await client.delete("/banners/delete", {
-        params: {bannerId:id}
+        params: {bannerId: id}
     });
 
     return response.data;
 }
 
 
-export const updateBannerOrder = async (params:object) => {
+export const updateBannerOrder = async (params: object) => {
     const response = await client.patch("/banners/order", params);
     return response.data;
 }
 
 
 //FOR EVENTS
-export const getEvents = async (params:object) => {
+export const getEvents = async (params: object) => {
     const response = await client.get("/events", {
         params: params
     });
@@ -216,7 +216,6 @@ export const createEvent = async (params: EventFormType, file?: File | null) => 
 };
 
 
-
 export const getEventDetail = async (params: object) => {
     const response = await client.get("/events/detail", {
         params: params
@@ -226,8 +225,7 @@ export const getEventDetail = async (params: object) => {
 }
 
 
-
-export const updateEvent = async (params: EventFormType,  id:string,file?: File | null,) => {
+export const updateEvent = async (params: EventFormType, id: string, file?: File | null,) => {
 
     const formData = new FormData();
 
@@ -249,8 +247,13 @@ export const updateEvent = async (params: EventFormType,  id:string,file?: File 
 
 export const deleteEvent = async (id: number) => {
     const response = await client.delete("/events/delete", {
-        params: {eventId:id}
+        params: {eventId: id}
     });
 
+    return response.data;
+}
+
+export const getEventDraft = async () => {
+    const response = await client.get("/events/draft");
     return response.data;
 }
