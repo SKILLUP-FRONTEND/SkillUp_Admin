@@ -8,7 +8,6 @@ import {ReactNode} from "react";
 import "@/styles/global.scss";
 import "@/styles/util.scss"
 import GlobalLoading from "@/components/common/loading/GlobalLoading";
-import GlobalModal from "@/components/common/modal/GlobalModal";
 import Portal from "@/components/modal/Portal";
 
 
@@ -30,7 +29,7 @@ export default function RootLayout({children}: { children: ReactNode }) {
         </head>
         <body>
         <GlobalLoading/>
-        <GlobalModal/>
+
         {children}
         <div id="modal-root"/>
         <Portal /> {/* 전역 감시자 */}
