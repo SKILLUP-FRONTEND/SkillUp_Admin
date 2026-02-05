@@ -15,7 +15,7 @@ const client = axios.create({
 client.interceptors.response.use(
     (res) => res,
     (error) => {
-        if (error.response?.status === 401) {
+        if (error.response?.status === 401 || error.response?.status === 403) {
             fetch("/api/logout", {method: "POST"}).then();
             window.location.href = "/login";
         }
