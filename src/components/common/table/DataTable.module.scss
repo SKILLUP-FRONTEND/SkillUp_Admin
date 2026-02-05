@@ -21,18 +21,21 @@
             color: #1E293B;
         }
     }
+    &.isClickable {
+        tbody {
 
-    tbody {
+            tr {
+                cursor: pointer;
 
-        tr {
-            cursor: pointer;
-
-            &:hover {
-                background: #F1F5F9;
-                transition: 0.2s all;
+                &:hover {
+                    background: #F1F5F9;
+                    transition: 0.2s all;
+                }
             }
         }
     }
+
+
 
 
     th, td {

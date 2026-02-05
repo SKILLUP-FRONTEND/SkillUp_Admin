@@ -31,7 +31,6 @@ export default function BannerDetailPage() {
             const result = await getBannerDetail({id: params.id});
             setDetailData(result.data);
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }

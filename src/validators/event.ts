@@ -20,7 +20,7 @@ export const eventSchema = z.object({
 
     contact: z.string().nullish(),
     description: z.string().nullish(),
-    hashTags: z.array(z.string()),
+    hashTags: z.array(z.string()).min(1,"해시태그를 최소 1개 입력해주세요."),
     draft: z.boolean(),
 
 

@@ -1,14 +1,16 @@
-// stores/modalStore.ts
-import { create } from "zustand";
+import { create } from 'zustand';
+import { ReactNode } from 'react';
 
-type ModalState = {
-    modal: React.ReactNode | null;
-    openModal: (component: React.ReactNode) => void;
+interface ModalStore {
+    isOpen: boolean;
+    content: ReactNode | null;
+    openModal: (content: ReactNode) => void;
     closeModal: () => void;
-};
+}
 
-export const useModalStore = create<ModalState>((set) => ({
-    modal: null,
-    openModal: (component) => set({ modal: component }),
-    closeModal: () => set({ modal: null }),
+export const useModalStore = create<ModalStore>((set) => ({
+    isOpen: false,
+    content: null,
+    openModal: (content) => set({ isOpen: true, content }),
+    closeModal: () => set({ isOpen: false, content: null }),
 }));

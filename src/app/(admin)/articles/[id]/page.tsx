@@ -34,7 +34,6 @@ export default function ArticleDetailPage() {
             const result = await getArticleDetail({id: params.id});
             setDetailData(result.data);
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }

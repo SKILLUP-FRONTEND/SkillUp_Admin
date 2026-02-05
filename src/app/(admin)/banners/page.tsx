@@ -58,7 +58,6 @@ export default function Banners() {
             setPrevBanner(result.data.eventPastBannerList);
 
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }
@@ -75,27 +74,23 @@ export default function Banners() {
     }
 
     const handleOrderChange = (newData: BannerModel[]) => {
-        setCurrentBanner(newData)
-        updateOrder().then();
-
-
+        setCurrentBanner(newData);
+        updateOrder(newData).then();
     };
 
-    const updateOrder = async () => {
+    const updateOrder = async (newData: BannerModel[]) => {
         try {
             showLoading();
             setRouterFilter();
             const params = {
-                bannerIds: prevBanner.map((e) => {
+                bannerIds: newData.map((e) => {
                     return e.id
                 }),
             };
-
-            const result = await updateBannerOrder(params);
+            await updateBannerOrder(params);
 
 
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }
@@ -127,7 +122,13 @@ export default function Banners() {
                             </div>
                         )}
                     </DataTableColumn>
-                    <DataTableColumn prop="displayOrder" label="순서" width={84}/>
+                    <DataTableColumn label="순서" width={84}>
+                        {(row: BannerModel,index) => (
+                            <div>
+                                {(index??0)+1}
+                            </div>
+                        )}
+                    </DataTableColumn>
                     <DataTableColumn prop="mainTitle" label="제목"/>
                     <DataTableColumn label="업로드일">
                         {(row: BannerModel) => (

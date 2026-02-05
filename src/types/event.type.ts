@@ -25,6 +25,16 @@ export interface EventModel {
     createdAt: string;
 }
 
+export interface EventDraftModel {
+    id: number;
+    title: string;
+    eventPeriodText: string;
+    eventRecruitEnd: string;
+    createdAt: string;
+
+
+}
+
 export interface EventDetailModel {
     id: number;
     title: string;
@@ -42,34 +52,11 @@ export interface EventDetailModel {
     latitude: number;
     longitude: number;
     applyLink: string;
-    targetRoles:Array<string>;
+    targetRoles: Array<string>;
 
-    description:string;
-    hashTags:Array<string>;
+    description: string;
+    hashTags: Array<string>;
 
     status: EventStatus;
 
-
-    // "recruitStart": "2026-01-14T15:00:00",
-    // "recruitEnd": "2026-02-19T15:00:00",
-    // "isFree": false,
-    // "price": 25000,
-    // "isOnline": true,
-    // "locationText": null,
-    // "locationLink": "https://test.com/location",
-    // "latitude": null,
-    // "longitude": null,
-    // "applyLink": null,
-    // "status": "PUBLISHED",
-    // "contact": "devops@test.com",
-    // "description": "Docker/CI/CD/모니터링 기초",
-    // "hashTags": [
-    //   "#Python",
-    //   "#비즈니스모델",
-    //   "#Spring"
-    // ],
-    // "bookmarked": false,
-    // "targetRoles": [
-    //   "AI 개발자"
-    // ]
 }

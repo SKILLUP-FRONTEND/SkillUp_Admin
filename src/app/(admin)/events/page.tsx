@@ -20,7 +20,7 @@ import {EventModel} from "@/types/event.type";
 import Dropdown from "@/components/common/dropdown/Dropdown";
 import {useRouter, useSearchParams} from "next/navigation";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
-import {getBanner, getEventDraft, getEvents} from "@/api/client";
+import {getEvents} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 
 
@@ -107,13 +107,8 @@ export default function Events() {
             };
 
 
-            // getEventDraft();
-
             const result = await getEvents(filterParams);
 
-
-            console.log(result.data.categoryCounts);
-            console.log(result.data.summary);
 
             setData(result.data.events);
             setCategories(prev =>
@@ -170,13 +165,12 @@ export default function Events() {
 
 
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }
     };
     const returnIndex = (index?: number) => {
-        return (returnTotalCount() ?? 0) - (page * 10) - (index ?? 0);
+        return (returnTotalCount() ?? 0) - (page * 20) - (index ?? 0);
     }
 
     const returnTotalCount = () => {

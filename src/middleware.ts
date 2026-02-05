@@ -6,7 +6,6 @@ export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const isPublic = PUBLIC_ROUTES.includes(pathname);
     const token = request.cookies.get('userSession')?.value;
-    console.log(token)
     if (!token && !isPublic) {
         return NextResponse.redirect(
             new URL(AUTH_ROUTES.LOGIN, request.url),

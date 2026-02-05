@@ -5,9 +5,9 @@ export async function PUT(req: NextRequest) {
     try {
         const formData = await req.formData();
         const { searchParams } = new URL(req.url);
-        const articleId = searchParams.get("id");
+        const eventId = searchParams.get("id");
 
-        const res = await serverFetch(`/articles/${articleId}/admin`, {
+        const res = await serverFetch(`/events/${eventId}`, {
             method: "PUT",
             body: formData,
         });

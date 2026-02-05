@@ -35,7 +35,6 @@ export default function EventDetailPage() {
             const result = await getEventDetail({id: params.id});
             setDetailData(result.data);
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }

@@ -59,14 +59,10 @@ export default function ArticleUpdatePage() {
     const handleActionSubmit = async () => {
         await handleSubmit(
             onSubmit,
-            (errors) => {
-                console.log("❌ 검증 실패", errors);
-            }
         )();
     }
 
     const onSubmit = async (data: ArticleFormType) => {
-        console.log(333)
         showLoading();
         try {
             const articleId = Array.isArray(params.id) ? params.id[0] : params.id;
@@ -84,7 +80,6 @@ export default function ArticleUpdatePage() {
                 }).then();
             }
         } catch (error) {
-            console.log(error);
             Swal.fire({
                 title: '수정에 실패했습니다',
                 confirmButtonText: '확인',
@@ -110,7 +105,6 @@ export default function ArticleUpdatePage() {
             setPreview(data.thumbnailUrl);
 
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }

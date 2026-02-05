@@ -99,7 +99,6 @@ export default function Members() {
             );
             setAllUserData(result.data);
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }

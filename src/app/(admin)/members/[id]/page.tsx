@@ -32,7 +32,6 @@ export default function MemberDetail() {
             const result = await getMemberDetail({id: params.id});
             setDetailData(result.data);
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }
@@ -61,7 +60,7 @@ export default function MemberDetail() {
                     <div className={styles.boxData}>{detailData?.role}</div>
 
                     <div className={styles.labelData}>가입일</div>
-                    <div className={styles.boxData}>{detailData?.email}</div>
+                    <div className={styles.boxData}>{detailData?.createdAt}</div>
 
                     <div className={styles.labelData}>로그인 경로</div>
                     <div className={styles.boxData}>{detailData?.socialLoginType}</div>

@@ -88,7 +88,6 @@ export default function BannerUpdatePage() {
                 }).then();
             }
         } catch (error) {
-            console.log(error);
             Swal.fire({
                 title: '수정에 실패했습니다',
                 confirmButtonText: '확인',
@@ -113,7 +112,6 @@ export default function BannerUpdatePage() {
             setPreview(data.bannerImageUrl);
 
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }

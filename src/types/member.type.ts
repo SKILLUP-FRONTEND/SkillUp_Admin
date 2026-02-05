@@ -33,6 +33,7 @@ export interface MemberDetailModel {
   role: string;
   status: string;
   lastLoginAt: string
+  createdAt:string;
 }
 
 

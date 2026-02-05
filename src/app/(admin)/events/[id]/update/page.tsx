@@ -17,7 +17,7 @@ import {EventFormType, eventSchema} from "@/validators/event";
 import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {CheckboxGroup} from "@/components/common/checkbox/CheckboxGroup";
-import {getEventDetail,  updateEvent} from "@/api/client";
+import {getEventDetail, updateEvent} from "@/api/client";
 
 import {useLoadingStore} from "@/store/loadingStore";
 import Swal from "sweetalert2";
@@ -104,8 +104,7 @@ export default function EventUpdatePage() {
                 Swal.fire({
                     title: '수정되었습니다',
                     confirmButtonText: '확인',
-                }).then();
-                router.back();
+                }).then(() => router.back());
             } else {
                 Swal.fire({
                     title: '수정에 실패했습니다',
@@ -113,7 +112,6 @@ export default function EventUpdatePage() {
                 }).then();
             }
         } catch (error) {
-            console.log(error);
             Swal.fire({
                 title: '수정에 실패했습니다',
                 confirmButtonText: '확인',
@@ -131,10 +129,10 @@ export default function EventUpdatePage() {
             const data = result.data;
             setValue("title", data.title, {shouldValidate: true});
             setValue("category", data.category, {shouldValidate: true});
-            setValue("eventStart", new Date(data.eventStart) , {shouldValidate: true});
+            setValue("eventStart", new Date(data.eventStart), {shouldValidate: true});
             setValue("eventEnd", new Date(data.eventEnd), {shouldValidate: true});
             setValue("recruitStart", new Date(data.recruitStart), {shouldValidate: true});
-            setValue("recruitEnd",new Date(data.recruitEnd), {shouldValidate: true});
+            setValue("recruitEnd", new Date(data.recruitEnd), {shouldValidate: true});
             setValue("targetRoles", data.targetRoles, {shouldValidate: true});
             setValue('isFree', data.isFree, {shouldValidate: true});
             setValue('price', data.price, {shouldValidate: true});
@@ -150,7 +148,6 @@ export default function EventUpdatePage() {
             setPreview(data.thumbnailUrl);
 
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }
@@ -484,10 +481,10 @@ export default function EventUpdatePage() {
                                 관리
                             </div>
                             <button type="submit"
-                                    className="btnDefault w100p mb12">수정하기
+                                    className="btnDefault w100p mb12">수정완료
                             </button>
                             <button type="button" onClick={() => router.back()}
-                                    className="btnBorder w100p">임시 저장
+                                    className="btnBorder w100p">수정취소
                             </button>
                         </div>
                     </div>

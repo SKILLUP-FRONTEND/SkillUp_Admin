@@ -15,7 +15,7 @@ import SearchInput from "@/components/common/input/SearchInput";
 import {DataTable} from "@/components/common/table/DataTable";
 import {useRouter, useSearchParams} from "next/navigation";
 import Pagination from "@/components/common/pagination/Pagination";
-import { deleteArticle, getArticle} from "@/api/client";
+import {deleteArticle, getArticle} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
 import Dropdown from "@/components/common/dropdown/Dropdown";
@@ -75,7 +75,6 @@ export default function Article() {
             );
             setData(result.data.articles);
         } catch (error) {
-            console.log(error);
         } finally {
             hideLoading();
         }
@@ -106,7 +105,7 @@ export default function Article() {
     const returnTotalCount = () => {
         switch (selected) {
             case "PUBLISHED":
-                return categories.find(category => category.value === "PUBLISHED")?.count ??0;
+                return categories.find(category => category.value === "PUBLISHED")?.count ?? 0;
             case "DRAFT":
                 return categories.find(category => category.value === "DRAFT")?.count ?? 0;
             default:
@@ -137,8 +136,7 @@ export default function Article() {
         });
 
         if (result.value) {
-            onDelete(row.id);
-
+            await onDelete(row.id);
         }
     }
 
@@ -218,7 +216,7 @@ export default function Article() {
                     </DataTableColumn>
                     <DataTableColumn prop="thumbnailUrl" label="썸네일">
                         {(row) =>
-                            row.thumbnailUrl ?  (
+                            row.thumbnailUrl ? (
 
                                 <Image
                                     src={row.thumbnailUrl}
@@ -253,6 +251,9 @@ export default function Article() {
                     </DataTableColumn>
                     <DataTableColumn prop="createdAt" label="등록일" width={175}>
                         {(row) => {
+                            if (!row.createdAt)
+                                return '-';
+
                             const date = new Date(row.createdAt);
                             const formatted = date.toLocaleDateString("ko-KR", {
                                 year: "numeric",
@@ -267,14 +268,14 @@ export default function Article() {
                                      label="액션">
                         {(row: ArticleModel) => {
                             return <div className="box-flex gap8">
-                                <button  onClick={(e) => {
+                                <button onClick={(e) => {
                                     e.stopPropagation()
                                     moveUpdate(row)
                                 }}
                                         className={`${styles.btnOption} ${styles.edit}`}></button>
                                 <button onClick={(e) => {
                                     e.stopPropagation()
-                                    showDelete(row)
+                                    showDelete(row).then();
                                 }}
                                         className={`${styles.btnOption} ${styles.delete}`}></button>
                             </div>

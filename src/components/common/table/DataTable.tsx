@@ -18,8 +18,8 @@ export function DataTable<T extends object>({
                                                 data,
                                                 emptyText = "데이터가 없습니다.",
                                                 onRowClick,
-                                                children,draggable,
-    onOrderChange,
+                                                children, draggable,
+                                                onOrderChange,
                                             }: DataTableProps<T>) {
     const columns = React.Children.toArray(children)
         .filter(Boolean)
@@ -35,7 +35,6 @@ export function DataTable<T extends object>({
         setDragIndex(index);
 
         const rowEl = rowRefs.current[index];
-        console.log(rowEl)
         if (rowEl) {
             e.dataTransfer.setDragImage(rowEl, 0, 0);
         }
@@ -44,8 +43,6 @@ export function DataTable<T extends object>({
     };
 
     const handleDrop = (dropIndex: number) => {
-
-        console.log(111)
         if (dragIndex === null || dragIndex === dropIndex) return;
 
         const updated = [...data];
@@ -57,7 +54,7 @@ export function DataTable<T extends object>({
     };
 
     return (
-        <table className={styles.tableDefault}>
+        <table className={`${styles.tableDefault} ${onRowClick && styles.isClickable} `}>
             <thead>
             <tr>
                 {columns.map((col, index) => (

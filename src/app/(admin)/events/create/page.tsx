@@ -27,18 +27,33 @@ import {EventFormType, eventSchema} from "@/validators/event";
 import {CheckboxGroup} from "@/components/common/checkbox/CheckboxGroup";
 import {RadioGroup} from "@/components/common/radio/RadioGroup";
 import {RadioBtn} from "@/components/common/radio/RadioBtn";
-import {createEvent} from "@/api/client";
+import {createEvent, getEventDetail} from "@/api/client";
+import {useModalStore} from "@/store/modalStore";
+
+import DraftModal from "@/components/modal/DraftModal";
 
 const ReactQuill = dynamic(() => import('react-quill-new'), {
     ssr: false,
 
 });
 
+const modules = {
+    toolbar: [
+        [{header: [1, 2, false]}],
+        ['bold', 'italic', 'underline', 'strike'],
+        ['image', 'link'], // 이미지 버튼 추가
+        ['clean'],
+    ],
+};
+
 export default function EventsCreatePage() {
     const router = useRouter();
     const showLoading = useLoadingStore((s) => s.show);
     const hideLoading = useLoadingStore((s) => s.hide);
+    const showModal = useModalStore((s) => s.openModal);
 
+
+    const [isOpen, setIsOpen] = useState(false);
 
     const {
         register,
@@ -90,12 +105,9 @@ export default function EventsCreatePage() {
 
     const onSubmit = async (data: EventFormType) => {
 
-        console.log(data);
-
         showLoading();
         try {
             const response = await createEvent(data, thumbnail);
-            console.log(response);
             if (response.code == "SUCCESS") {
                 Swal.fire({
                     title: '등록되었습니다',
@@ -132,7 +144,7 @@ export default function EventsCreatePage() {
             const value = e.currentTarget.value.trim();
             if (value) {
                 const nArray = [...hashTags, `#${value}`];
-                setValue("hashTags", nArray);
+                setValue("hashTags", nArray, {shouldValidate: true,});
                 e.currentTarget.value = "";
             }
         }
@@ -143,10 +155,55 @@ export default function EventsCreatePage() {
         setValue("hashTags", nArray);
     }
 
+    const handleActionSubmit = async () => {
+        setValue("draft", true);
+        await handleSubmit(onSubmit)();
+
+    }
+    const setSelectDraft = async (id: number) => {
+        try {
+            showLoading();
+            const result = await getEventDetail({id: id});
+            const data = result.data;
+            setValue("title", data.title, {shouldValidate: true});
+            setValue("category", data.category, {shouldValidate: true});
+            setValue("eventStart", new Date(data.eventStart), {shouldValidate: true});
+            setValue("eventEnd", new Date(data.eventEnd), {shouldValidate: true});
+            setValue("recruitStart", new Date(data.recruitStart), {shouldValidate: true});
+            setValue("recruitEnd", new Date(data.recruitEnd), {shouldValidate: true});
+            setValue("targetRoles", data.targetRoles, {shouldValidate: true});
+            setValue('isFree', data.isFree, {shouldValidate: true});
+            setValue('price', data.price, {shouldValidate: true});
+            setValue('isOnline', data.isOnline, {shouldValidate: true});
+            setValue('locationText', data.locationText, {shouldValidate: true});
+            setValue('locationLink', data.locationLink, {shouldValidate: true});
+            setValue('applyLink', data.applyLink, {shouldValidate: true});
+            setValue('contact', data.contact, {shouldValidate: true});
+            setValue('description', data.description, {shouldValidate: true});
+            setValue('hashTags', data.hashTags, {shouldValidate: true});
+
+
+            // setPreview(data.thumbnailUrl);
+
+        } catch (error) {
+        } finally {
+            hideLoading();
+        }
+    }
+
+
     return (
         <>
-            <div className="title-page mb32">
-                행사 등록
+            <div className="box-flex mb32">
+
+                <div className="title-page mr-auto">
+                    행사 등록
+                </div>
+                <button className="btnDefault" onClick={() => showModal(<DraftModal onSelect={(e) => {
+
+                    setSelectDraft(e).then();
+                }}/>)}>불러오기
+                </button>
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="box-flex gap24 a-start">
@@ -210,7 +267,6 @@ export default function EventsCreatePage() {
                                             filterDate={(date) => date.getDay() !== 0} // 일요일 비활성화 예시
                                             className="input-default"
                                             maxDate={eventEnd}
-                                            minDate={new Date()}
                                         />
                                     )}
                                 />
@@ -228,7 +284,6 @@ export default function EventsCreatePage() {
                                             dateFormat="yyyy-MM-dd"
                                             locale={'ko'}
                                             minDate={eventStart}
-
                                             className="input-default"
                                         />
                                     )}
@@ -257,7 +312,6 @@ export default function EventsCreatePage() {
                                             locale="ko"
                                             maxDate={recruitEnd}
                                             className="input-default"
-                                            minDate={new Date()}
                                         />
 
                                         <DatePicker
@@ -406,6 +460,7 @@ export default function EventsCreatePage() {
                                 name="description"
                                 render={({field: {value, onChange,}}) => (
                                     <ReactQuill
+                                        modules={modules}
                                         value={value ?? ""}
                                         onChange={onChange}
                                         theme="snow"
@@ -432,6 +487,8 @@ export default function EventsCreatePage() {
                                 })}
                             </div>
 
+                            {errors.hashTags && <div className={styles.errorText}>{errors.hashTags.message}</div>}
+
                         </div>
 
                     </div>
@@ -444,7 +501,7 @@ export default function EventsCreatePage() {
                             <button type="submit"
                                     className="btnDefault w100p mb12">등록하기
                             </button>
-                            <button type="button" onClick={() => router.back()}
+                            <button type="button" onClick={() => handleActionSubmit()}
                                     className="btnBorder w100p">임시 저장
                             </button>
                         </div>

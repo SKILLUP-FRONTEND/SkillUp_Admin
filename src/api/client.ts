@@ -15,7 +15,7 @@ const client = axios.create({
 client.interceptors.response.use(
     (res) => res,
     (error) => {
-        if (error.response?.status === 401 || error.response?.status === 403) {
+        if (error.response?.status === 401) {
             fetch("/api/logout", {method: "POST"}).then();
             window.location.href = "/login";
         }
@@ -195,6 +195,14 @@ export const getEvents = async (params: object) => {
     return response.data;
 }
 
+export const getDraftEvents = async (params: object) => {
+    const response = await client.get("/events/draft", {
+        params: params
+    });
+    return response.data;
+}
+
+
 export const createEvent = async (params: EventFormType, file?: File | null) => {
 
     const formData = new FormData();
@@ -234,7 +242,7 @@ export const updateEvent = async (params: EventFormType, id: string, file?: File
         formData.append("thumbnailImage", file);
     }
 
-    const response = await client.put(`/articles/update?id=${id}`, formData,
+    const response = await client.put(`/events/update?id=${id}`, formData,
         {
             headers: {
                 "Content-Type": "multipart/form-data",
@@ -253,7 +261,12 @@ export const deleteEvent = async (id: number) => {
     return response.data;
 }
 
-export const getEventDraft = async () => {
-    const response = await client.get("/events/draft");
+export const deleteDraftEvent = async (params:object) => {
+    const response = await client.delete("/events/delete", {
+        params: params
+    });
+
     return response.data;
 }
+
+
