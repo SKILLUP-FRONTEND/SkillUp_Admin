@@ -7,6 +7,7 @@
 import Link from "next/link";
 
 export default function Header() {
+
   return (
     <header id="header">
       <div className="inner">
@@ -14,7 +15,7 @@ export default function Header() {
         <nav>
           <ul className="gnb">
             <li><Link href="/">Home</Link></li>
-            <li><Link href="/login">로그인</Link></li>
+            <li><Link href="/src/app/login.module">로그인</Link></li>
             <li><Link href="/signup">회원가입</Link></li>
             <li><Link href="/admin">관리자페이지</Link></li>
           </ul>

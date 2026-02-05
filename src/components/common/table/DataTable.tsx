@@ -1,70 +1,117 @@
-// src/components/common/table/DataTable.tsx
-
-/* 
-  담당자 : 김은혜
-  최초 작성일 : 2025-09-16
-  최종 수정일 : 2025-09-16
-*/
-
-import styles from "./DataTable.module.css";
-
-interface ColumnDef<T> {
-  key: string;
-  header: string;
-  width?: string;
-  render?: (item: T) => React.ReactNode;
-  onClick?: () => void;
-}
+// DataTable.tsx
+import React, {ReactElement, ReactNode} from "react";
+import styles from "./DataTable.module.scss";
+import {DataTableColumnProps} from "./DataTableColumn";
+import {index} from "d3-array";
 
 interface DataTableProps<T> {
-  columns: ColumnDef<T>[];
-  data: T[];
-  emptyText?: string;
-  onRowClick?: (item: T) => void;
+    data: T[];
+    emptyText?: string;
+    onRowClick?: (row: T) => void;
+    draggable?: boolean;
+    children: ReactNode;
+    onOrderChange?: (newData: T[]) => void;
+
 }
 
-export function DataTable<T>({
-  columns,
-  data,
-  emptyText = "데이터가 없습니다.",
-  onRowClick,
-}: DataTableProps<T>) {
-  return (
-    <div className={styles.dataTable}>
-      <table>
-        <thead className={styles.dataTableHeader}>
-          <tr>
-            {columns.map((col) => (
-              <th key={col.key}>{col.header}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.length === 0 ? (
+export function DataTable<T extends object>({
+                                                data,
+                                                emptyText = "데이터가 없습니다.",
+                                                onRowClick,
+                                                children,draggable,
+    onOrderChange,
+                                            }: DataTableProps<T>) {
+    const columns = React.Children.toArray(children)
+        .filter(Boolean)
+        .map((child) => {
+            const element = child as ReactElement<DataTableColumnProps<T>>;
+            return element.props;
+        });
+
+    const rowRefs = React.useRef<(HTMLTableRowElement | null)[]>([]);
+    const [dragIndex, setDragIndex] = React.useState<number | null>(null);
+
+    const handleDragStart = (index: number, e: React.DragEvent) => {
+        setDragIndex(index);
+
+        const rowEl = rowRefs.current[index];
+        console.log(rowEl)
+        if (rowEl) {
+            e.dataTransfer.setDragImage(rowEl, 0, 0);
+        }
+
+        e.dataTransfer.effectAllowed = "move";
+    };
+
+    const handleDrop = (dropIndex: number) => {
+
+        console.log(111)
+        if (dragIndex === null || dragIndex === dropIndex) return;
+
+        const updated = [...data];
+        const [moved] = updated.splice(dragIndex, 1);
+        updated.splice(dropIndex, 0, moved);
+
+        onOrderChange?.(updated);
+        setDragIndex(null);
+    };
+
+    return (
+        <table className={styles.tableDefault}>
+            <thead>
             <tr>
-              <td colSpan={columns.length} className={styles.dataTableRowEmpty}>
-                {emptyText}
-              </td>
-            </tr>
-          ) : (
-            data.map((item, idx) => (
-              <tr
-                key={idx}
-                className={styles.dataTableRow}
-                onClick={() => onRowClick?.(item)}
-              >
-                {columns.map((col) => (
-                  <td key={col.key} className={styles.dataTableRowCell}>
-                    {col.render
-                      ? col.render(item)
-                      : (item[col.key as keyof T] as React.ReactNode)}
-                  </td>
+                {columns.map((col, index) => (
+                    <th key={index} style={{width: `${col.width}px`}}>
+                        <div className={styles.tableCell}>
+                            {col.label}
+                        </div>
+                    </th>
                 ))}
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
+            </tr>
+            </thead>
+
+            <tbody>
+            {data.length === 0 ? (
+                <tr>
+                    <td colSpan={columns.length}>
+                        <div className={styles.boxEmpty}>
+                            {emptyText}
+                        </div>
+                    </td>
+                </tr>
+            ) : (
+                data.map((row, rowIndex) => (
+                    <tr
+                        ref={(el) => {
+                            if (el) {
+                                rowRefs.current[rowIndex] = el;
+                            }
+                        }}
+                        key={rowIndex}
+                        className={styles.dataTableRow}
+                        onClick={() => onRowClick?.(row)}
+
+                        onDragOver={(e) => draggable && e.preventDefault()}
+                        onDrop={() => draggable && handleDrop(rowIndex)}
+                    >
+                        {columns.map((col, index) => (
+                            <td key={index}>
+                                <div className={styles.tableCell}>
+
+                                    {typeof col.children === "function"
+                                        ?
+                                        col.children(row, rowIndex, {
+                                            startDrag: (e) => handleDragStart(rowIndex, e),
+                                        })
+                                        : col.children ??
+                                        (row[col.prop as keyof T] as React.ReactNode)}
+                                </div>
+                            </td>
+                        ))}
+                    </tr>
+                ))
+            )}
+            </tbody>
+        </table>
+    );
 }

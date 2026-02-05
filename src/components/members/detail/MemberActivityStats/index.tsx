@@ -11,7 +11,6 @@ import UpdateIcon from "@/assets/update.svg";
 import Image from "next/image";
 import BarChartComponent from "@/components/common/chart/BarChart";
 import DonutChart from "@/components/common/chart/DonutChart";
-import { DONUT_CHART_DATA, BAR_CHART_DATA } from "@/mocks/members.mock";
 import Dropdown from "@/components/common/dropdown/Dropdown";
 import { useState } from "react";
 
@@ -74,8 +73,8 @@ export default function MemberActivityStats() {
         </div>
         {/* TODO : 추후 차트 데이터 구체화되면 추가 필요*/}
         <div className={styles.memberActivityStatsBodyChart}>
-          <DonutChart data={DONUT_CHART_DATA} />
-          <BarChartComponent data={BAR_CHART_DATA} />
+          {/*<DonutChart data={DONUT_CHART_DATA} />*/}
+          {/*<BarChartComponent data={BAR_CHART_DATA} />*/}
         </div>
       </div>
     </div>

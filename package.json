@@ -9,11 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
     "axios": "^1.13.2",
     "next": "15.4.4",
     "react": "19.1.0",
+    "react-cookie": "^8.0.1",
+    "react-datepicker": "^9.1.0",
     "react-dom": "19.1.0",
-    "recharts": "^3.1.2"
+    "react-hook-form": "^7.71.1",
+    "react-quill-new": "^3.8.3",
+    "recharts": "^3.1.2",
+    "sass-embedded": "^1.97.3",
+    "sweetalert2": "^11.26.17",
+    "zod": "^4.3.6",
+    "zustand": "^5.0.10"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -23,6 +32,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.4.4",
+    "sass": "^1.97.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

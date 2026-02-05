@@ -1,0 +1,174 @@
+/* src/components/layout/adminLayout.module.css */
+
+/*
+  담당자 : 김은혜
+  최초 작성일 : 2025-08-28
+  최종 수정일 : 2025-08-28
+*/
+
+/* (admin) sidebar */
+.adminSidebar {
+    width: 256px;
+    flex-shrink: 0;
+    background: #212b36;
+    padding: 32px 0;
+}
+
+.adminLogo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 8px;
+    padding: 0 24px;
+}
+
+.adminLogo p {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+.adminMenuTitle {
+    color: #637381;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    padding: 0 24px;
+}
+
+
+.adminMenuLink {
+    height: 46px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #919eab;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 0 24px;
+    transition: 0.2s all;
+
+    &:before {
+        display: inline-flex;
+        content: '';
+        width: 16px;
+        height: 16px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+    }
+
+    &.event {
+        &:before {
+            background-image: url("/images/layer_inactive.svg");
+        }
+    }
+    
+    &.article {
+        &:before {
+            background-image: url("/images/layout_inactive.svg");
+        }
+    }
+    
+    &.banner {
+        &:before {
+            background-image: url("/images/board_inactive.svg");
+        }
+    }
+    
+    &.member {
+       &:before {
+            background-image: url("/images/person_inactive.svg");
+        }
+    }
+
+    &:hover {
+        background: #ffffff50;
+        color: #fff;
+    }
+
+    &.active, &:hover {
+        color: #fff;
+
+        &.event {
+            &:before {
+                background-image: url("/images/layer_active.svg");
+            }
+        }
+        &.article {
+            &:before {
+                background-image: url("/images/layout_active.svg");
+            }
+        }
+        &.banner {
+            &:before {
+                background-image: url("/images/board_active.svg");
+            }
+        }
+        &.member {
+            &:before {
+                background-image: url("/images/person_active.svg");
+            }
+        }
+    }
+
+}
+
+
+/* (admin) header */
+.adminHeader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    overflow: visible;
+    justify-content: flex-end;
+
+}
+
+.adminHeaderRight {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.adminHeaderNotification {
+    display: flex;
+    padding: 0.5625rem;
+    align-items: flex-start;
+    position: relative;
+    cursor: pointer;
+}
+
+.adminHeaderNotificationCount {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    background: #ff0000;
+    border-radius: 50%;
+    width: 0.75rem;
+    height: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.625rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.adminHeaderRight h5 {
+    color: #0f172a;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}

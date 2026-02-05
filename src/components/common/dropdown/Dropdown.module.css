@@ -8,29 +8,25 @@
 
 .dropdown {
   position: relative;
-  width: fit-content;
-  min-width: 10rem;
+
 }
 
-.dropdownButton {
+.btnDropdown {
   width: 100%;
   border-radius: 0.5rem;
   background: #fff;
-  padding: 0.75rem 1.25rem;
-
-  border: 1px solid #dfe3e8;
-  cursor: pointer;
-  text-align: left;
-  display: flex;
-  justify-content: space-between;
+  display: inline-flex;
+  align-content: center;
+  gap: 8px;
+  padding: 8px 16px;
 }
 
-.dropdownButtonText {
-  color: #333;
-  font-size: 1rem;
-  font-style: normal;
+.textDropDownLabel {
+  color: #55555c;
+  font-size: 14px;
   font-weight: 500;
-  line-height: normal;
+  flex-grow: 1;
+  text-align: left;
 }
 
 .dropdownList {
@@ -46,8 +42,13 @@
 }
 
 .dropdownItem {
-  padding: 0.75rem 1.25rem;
+  padding: 8px 12px;
   cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdownItem.active {
+  font-weight: 700;
 }
 
 .dropdownItem:hover {
