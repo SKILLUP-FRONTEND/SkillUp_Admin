@@ -106,7 +106,7 @@ export default function Events() {
                 ...filterData,
             };
 
-
+            //
             // getEventDraft();
 
             const result = await getEvents(filterParams);
