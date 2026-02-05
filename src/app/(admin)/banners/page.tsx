@@ -10,7 +10,7 @@ import {DataTable} from "@/components/common/table/DataTable";
 import {DataTableColumn} from "@/components/common/table/DataTableColumn";
 
 import {useEffect, useState} from "react";
-import { getBanner, updateBanner} from "@/api/client";
+import {getBanner, updateBannerOrder} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 import {useRouter, useSearchParams} from "next/navigation";
 import Pagination from "@/components/common/pagination/Pagination";
@@ -25,7 +25,7 @@ export default function Banners() {
     const hideLoading = useLoadingStore((s) => s.hide);
 
     const searchParams = useSearchParams();
-    const page = Number(searchParams.get('page') ?? 1);
+    const page = Number(searchParams.get('page') ?? 0);
 
     const [filterData, setFilterData] = useState({
         page: page,
@@ -76,12 +76,12 @@ export default function Banners() {
 
     const handleOrderChange = (newData: BannerModel[]) => {
         setCurrentBanner(newData)
-        updateBannerOrder().then();
+        updateOrder().then();
 
 
     };
 
-    const updateBannerOrder = async () => {
+    const updateOrder = async () => {
         try {
             showLoading();
             setRouterFilter();
@@ -90,10 +90,8 @@ export default function Banners() {
                     return e.id
                 }),
             };
-            console.log(params);
 
-
-            const result = await updateBanner(params);
+            const result = await updateBannerOrder(params);
 
 
         } catch (error) {
@@ -130,7 +128,7 @@ export default function Banners() {
                         )}
                     </DataTableColumn>
                     <DataTableColumn prop="displayOrder" label="순서" width={84}/>
-                    <DataTableColumn prop="title" label="제목"/>
+                    <DataTableColumn prop="mainTitle" label="제목"/>
                     <DataTableColumn label="업로드일">
                         {(row: BannerModel) => (
                             <div
@@ -141,7 +139,7 @@ export default function Banners() {
                         )}
                     </DataTableColumn>
                     <DataTableColumn
-                        prop="status"
+                        prop="clickCount"
                         label="클릭수"
                     />
                     <DataTableColumn
@@ -163,16 +161,29 @@ export default function Banners() {
                     <DataTableColumn label="순서" width={84}>
 
                     </DataTableColumn>
-                    <DataTableColumn prop="name" label="제목"/>
-                    <DataTableColumn prop="email" label="업로드일"/>
+                    <DataTableColumn prop="mainTitle" label="제목"/>
+                    <DataTableColumn label="업로드일">
+                        {(row: BannerModel) => (
+                            <div
+
+                            >
+                                {row.startAt} ~ {row.endAt}
+                            </div>
+                        )}
+                    </DataTableColumn>
                     <DataTableColumn
-                        prop="status"
+                        prop="clickCount"
                         label="클릭수"
                     />
                     <DataTableColumn
-                        prop="status"
+                        width={100}
                         label="상세"
-                    />
+                    >
+                        {(row: BannerModel) => (
+                            <button className="btnOption" onClick={()=>moveDetail(row)}>상세</button>
+                        )}
+
+                    </DataTableColumn>
                 </DataTable>
             </div>
 

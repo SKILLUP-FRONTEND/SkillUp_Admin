@@ -30,7 +30,7 @@ export default function ArticleCreatePage() {
         handleSubmit,
         setValue,
         watch,
-        formState: {errors,isValid,isSubmitted},
+        formState: {errors,isSubmitted},
     } = useForm<ArticleFormType>({
         resolver: zodResolver(articleSchema),
         mode: "onChange",

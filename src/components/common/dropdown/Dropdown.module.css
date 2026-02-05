@@ -8,7 +8,7 @@
 
 .dropdown {
   position: relative;
-  width: fit-content;
+
 }
 
 .btnDropdown {
@@ -25,6 +25,8 @@
   color: #55555c;
   font-size: 14px;
   font-weight: 500;
+  flex-grow: 1;
+  text-align: left;
 }
 
 .dropdownList {
@@ -40,8 +42,13 @@
 }
 
 .dropdownItem {
-  padding: 0.75rem 1.25rem;
+  padding: 8px 12px;
   cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdownItem.active {
+  font-weight: 700;
 }
 
 .dropdownItem:hover {

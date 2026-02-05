@@ -14,7 +14,9 @@ export interface BannerModel {
 
 export interface BannerDetailModel {
     displayOrder: number;
-    title: string;
+    mainTitle: string;
+    subTitle:string;
+    description:string;
     bannerImageUrl: string;
     bannerLink: string;
 

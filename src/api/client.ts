@@ -1,6 +1,7 @@
 import axios from "axios";
 import {ArticleFormType} from "@/validators/article";
 import {BannerFormType} from "@/validators/banner";
+import {EventFormType} from "@/validators/event";
 
 const client = axios.create({
     baseURL: "/api",
@@ -116,7 +117,18 @@ export const deleteArticle = async (id: number) => {
 
 //FOR BANNER
 export const getBanner = async (params:object) => {
-    const response = await client.get("/banners", params);
+    const response = await client.get("/banners", {
+        params: params
+    });
+    return response.data;
+}
+
+
+export const getBannerDetail = async (params: object) => {
+    const response = await client.get("/banners/detail", {
+        params: params
+    });
+
     return response.data;
 }
 
@@ -140,7 +152,105 @@ export const createBanner = async (params: object, file?: File | null) => {
     return response.data;
 };
 
-export const updateBanner = async (params:object) => {
+
+export const updateBanner = async (params: object,  id:string,file?: File | null,) => {
+
+    const formData = new FormData();
+
+    formData.append("request", JSON.stringify(params));
+    if (file) {
+        formData.append("bannerImage", file);
+    }
+
+    const response = await client.put(`/banners/update?id=${id}`, formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
+    return response.data;
+};
+
+export const deleteBanner = async (id: number) => {
+    const response = await client.delete("/banners/delete", {
+        params: {bannerId:id}
+    });
+
+    return response.data;
+}
+
+
+export const updateBannerOrder = async (params:object) => {
     const response = await client.patch("/banners/order", params);
+    return response.data;
+}
+
+
+//FOR EVENTS
+export const getEvents = async (params:object) => {
+    const response = await client.get("/events", {
+        params: params
+    });
+    return response.data;
+}
+
+export const createEvent = async (params: EventFormType, file?: File | null) => {
+
+    const formData = new FormData();
+
+
+    formData.append("request", JSON.stringify(params));
+    if (file) {
+        formData.append("thumbnailImage", file);
+    }
+
+    const response = await client.post("/events/create", formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
+    return response.data;
+};
+
+
+
+export const getEventDetail = async (params: object) => {
+    const response = await client.get("/events/detail", {
+        params: params
+    });
+
+    return response.data;
+}
+
+
+
+export const updateEvent = async (params: EventFormType,  id:string,file?: File | null,) => {
+
+    const formData = new FormData();
+
+    formData.append("request", JSON.stringify(params));
+    if (file) {
+        formData.append("thumbnailImage", file);
+    }
+
+    const response = await client.put(`/articles/update?id=${id}`, formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
+    return response.data;
+};
+
+
+export const deleteEvent = async (id: number) => {
+    const response = await client.delete("/events/delete", {
+        params: {eventId:id}
+    });
+
     return response.data;
 }

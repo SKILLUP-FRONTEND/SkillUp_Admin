@@ -58,7 +58,7 @@ export default function Dropdown({
     }, []);
 
     return (
-        <div className={styles.dropdown}>
+        <div className={`${styles.dropdown} ${className}`}>
             <button
                 id={id}
                 disabled={disabled}
@@ -74,7 +74,7 @@ export default function Dropdown({
                     {options.map((opt) => (
                         <li
                             key={opt.value}
-                            className={styles.dropdownItem}
+                            className={`${styles.dropdownItem} ${value == opt.value ? styles.active :''}`}
                             onClick={() => {
                                 onChange(opt.value);
                                 setIsOpen(false);

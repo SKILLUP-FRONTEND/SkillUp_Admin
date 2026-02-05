@@ -106,9 +106,9 @@ export default function Article() {
     const returnTotalCount = () => {
         switch (selected) {
             case "PUBLISHED":
-                return categories.find(category => category.value === "PUBLISHED")?.count;
+                return categories.find(category => category.value === "PUBLISHED")?.count ??0;
             case "DRAFT":
-                return categories.find(category => category.value === "DRAFT")?.count;
+                return categories.find(category => category.value === "DRAFT")?.count ?? 0;
             default:
                 return 0;
         }
@@ -218,7 +218,8 @@ export default function Article() {
                     </DataTableColumn>
                     <DataTableColumn prop="thumbnailUrl" label="썸네일">
                         {(row) =>
-                            row.thumbnailUrl ? (
+                            row.thumbnailUrl ?  (
+
                                 <Image
                                     src={row.thumbnailUrl}
                                     alt="thumbnail"
@@ -282,7 +283,7 @@ export default function Article() {
                 </DataTable>
                 <Pagination
                     currentPage={filterData.page}
-                    totalPages={Math.ceil(data.length / 5)}
+                    totalPages={Math.ceil(returnTotalCount() / 10)}
                     onPageChange={(page) => {
                         setPageFilter(page);
                     }}

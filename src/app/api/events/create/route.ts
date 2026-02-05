@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { serverFetch } from "@/lib/serverFetch";
 
-export async function PUT(req: NextRequest) {
+export async function POST(req: NextRequest) {
     try {
-        const formData = await req.formData();
-        const { searchParams } = new URL(req.url);
-        const articleId = searchParams.get("id");
-        console.log(articleId)
+        const formData = await req.formData(); // Web FormData 그대로
 
-        const res = await serverFetch(`/articles/${articleId}/admin`, {
-            method: "PUT",
+        const res = await serverFetch("/events", {
+            method: "POST",
             body: formData,
         });
+
         const data = await res.json();
         return NextResponse.json(data, { status: res.status });
     } catch (error) {

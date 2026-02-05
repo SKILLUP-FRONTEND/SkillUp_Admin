@@ -6,42 +6,43 @@
 */
 "use client";
 
-import React, {useState} from "react";
-import styles from "../banner.module.scss"
+import React, {useEffect, useState} from "react";
+import styles from "../../banner.module.scss"
 
 
-import {useForm} from "react-hook-form";
+import {Controller, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {createBanner} from "@/api/client";
+import {getBannerDetail, updateBanner} from "@/api/client";
 
 import {useLoadingStore} from "@/store/loadingStore";
 import Swal from "sweetalert2";
-import {useRouter} from "next/navigation";
-import {BannerFormType, bannerSchema} from "@/validators/banner";
+import {useParams, useRouter} from "next/navigation";
 import DatePicker from "react-datepicker";
-import {Controller} from "react-hook-form";
-
+import {bannerSchema, BannerFormType} from "@/validators/banner";
 import "react-datepicker/dist/react-datepicker.css";
 
-
-export default function BannerCreatePage() {
+export default function BannerUpdatePage() {
+    const params = useParams();
     const router = useRouter();
     const showLoading = useLoadingStore((s) => s.show);
     const hideLoading = useLoadingStore((s) => s.hide);
     const {
         register,
         handleSubmit,
+        setValue,
         watch,
         control,
-        formState: {errors, isSubmitted,},
+        formState: {errors, isSubmitted},
     } = useForm<BannerFormType>({
         resolver: zodResolver(bannerSchema),
         mode: "onChange",
         defaultValues: {},
     });
 
+
     const bannerStart = watch("bannerStart");
     const bannerEnd = watch("bannerEnd");
+
 
     const [thumbnail, setThumbnail] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -58,37 +59,38 @@ export default function BannerCreatePage() {
         };
         reader.readAsDataURL(file);
     };
+
     const formatDate = (date: Date) => {
         return date.toISOString().split("T")[0];
     };
 
     const onSubmit = async (data: BannerFormType) => {
-        if (!thumbnail) {
-            return;
-        }
-
         showLoading();
         try {
+            const bannerId = Array.isArray(params.id) ? params.id[0] : params.id;
             const payload = {
                 ...data,
                 bannerStart: formatDate(data.bannerStart),
                 bannerEnd: formatDate(data.bannerEnd),
             };
-            const response = await createBanner(payload, thumbnail);
+
+            const response = await updateBanner(payload, bannerId!, thumbnail,);
             if (response.code == "SUCCESS") {
                 Swal.fire({
-                    title: '등록되었습니다',
+                    title: '수정되었습니다',
                     confirmButtonText: '확인',
-                }).then(() => router.back());
+                }).then( () => router.back());
+
             } else {
                 Swal.fire({
-                    title: '등록에 실패했습니다',
+                    title: '수정에 실패했습니다',
                     confirmButtonText: '확인',
                 }).then();
             }
         } catch (error) {
+            console.log(error);
             Swal.fire({
-                title: '등록에 실패했습니다',
+                title: '수정에 실패했습니다',
                 confirmButtonText: '확인',
             }).then();
         } finally {
@@ -96,13 +98,46 @@ export default function BannerCreatePage() {
         }
     };
 
+    const initData = async () => {
+        try {
+            showLoading();
+            const result = await getBannerDetail({id: params.id});
+            const data = result.data;
+            setValue("subTitle", data.subTitle, {shouldValidate: true});
+            setValue("mainTitle", data.mainTitle, {shouldValidate: true});
+            setValue("description", data.description, {shouldValidate: true});
+            setValue("bannerLink", data.bannerLink, {shouldValidate: true});
+            setValue("bannerStart", new Date(data.startAt), {shouldValidate: true});
+            setValue("bannerEnd", new Date( data.endAt), {shouldValidate: true});
+
+            setPreview(data.bannerImageUrl);
+
+        } catch (error) {
+            console.log(error);
+        } finally {
+            hideLoading();
+        }
+    };
+
+
+    useEffect(() => {
+        initData().then();
+    }, []);
+
     return (
         <>
             <div className="title-page mb32">
-                배너 등록
+                배너 수정
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
+
                 <div className="box-flex gap24 a-start">
+                    {errors.subTitle && <div className={styles.errorText}>{errors.subTitle.message}</div>}
+                    {errors.mainTitle && <div className={styles.errorText}>{errors.mainTitle.message}</div>}
+                    {errors.description && <div className={styles.errorText}>{errors.description.message}</div>}
+                    {errors.bannerLink && <div className={styles.errorText}>{errors.bannerLink.message}</div>}
+                    {errors.bannerStart && <div className={styles.errorText}>{errors.bannerStart.message}</div>}
+                    {errors.bannerEnd && <div className={styles.errorText}>{errors.bannerEnd.message}</div>}
                     <div className="flex3">
                         <div className="container-default mb24 pa24">
 
@@ -191,7 +226,6 @@ export default function BannerCreatePage() {
                                             dateFormat="yyyy-MM-dd"
                                             locale={'ko'}
                                             minDate={bannerStart}
-
                                             className="input-default"
                                         />
                                     )}
@@ -209,7 +243,7 @@ export default function BannerCreatePage() {
                                 관리
                             </div>
                             <button type="submit"
-                                    className="btnDefault w100p mb12">등록하기
+                                    className="btnDefault w100p mb12">수정하기
                             </button>
                             <button type="button" onClick={() => router.back()}
                                     className="btnBorder w100p">취소

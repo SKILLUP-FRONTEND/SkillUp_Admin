@@ -14,7 +14,7 @@ import {ArticleFormType, articleSchema} from "@/validators/article";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {CheckboxGroup} from "@/components/common/checkbox/CheckboxGroup";
-import {createArticle, getArticleDetail, updateArticle} from "@/api/client";
+import { getArticleDetail, updateArticle} from "@/api/client";
 
 import {useLoadingStore} from "@/store/loadingStore";
 import Swal from "sweetalert2";
