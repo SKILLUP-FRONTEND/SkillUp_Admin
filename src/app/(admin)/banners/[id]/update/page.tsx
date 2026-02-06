@@ -177,7 +177,7 @@ export default function BannerUpdatePage() {
                                     "이미지 업로드"
                                 )}
                             </label>
-                            {!thumbnail && isSubmitted ? <div className={styles.errorText}>썸네일을 등록해주세요</div> : null}
+                            {!preview && isSubmitted ? <div className={styles.errorText}>썸네일을 등록해주세요</div> : null}
 
                             <div className={`${styles.textRequired} mt16`}>
                                 주소링크
@@ -203,7 +203,6 @@ export default function BannerUpdatePage() {
                                             }}
                                             dateFormat="yyyy-MM-dd"
                                             locale={'ko'}
-                                            filterDate={(date) => date.getDay() !== 0} // 일요일 비활성화 예시
                                             className="input-default"
                                             maxDate={bannerEnd}
                                             minDate={new Date()}

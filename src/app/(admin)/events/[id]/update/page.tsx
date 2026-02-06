@@ -245,7 +245,6 @@ export default function EventUpdatePage() {
                                             }}
                                             dateFormat="yyyy-MM-dd"
                                             locale={'ko'}
-                                            filterDate={(date) => date.getDay() !== 0} // 일요일 비활성화 예시
                                             className="input-default"
                                             maxDate={eventEnd}
                                             minDate={new Date()}

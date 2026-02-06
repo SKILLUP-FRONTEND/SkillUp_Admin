@@ -229,6 +229,11 @@ export default function EventDetailPage() {
                     {detailData ? detailData.applyLink : '-'}
                 </div>
 
+                <div className={`${styles.textRequired} ${styles.noneRequired}`}>문의방법</div>
+                <div className={`${styles.boxDetail} mb20`}>
+                    {detailData ? detailData.contact : '-'}
+                </div>
+
                 <div className={`${styles.textRequired} ${styles.noneRequired}`}>행사설명</div>
                 <div
                     className={`${styles.boxDetail} mb20`}

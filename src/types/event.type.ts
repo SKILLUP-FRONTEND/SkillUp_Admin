@@ -52,6 +52,7 @@ export interface EventDetailModel {
     latitude: number;
     longitude: number;
     applyLink: string;
+    contact:string;
     targetRoles: Array<string>;
 
     description: string;
