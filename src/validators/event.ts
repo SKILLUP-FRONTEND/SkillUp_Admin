@@ -8,8 +8,8 @@ export const eventSchema = z.object({
 
     eventStart: z.date(),
     eventEnd: z.date(),
-    recruitStart: z.date(),
-    recruitEnd: z.date(),
+    recruitStart: z.date().nullish(),
+    recruitEnd: z.date().nullish(),
     targetRoles:z.array(z.string()).min(1, "직군을 최소 1개 선택해주세요."),
     isFree: z.boolean(),
     price: z.number().or(z.nan()).or(z.undefined()),

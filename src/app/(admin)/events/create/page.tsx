@@ -158,7 +158,6 @@ export default function EventsCreatePage() {
     const handleActionSubmit = async () => {
         setValue("draft", true);
         await handleSubmit(onSubmit)();
-
     }
     const setSelectDraft = async (id: number) => {
         try {
@@ -214,7 +213,7 @@ export default function EventsCreatePage() {
                             <div className={styles.textRequired}>
                                 행사명
                             </div>
-                            <input  {...register("title")} maxLength={20} className="input-default"
+                            <input  {...register("title")} maxLength={100} className="input-default"
                                     placeholder="최대 100글자"/>
                             {errors.title && <div className={styles.errorText}>{errors.title.message}</div>}
 
@@ -291,7 +290,7 @@ export default function EventsCreatePage() {
                             {(errors.eventStart || errors.eventEnd) &&
                                 <div className={styles.errorText}>행사 기간은 필수입니다.</div>}
 
-                            <div className={`${styles.textRequired} mt16`}>
+                            <div className={`${styles.textRequired} ${styles.noneRequired} mt16`}>
                                 모집 기간
                             </div>
 
@@ -309,7 +308,7 @@ export default function EventsCreatePage() {
                                             placeholderText="날짜 선택"
                                             dateFormat="yyyy-MM-dd"
                                             locale="ko"
-                                            maxDate={recruitEnd}
+                                            maxDate={recruitEnd !=null ? recruitEnd! : undefined}
                                             className="input-default"
                                         />
 
@@ -343,9 +342,7 @@ export default function EventsCreatePage() {
                                             }}
                                             dateFormat="yyyy-MM-dd"
                                             locale={'ko'}
-                                            minDate={recruitStart}
-
-
+                                            maxDate={recruitStart !=null ? recruitStart! : undefined}
                                             className="input-default"
                                         />
                                         <DatePicker
@@ -366,8 +363,7 @@ export default function EventsCreatePage() {
 
                                 )}
                             />
-                            {(errors.recruitStart || errors.recruitEnd) &&
-                                <div className={styles.errorText}>모집 기간은 필수입니다.</div>}
+
 
 
                             <div className={`${styles.textRequired} mt16`}>

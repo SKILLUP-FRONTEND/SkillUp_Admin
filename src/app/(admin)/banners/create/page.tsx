@@ -172,7 +172,6 @@ export default function BannerCreatePage() {
                                             locale={'ko'}
                                             className="input-default"
                                             maxDate={bannerEnd}
-                                            minDate={new Date()}
                                         />
                                     )}
                                 />
