@@ -195,8 +195,8 @@ export default function EventUpdatePage() {
                             <div className={styles.textRequired}>
                                 행사명
                             </div>
-                            <input  {...register("title")} maxLength={20} className="input-default"
-                                    placeholder="최대 100글자"/>
+                            <input  {...register("title")} maxLength={40} className="input-default"
+                                    placeholder="최대 40글자"/>
                             {errors.title && <div className={styles.errorText}>{errors.title.message}</div>}
 
 

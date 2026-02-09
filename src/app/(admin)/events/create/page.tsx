@@ -102,6 +102,16 @@ export default function EventsCreatePage() {
         reader.readAsDataURL(file);
     };
 
+    const returnFailType = (type:string) => {
+        switch (type){
+            case "MAP_GEOCODE_ERROR":
+                return '주소를 불러오지 못 했습니다.';
+            case "COORDINATE_NOT_FOUND":
+                return '주소를 불러오지 못 했습니다.';
+        }
+        return '등록에 실패했습니다';
+    }
+
 
     const onSubmit = async (data: EventFormType) => {
 
@@ -115,14 +125,16 @@ export default function EventsCreatePage() {
                 }).then();
                 router.back();
             } else {
+                const failType =  returnFailType(response.code);
                 Swal.fire({
-                    title: '등록에 실패했습니다',
+                    title: failType,
                     confirmButtonText: '확인',
                 }).then();
             }
         } catch (error) {
+
             Swal.fire({
-                title: '등록에 실패했습니다',
+                title: `등록에 실패했습니다`,
                 confirmButtonText: '확인',
             }).then();
         } finally {
@@ -213,8 +225,8 @@ export default function EventsCreatePage() {
                             <div className={styles.textRequired}>
                                 행사명
                             </div>
-                            <input  {...register("title")} maxLength={100} className="input-default"
-                                    placeholder="최대 100글자"/>
+                            <input  {...register("title")} maxLength={40} className="input-default"
+                                    placeholder="최대 40글자"/>
                             {errors.title && <div className={styles.errorText}>{errors.title.message}</div>}
 
 
@@ -342,7 +354,7 @@ export default function EventsCreatePage() {
                                             }}
                                             dateFormat="yyyy-MM-dd"
                                             locale={'ko'}
-                                            maxDate={recruitStart !=null ? recruitStart! : undefined}
+                                            minDate={recruitStart !=null ? recruitStart! : undefined}
                                             className="input-default"
                                         />
                                         <DatePicker
