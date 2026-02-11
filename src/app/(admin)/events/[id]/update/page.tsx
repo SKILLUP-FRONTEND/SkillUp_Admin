@@ -6,7 +6,7 @@
 */
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styles from "../../events.module.scss"
 
 import dynamic from 'next/dynamic';
@@ -27,6 +27,8 @@ import {RadioBtn} from "@/components/common/radio/RadioBtn";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import Cropper, {Point} from "react-easy-crop";
+import type {Area} from "react-easy-crop";
 
 const ReactQuill = dynamic(() => import('react-quill-new'), {
     ssr: false,
@@ -38,6 +40,11 @@ export default function EventUpdatePage() {
     const router = useRouter();
     const showLoading = useLoadingStore((s) => s.show);
     const hideLoading = useLoadingStore((s) => s.hide);
+
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [imageSrc, setImageSrc] = useState<string | null>(null);
+
     const {
         register,
         handleSubmit,
@@ -68,9 +75,68 @@ export default function EventUpdatePage() {
     const isFree = watch("isFree");
     const price = watch("price");
     const isOnline = watch("isOnline");
+    const [crop, setCrop] = useState({x: 0, y: 0});
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
     const [thumbnail, setThumbnail] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
+
+    const handleZoom = async (zoom: number) => {
+        setZoom(zoom);
+        await handleCropDone();
+    }
+
+    const handleCrop = async (location: Point) => {
+        setCrop(location);
+        await handleCropDone();
+    }
+
+    const handleCropDone = async () => {
+        if (!imageSrc || !croppedAreaPixels) return;
+
+        const croppedFile = await getCroppedImg(imageSrc, croppedAreaPixels);
+        setThumbnail(croppedFile);
+    };
+
+    const createImage = (url: string) =>
+        new Promise<HTMLImageElement>((resolve, reject) => {
+            const img = new Image();
+            img.addEventListener("load", () => resolve(img));
+            img.addEventListener("error", reject);
+            img.src = url;
+        });
+
+
+    const getCroppedImg = async (imageSrc: string, pixelCrop: Area) => {
+        const image = await createImage(imageSrc);
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d")!;
+
+        canvas.width = pixelCrop.width;
+        canvas.height = pixelCrop.height;
+
+        ctx.drawImage(
+            image,
+            pixelCrop.x,
+            pixelCrop.y,
+            pixelCrop.width,
+            pixelCrop.height,
+            0,
+            0,
+            pixelCrop.width,
+            pixelCrop.height
+        );
+
+        return new Promise<File>((resolve) => {
+            canvas.toBlob((blob) => {
+                if (!blob) return;
+                const file = new File([blob], "thumbnail.jpg", {type: "image/jpeg"});
+                resolve(file);
+            }, "image/jpeg");
+        });
+    };
+
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -80,7 +146,7 @@ export default function EventUpdatePage() {
 
         const reader = new FileReader();
         reader.onloadend = () => {
-            setPreview(reader.result as string);
+            setImageSrc(reader.result as string);
         };
         reader.readAsDataURL(file);
     };
@@ -205,17 +271,55 @@ export default function EventUpdatePage() {
                             </div>
 
                             <input
-                                id="thumbnail-upload"
+                                ref={fileInputRef}
                                 className={styles.inputImg}
                                 type={"file"} accept="image/*" onChange={handleFileChange}/>
 
-                            <label htmlFor="thumbnail-upload" className={styles.uploadBox}>
-                                {preview ? (
-                                    <img src={preview} alt="preview" className={styles.previewImg}/>
-                                ) : (
-                                    "이미지 업로드"
+                            {preview ? (
+                                <img src={preview} alt="preview" className={styles.previewImg}/>
+                            ) : (
+                                "이미지 업로드"
+                            )}
+                            <div
+                                className={styles.uploadBox}
+                                onClick={() => {
+                                    if (isDragging) {
+                                        return;
+                                    }
+                                    fileInputRef.current?.click();
+                                }}
+                            >
+                                {!imageSrc && (
+                                    <div className={styles.uploadLabel}>
+                                        이미지 업로드
+                                    </div>
                                 )}
-                            </label>
+
+                                {imageSrc && (
+
+                                    <div className={styles.inlineCropper}
+                                         onMouseDown={() => (setIsDragging(false))}
+                                         onMouseMove={() => (setIsDragging(true))}
+                                         onTouchStart={() => (setIsDragging(false))}
+                                         onTouchMove={() => (setIsDragging(true))}
+
+                                    >
+                                        <Cropper
+                                            image={imageSrc}
+                                            crop={crop}
+                                            zoom={zoom}
+                                            aspect={16 / 9}
+                                            onCropChange={handleCrop}
+                                            objectFit="cover"
+                                            onZoomChange={handleZoom}
+                                            onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+
+
                             <div className={`${styles.textRequired} mt16`}>
                                 카테고리
                             </div>
@@ -293,7 +397,7 @@ export default function EventUpdatePage() {
                                             placeholderText="날짜 선택"
                                             dateFormat="yyyy-MM-dd"
                                             locale="ko"
-                                            maxDate={recruitEnd}
+                                            maxDate={recruitEnd != null ? recruitEnd : undefined}
                                             className="input-default"
                                             minDate={new Date()}
                                         />
@@ -328,9 +432,7 @@ export default function EventUpdatePage() {
                                             }}
                                             dateFormat="yyyy-MM-dd"
                                             locale={'ko'}
-                                            minDate={recruitStart}
-
-
+                                            minDate={recruitStart != null ? recruitStart : undefined}
                                             className="input-default"
                                         />
                                         <DatePicker

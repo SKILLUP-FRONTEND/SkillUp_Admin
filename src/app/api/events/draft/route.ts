@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { serverFetch } from "@/lib/serverFetch";
 
 export async function GET(req: NextRequest) {
+
     const res = await serverFetch(`/events/admin/drafts`);
     const text = await res.text();
     let data: unknown;

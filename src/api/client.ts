@@ -9,6 +9,9 @@ const client = axios.create({
     headers: {
         "Content-Type": "application/json",
     },
+    validateStatus: (status) => {
+        return status < 500;
+    },
 });
 
 
@@ -201,6 +204,48 @@ export const getDraftEvents = async (params: object) => {
     });
     return response.data;
 }
+
+export const createDraftEvent = async (params: EventFormType, file?: File | null) => {
+
+    const formData = new FormData();
+
+
+    formData.append("request", JSON.stringify(params));
+    if (file) {
+        formData.append("thumbnailImage", file);
+    }
+
+    const response = await client.post("/events/draft/create", formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
+    return response.data;
+};
+
+
+export const registDraftEvent = async (params: EventFormType, file: File | null,draftId:number,) => {
+
+    const formData = new FormData();
+
+
+    formData.append("request", JSON.stringify(params));
+    if (file) {
+        formData.append("thumbnailImage", file);
+    }
+
+    const response = await client.post(`/events/draft/regist?id=${draftId}`, formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
+    return response.data;
+};
+
 
 
 export const createEvent = async (params: EventFormType, file?: File | null) => {

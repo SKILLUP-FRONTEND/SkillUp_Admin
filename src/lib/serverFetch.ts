@@ -20,7 +20,7 @@ export async function serverFetch(
         headers.Authorization = `Bearer ${token}`;
     }
 
-    return fetch(`https://52.79.215.19.nip.io${url}`, {
+    return fetch(`https://43.203.214.187.nip.io${url}`, {
         ...options,
         headers,
         cache: "no-store",
