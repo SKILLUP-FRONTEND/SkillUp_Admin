@@ -10,7 +10,7 @@ const client = axios.create({
         "Content-Type": "application/json",
     },
     validateStatus: (status) => {
-        return status < 500;
+        return status < 500 && status !== 401 && status !== 403;
     },
 });
 
