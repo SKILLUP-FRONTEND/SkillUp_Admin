@@ -114,7 +114,9 @@ export default function EventDetailPage() {
                 </div>
 
                 <div className={`${styles.boxDetail} mb20`}>
-                    {detailData ? detailData.thumbnailUrl : '-'}
+                    {detailData?.thumbnailUrl && (
+                        <img src={detailData?.thumbnailUrl} alt="preview" style={{width: '100%'}}/>
+                    )}
                 </div>
 
 

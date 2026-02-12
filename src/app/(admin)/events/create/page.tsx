@@ -49,13 +49,15 @@ const modules = {
     ],
 };
 
-export enum EventActionType {
-    CREATE = 'create',
-    CREATE_DRAFT = 'createDraft',
-    REGIST_DRAFT = 'registDraft',
-}
+
 
 export default function EventsCreatePage() {
+
+    const enum EventActionType {
+        CREATE = 'create',
+        CREATE_DRAFT = 'createDraft',
+        REGIST_DRAFT = 'registDraft',
+    }
     const router = useRouter();
     const showLoading = useLoadingStore((s) => s.show);
     const hideLoading = useLoadingStore((s) => s.hide);
