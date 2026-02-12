@@ -67,7 +67,7 @@
 }
 .uploadBox{
     width: 100%;
-    aspect-ratio: 526/226;
+    aspect-ratio: 16/9;
     overflow: hidden;
     display: flex;
     border-radius: 8px;
@@ -81,4 +81,11 @@
         object-fit: cover;
         width: 100%;
     }
+}
+
+.inlineCropper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
 }

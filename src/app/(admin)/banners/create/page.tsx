@@ -6,7 +6,7 @@
 */
 "use client";
 
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import styles from "../banner.module.scss"
 
 
@@ -22,6 +22,7 @@ import DatePicker from "react-datepicker";
 import {Controller} from "react-hook-form";
 
 import "react-datepicker/dist/react-datepicker.css";
+import Cropper, {type Area, Point} from "react-easy-crop";
 
 
 export default function BannerCreatePage() {
@@ -40,24 +41,86 @@ export default function BannerCreatePage() {
         defaultValues: {},
     });
 
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
     const bannerStart = watch("bannerStart");
     const bannerEnd = watch("bannerEnd");
 
     const [thumbnail, setThumbnail] = useState<File | null>(null);
-    const [preview, setPreview] = useState<string | null>(null);
+
+
+    const [imageSrc, setImageSrc] = useState<string | null>(null);
+    const [crop, setCrop] = useState({x: 0, y: 0});
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+
+    const [isDragging, setIsDragging] = useState(false);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        setThumbnail(file);
-
         const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreview(reader.result as string);
+        reader.onload = () => {
+            setImageSrc(reader.result as string);
         };
         reader.readAsDataURL(file);
     };
+
+    const createImage = (url: string) =>
+        new Promise<HTMLImageElement>((resolve, reject) => {
+            const img = new Image();
+            img.addEventListener("load", () => resolve(img));
+            img.addEventListener("error", reject);
+            img.src = url;
+        });
+
+    const getCroppedImg = async (imageSrc: string, pixelCrop: Area) => {
+        const image = await createImage(imageSrc);
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d")!;
+
+        canvas.width = pixelCrop.width;
+        canvas.height = pixelCrop.height;
+
+        ctx.drawImage(
+            image,
+            pixelCrop.x,
+            pixelCrop.y,
+            pixelCrop.width,
+            pixelCrop.height,
+            0,
+            0,
+            pixelCrop.width,
+            pixelCrop.height
+        );
+
+        return new Promise<File>((resolve) => {
+            canvas.toBlob((blob) => {
+                if (!blob) return;
+                const file = new File([blob], "thumbnail.jpg", {type: "image/jpeg"});
+                resolve(file);
+            }, "image/jpeg");
+        });
+    };
+
+    const handleZoom = async (zoom: number) => {
+        setZoom(zoom);
+        await handleCropDone();
+    }
+
+    const handleCrop = async (location: Point) => {
+        setCrop(location);
+        await handleCropDone();
+    }
+
+    const handleCropDone = async () => {
+        if (!imageSrc || !croppedAreaPixels) return;
+
+        const croppedFile = await getCroppedImg(imageSrc, croppedAreaPixels);
+        setThumbnail(croppedFile);
+    };
+
     const formatDate = (date: Date) => {
         return date.toISOString().split("T")[0];
     };
@@ -131,19 +194,47 @@ export default function BannerCreatePage() {
                             <div className={`${styles.textRequired} mt16`}>
                                 대표 이미지
                             </div>
-
                             <input
-                                id="thumbnail-upload"
+                                ref={fileInputRef}
                                 className={styles.inputImg}
                                 type={"file"} accept="image/*" onChange={handleFileChange}/>
-
-                            <label htmlFor="thumbnail-upload" className={styles.uploadBox}>
-                                {preview ? (
-                                    <img src={preview} alt="preview" className={styles.previewImg}/>
-                                ) : (
-                                    "이미지 업로드"
+                            <div
+                                className={styles.uploadBox}
+                                onClick={() => {
+                                    if (isDragging) {
+                                        return;
+                                    }
+                                    fileInputRef.current?.click();
+                                }}
+                            >
+                                {!imageSrc && (
+                                    <div className={styles.uploadLabel}>
+                                        이미지 업로드
+                                    </div>
                                 )}
-                            </label>
+
+                                {imageSrc && (
+
+                                    <div className={styles.inlineCropper}
+                                         onMouseDown={() => (setIsDragging(false))}
+                                         onMouseMove={() => (setIsDragging(true))}
+                                         onTouchStart={() => (setIsDragging(false))}
+                                         onTouchMove={() => (setIsDragging(true))}
+
+                                    >
+                                        <Cropper
+                                            image={imageSrc}
+                                            crop={crop}
+                                            zoom={zoom}
+                                            aspect={16 / 9}
+                                            onCropChange={handleCrop}
+                                            objectFit="cover"
+                                            onZoomChange={handleZoom}
+                                            onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                             {!thumbnail && isSubmitted ? <div className={styles.errorText}>썸네일을 등록해주세요</div> : null}
 
                             <div className={`${styles.textRequired} mt16`}>

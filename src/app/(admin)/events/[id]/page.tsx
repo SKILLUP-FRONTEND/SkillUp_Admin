@@ -18,7 +18,7 @@ import Swal from "sweetalert2";
 import {EventDetailModel} from "@/types/event.type";
 import {RadioGroup} from "@/components/common/radio/RadioGroup";
 import {RadioBtn} from "@/components/common/radio/RadioBtn";
-
+import 'react-quill-new/dist/quill.snow.css';
 
 export default function EventDetailPage() {
     const params = useParams();

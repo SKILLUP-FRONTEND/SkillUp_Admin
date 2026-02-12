@@ -344,7 +344,7 @@ export default function EventsCreatePage() {
                                 }}
                             >
                                 {!imageSrc && (
-                                    <div className={styles.uploadLabel}>
+                                    <div>
                                         이미지 업로드
                                     </div>
                                 )}

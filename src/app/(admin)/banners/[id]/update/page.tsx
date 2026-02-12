@@ -6,7 +6,7 @@
 */
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styles from "../../banner.module.scss"
 
 
@@ -20,6 +20,7 @@ import {useParams, useRouter} from "next/navigation";
 import DatePicker from "react-datepicker";
 import {bannerSchema, BannerFormType} from "@/validators/banner";
 import "react-datepicker/dist/react-datepicker.css";
+import Cropper, {type Area, Point} from "react-easy-crop";
 
 export default function BannerUpdatePage() {
     const params = useParams();
@@ -39,6 +40,67 @@ export default function BannerUpdatePage() {
         defaultValues: {},
     });
 
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [imageSrc, setImageSrc] = useState<string | null>(null);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+    const [crop, setCrop] = useState({x: 0, y: 0});
+    const [zoom, setZoom] = useState(1);
+
+    const handleZoom = async (zoom: number) => {
+        setZoom(zoom);
+        await handleCropDone();
+    }
+
+    const handleCrop = async (location: Point) => {
+        setCrop(location);
+        await handleCropDone();
+    }
+
+    const handleCropDone = async () => {
+        if (!imageSrc || !croppedAreaPixels) return;
+
+        const croppedFile = await getCroppedImg(imageSrc, croppedAreaPixels);
+        setThumbnail(croppedFile);
+    };
+
+    const getCroppedImg = async (imageSrc: string, pixelCrop: Area) => {
+        const image = await createImage(imageSrc);
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d")!;
+
+        canvas.width = pixelCrop.width;
+        canvas.height = pixelCrop.height;
+
+        ctx.drawImage(
+            image,
+            pixelCrop.x,
+            pixelCrop.y,
+            pixelCrop.width,
+            pixelCrop.height,
+            0,
+            0,
+            pixelCrop.width,
+            pixelCrop.height
+        );
+
+        return new Promise<File>((resolve) => {
+            canvas.toBlob((blob) => {
+                if (!blob) return;
+                const file = new File([blob], "thumbnail.jpg", {type: "image/jpeg"});
+                resolve(file);
+            }, "image/jpeg");
+        });
+    };
+
+    const createImage = (url: string) =>
+        new Promise<HTMLImageElement>((resolve, reject) => {
+            const img = new Image();
+            img.addEventListener("load", () => resolve(img));
+            img.addEventListener("error", reject);
+            img.src = url;
+        });
+
 
     const bannerStart = watch("bannerStart");
     const bannerEnd = watch("bannerEnd");
@@ -55,7 +117,7 @@ export default function BannerUpdatePage() {
 
         const reader = new FileReader();
         reader.onloadend = () => {
-            setPreview(reader.result as string);
+            setImageSrc(reader.result as string);
         };
         reader.readAsDataURL(file);
     };
@@ -79,7 +141,7 @@ export default function BannerUpdatePage() {
                 Swal.fire({
                     title: '수정되었습니다',
                     confirmButtonText: '확인',
-                }).then( () => router.back());
+                }).then(() => router.back());
 
             } else {
                 Swal.fire({
@@ -107,7 +169,7 @@ export default function BannerUpdatePage() {
             setValue("description", data.description, {shouldValidate: true});
             setValue("bannerLink", data.bannerLink, {shouldValidate: true});
             setValue("bannerStart", new Date(data.startAt), {shouldValidate: true});
-            setValue("bannerEnd", new Date( data.endAt), {shouldValidate: true});
+            setValue("bannerEnd", new Date(data.endAt), {shouldValidate: true});
 
             setPreview(data.bannerImageUrl);
 
@@ -166,17 +228,45 @@ export default function BannerUpdatePage() {
                             </div>
 
                             <input
-                                id="thumbnail-upload"
+                                ref={fileInputRef}
                                 className={styles.inputImg}
                                 type={"file"} accept="image/*" onChange={handleFileChange}/>
-
-                            <label htmlFor="thumbnail-upload" className={styles.uploadBox}>
-                                {preview ? (
-                                    <img src={preview} alt="preview" className={styles.previewImg}/>
-                                ) : (
-                                    "이미지 업로드"
-                                )}
-                            </label>
+                            <div
+                                className={styles.uploadBox}
+                                onClick={() => {
+                                    if (isDragging) {
+                                        return;
+                                    }
+                                    fileInputRef.current?.click();
+                                }}
+                            >
+                                {imageSrc ? (
+                                    <div className={styles.inlineCropper}
+                                         onMouseDown={() => (setIsDragging(false))}
+                                         onMouseMove={() => (setIsDragging(true))}
+                                         onTouchStart={() => (setIsDragging(false))}
+                                         onTouchMove={() => (setIsDragging(true))}
+                                    >
+                                        <Cropper
+                                            image={imageSrc}
+                                            crop={crop}
+                                            zoom={zoom}
+                                            aspect={16 / 9}
+                                            onCropChange={handleCrop}
+                                            objectFit="cover"
+                                            onZoomChange={handleZoom}
+                                            onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+                                        />
+                                    </div>
+                                ) : preview ? (
+                                        <img src={preview} alt="preview" className={styles.previewImg}/>
+                                    ) :
+                                    (
+                                        <div className={styles.uploadLabel}>
+                                            이미지 업로드
+                                        </div>
+                                    )}
+                            </div>
                             {!preview && isSubmitted ? <div className={styles.errorText}>썸네일을 등록해주세요</div> : null}
 
                             <div className={`${styles.textRequired} mt16`}>
