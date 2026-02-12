@@ -149,15 +149,17 @@ export default function DraftModal({onSelect}: { onSelect: (id: number) => void 
                     }}
                 </DataTableColumn>
                 <DataTableColumn prop="title" label="행사명"/>
-                <DataTableColumn prop="eventRecruitEnd" label="모집기간"/>
                 <DataTableColumn prop="eventPeriodText" label="행사 기간"/>
-                <DataTableColumn label="등록일">
+                <DataTableColumn label="등록일시">
                     {(row: EventDraftModel, index) => {
                         if (row.createdAt) {
                             return new Intl.DateTimeFormat('ko-KR', {
                                 year: 'numeric',
                                 month: '2-digit',
                                 day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                timeZone: 'Asia/Seoul'
                             }).format(new Date(row.createdAt))
                         }
                         return '-';

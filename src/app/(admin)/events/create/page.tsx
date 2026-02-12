@@ -31,13 +31,13 @@ import {createDraftEvent, createEvent, getEventDetail, registDraftEvent} from "@
 import {useModalStore} from "@/store/modalStore";
 import Cropper, {Point} from "react-easy-crop";
 import type {Area} from "react-easy-crop";
+import { ALL_HASHTAGS} from "@/types/event.type";
 
 import DraftModal from "@/components/modal/DraftModal";
 import {AxiosResponse} from "axios";
 
 const ReactQuill = dynamic(() => import('react-quill-new'), {
     ssr: false,
-
 });
 
 const modules = {
@@ -50,7 +50,6 @@ const modules = {
 };
 
 
-
 export default function EventsCreatePage() {
 
     const enum EventActionType {
@@ -58,6 +57,7 @@ export default function EventsCreatePage() {
         CREATE_DRAFT = 'createDraft',
         REGIST_DRAFT = 'registDraft',
     }
+
     const router = useRouter();
     const showLoading = useLoadingStore((s) => s.show);
     const hideLoading = useLoadingStore((s) => s.hide);
@@ -197,19 +197,19 @@ export default function EventsCreatePage() {
                 [EventActionType.CREATE_DRAFT]: (d, t) => createDraftEvent(d, t),
                 [EventActionType.REGIST_DRAFT]: (d, t, id) => {
                     if (!id) throw new Error("Draft ID가 필요합니다.");
-                    return registDraftEvent(d,t,id );
+                    return registDraftEvent(d, t, id);
                 },
             };
 
             const action = eventActions[type];
 
-            const response = await action(data, thumbnail,draftId);
+            const response = await action(data, thumbnail, draftId);
             if (response.code == "SUCCESS") {
                 Swal.fire({
                     title: '등록되었습니다',
                     confirmButtonText: '확인',
                 }).then(() => {
-                    if(type != EventActionType.CREATE_DRAFT) {
+                    if (type != EventActionType.CREATE_DRAFT) {
                         router.back();
                     }
                 });
@@ -234,33 +234,23 @@ export default function EventsCreatePage() {
 
     const targetRoles = watch("targetRoles");
 
-    const addTags = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.nativeEvent.isComposing) return;
-        if (e.key === 'Enter') {
-            e.preventDefault();
-
-            if (hashTags.length >= 5) {
-                return;
-            }
-
-            const value = e.currentTarget.value.trim();
-            if (value) {
-                const nArray = [...hashTags, `#${value}`];
-                setValue("hashTags", nArray, {shouldValidate: true,});
-                e.currentTarget.value = "";
-            }
+    const checkHashTag = (data: string) => {
+        if (hashTags.length >= 5) {
+            return;
         }
-    }
-
-    const removeHashTag = (index: number) => {
-        const nArray = hashTags.filter((_, i) => i !== index);
+        let nArray;
+        if (hashTags.includes(data)) {
+            nArray = hashTags.filter((innerData) => innerData !== data);
+        } else {
+            nArray = [...hashTags, data];
+        }
         setValue("hashTags", nArray);
     }
 
     const handleCreateSubmit = async () => {
         let type = EventActionType.CREATE;
 
-        if(draftId != null) {
+        if (draftId != null) {
             type = EventActionType.REGIST_DRAFT;
         }
 
@@ -286,8 +276,8 @@ export default function EventsCreatePage() {
             setValue("category", data.category, {shouldValidate: true});
             setValue("eventStart", new Date(data.eventStart), {shouldValidate: true});
             setValue("eventEnd", new Date(data.eventEnd), {shouldValidate: true});
-            setValue("recruitStart", data.recruitStart != null? new Date(data.recruitStart) : null, {shouldValidate: true});
-            setValue("recruitEnd", data.recruitEnd != null? new Date(data.recruitEnd) : null, {shouldValidate: true});
+            setValue("recruitStart", data.recruitStart != null ? new Date(data.recruitStart) : null, {shouldValidate: true});
+            setValue("recruitEnd", data.recruitEnd != null ? new Date(data.recruitEnd) : null, {shouldValidate: true});
             setValue("targetRoles", data.targetRoles, {shouldValidate: true});
             setValue('isFree', data.isFree, {shouldValidate: true});
             setValue('price', data.price, {shouldValidate: true});
@@ -614,24 +604,17 @@ export default function EventsCreatePage() {
 
 
                             <div className={`${styles.textRequired} ${styles.noneRequired} mt16`}>
-                                해시 태그
+                                해시 태그 ( 최대 5개 )
                             </div>
-                            <input onKeyDown={addTags} type="text"
-                                   className="input-default" placeholder="최대 5개 (ENTER)"
-                                   disabled={hashTags.length >= 5}
-                            />
-                            <div className="box-flex gap8 mt16">
-                                {hashTags.map((tag, index) => {
-                                    return <button type={"button"} onClick={() => removeHashTag(index)}
-                                                   className={styles.boxHashTag} key={index}>{tag}
-                                        <span>X</span></button>
+
+                            <div className="box-flex gap8 mt16 fw-wrap">
+                                {ALL_HASHTAGS.map((tag, index) => {
+                                    return <button type={"button"} onClick={() => checkHashTag(tag)}
+                                                   className={`${styles.boxHashTag} ${hashTags.includes(tag) ? styles.active : ''} `} key={index}>{tag}
+                                    </button>
                                 })}
                             </div>
-
-                            {errors.hashTags && <div className={styles.errorText}>{errors.hashTags.message}</div>}
-
                         </div>
-
                     </div>
                     <div className="flex2">
 

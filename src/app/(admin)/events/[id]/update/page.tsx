@@ -29,6 +29,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import Cropper, {Point} from "react-easy-crop";
 import type {Area} from "react-easy-crop";
+import {ALL_HASHTAGS} from "@/types/event.type";
 
 const ReactQuill = dynamic(() => import('react-quill-new'), {
     ssr: false,
@@ -196,8 +197,8 @@ export default function EventUpdatePage() {
             setValue("category", data.category, {shouldValidate: true});
             setValue("eventStart", new Date(data.eventStart), {shouldValidate: true});
             setValue("eventEnd", new Date(data.eventEnd), {shouldValidate: true});
-            setValue("recruitStart", new Date(data.recruitStart), {shouldValidate: true});
-            setValue("recruitEnd", new Date(data.recruitEnd), {shouldValidate: true});
+            setValue("recruitStart", data.recruitStart != null ? new Date(data.recruitStart) : null, {shouldValidate: true});
+            setValue("recruitEnd", data.recruitEnd != null ? new Date(data.recruitEnd) : null, {shouldValidate: true});
             setValue("targetRoles", data.targetRoles, {shouldValidate: true});
             setValue('isFree', data.isFree, {shouldValidate: true});
             setValue('price', data.price, {shouldValidate: true});
@@ -218,29 +219,18 @@ export default function EventUpdatePage() {
         }
     };
 
-    const addTags = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.nativeEvent.isComposing) return;
-        if (e.key === 'Enter') {
-            e.preventDefault();
-
-            if (hashTags.length >= 5) {
-                return;
-            }
-
-            const value = e.currentTarget.value.trim();
-            if (value) {
-                const nArray = [...hashTags, `#${value}`];
-                setValue("hashTags", nArray);
-                e.currentTarget.value = "";
-            }
+    const checkHashTag = (data: string) => {
+        if (hashTags.length >= 5) {
+            return;
         }
-    }
-
-    const removeHashTag = (index: number) => {
-        const nArray = hashTags.filter((_, i) => i !== index);
+        let nArray;
+        if (hashTags.includes(data)) {
+            nArray = hashTags.filter((innerData) => innerData !== data);
+        } else {
+            nArray = [...hashTags, data];
+        }
         setValue("hashTags", nArray);
     }
-
 
     useEffect(() => {
         initData().then();
@@ -274,11 +264,7 @@ export default function EventUpdatePage() {
                                 className={styles.inputImg}
                                 type={"file"} accept="image/*" onChange={handleFileChange}/>
 
-                            {preview ? (
-                                <img src={preview} alt="preview" className={styles.previewImg}/>
-                            ) : (
-                                "이미지 업로드"
-                            )}
+
                             <div
                                 className={styles.uploadBox}
                                 onClick={() => {
@@ -288,35 +274,37 @@ export default function EventUpdatePage() {
                                     fileInputRef.current?.click();
                                 }}
                             >
-                                {!imageSrc && (
-                                    <div className={styles.uploadLabel}>
-                                        이미지 업로드
-                                    </div>
-                                )}
-
-                                {imageSrc && (
-
-                                    <div className={styles.inlineCropper}
-                                         onMouseDown={() => (setIsDragging(false))}
-                                         onMouseMove={() => (setIsDragging(true))}
-                                         onTouchStart={() => (setIsDragging(false))}
-                                         onTouchMove={() => (setIsDragging(true))}
-
-                                    >
-                                        <Cropper
-                                            image={imageSrc}
-                                            crop={crop}
-                                            zoom={zoom}
-                                            aspect={16 / 9}
-                                            onCropChange={handleCrop}
-                                            objectFit="cover"
-                                            onZoomChange={handleZoom}
-                                            onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
-                                        />
-                                    </div>
-                                )}
+                                {
+                                    imageSrc ?
+                                        (
+                                            <div className={styles.inlineCropper}
+                                                 onMouseDown={() => (setIsDragging(false))}
+                                                 onMouseMove={() => (setIsDragging(true))}
+                                                 onTouchStart={() => (setIsDragging(false))}
+                                                 onTouchMove={() => (setIsDragging(true))}
+                                            >
+                                                <Cropper
+                                                    image={imageSrc}
+                                                    crop={crop}
+                                                    zoom={zoom}
+                                                    aspect={16 / 9}
+                                                    onCropChange={handleCrop}
+                                                    objectFit="cover"
+                                                    onZoomChange={handleZoom}
+                                                    onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+                                                />
+                                            </div>
+                                        ) :
+                                        preview ? (
+                                                <img src={preview} alt="preview" className={styles.previewImg}/>
+                                            ) :
+                                            (
+                                                <div className={styles.uploadLabel}>
+                                                    이미지 업로드
+                                                </div>
+                                            )
+                                }
                             </div>
-
 
 
                             <div className={`${styles.textRequired} mt16`}>
@@ -350,7 +338,6 @@ export default function EventUpdatePage() {
                                             locale={'ko'}
                                             className="input-default"
                                             maxDate={eventEnd}
-                                            minDate={new Date()}
                                         />
                                     )}
                                 />
@@ -368,7 +355,6 @@ export default function EventUpdatePage() {
                                             dateFormat="yyyy-MM-dd"
                                             locale={'ko'}
                                             minDate={eventStart}
-
                                             className="input-default"
                                         />
                                     )}
@@ -398,7 +384,6 @@ export default function EventUpdatePage() {
                                             locale="ko"
                                             maxDate={recruitEnd != null ? recruitEnd : undefined}
                                             className="input-default"
-                                            minDate={new Date()}
                                         />
 
                                         <DatePicker
@@ -559,15 +544,13 @@ export default function EventUpdatePage() {
                             <div className={`${styles.textRequired} ${styles.noneRequired} mt16`}>
                                 해시 태그
                             </div>
-                            <input onKeyDown={addTags} type="text"
-                                   className="input-default" placeholder="최대 5개 (ENTER)"
-                                   disabled={hashTags.length >= 5}
-                            />
-                            <div className="box-flex gap8 mt16">
-                                {hashTags.map((tag, index) => {
-                                    return <button type={"button"} onClick={() => removeHashTag(index)}
-                                                   className={styles.boxHashTag} key={index}>{tag}
-                                        <span>X</span></button>
+
+                            <div className="box-flex gap8 mt16 fw-wrap">
+                                {ALL_HASHTAGS.map((tag, index) => {
+                                    return <button type={"button"} onClick={() => checkHashTag(tag)}
+                                                   className={`${styles.boxHashTag} ${hashTags.includes(tag) ? styles.active : ''} `}
+                                                   key={index}>{tag}
+                                    </button>
                                 })}
                             </div>
 

@@ -37,4 +37,5 @@ export interface MemberDetailModel {
 }
 
 
+
 export type MemberStatus = "ACTIVE" | "INACTIVE";

@@ -70,8 +70,11 @@
     border-radius: 4px;
     gap: 12px;
     align-items: center;
-    button{
-        font-size: 12px;
+
+
+    &.active{
+        background-color: v.$main-blue;
+        color: white;
     }
 }
 
