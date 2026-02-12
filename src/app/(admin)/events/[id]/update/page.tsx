@@ -58,7 +58,6 @@ export default function EventUpdatePage() {
         defaultValues: {
             category: 'CONFERENCE_SEMINAR',
             targetRoles: [],
-            draft: false,
             hashTags: [],
             isFree: true,
             isOnline: false,
