@@ -12,7 +12,7 @@ import styles from "../member.module.scss";
 
 import MemberActivityStats from "@/components/members/detail/MemberActivityStats";
 import React, {useEffect, useState} from "react";
-import {getArticleDetail, getMemberDetail} from "@/api/client";
+import {getArticleDetail, getMemberCount, getMemberDetail, getMemberInfo} from "@/api/client";
 import {useLoadingStore} from "@/store/loadingStore";
 
 import {MemberDetailModel} from "@/types/member.type";
@@ -29,8 +29,12 @@ export default function MemberDetail() {
     const initData = async () => {
         try {
             showLoading();
-            const result = await getMemberDetail({id: params.id});
-            setDetailData(result.data);
+            const deatailResult = await getMemberDetail({id: params.id});
+            // const infoResult = await getMemberInfo({id: params.id});
+            // const cntResult = await getMemberCount({id: params.id});
+            // console.log(infoResult)
+            // console.log(cntResult)
+            setDetailData(deatailResult.data);
         } catch (error) {
         } finally {
             hideLoading();
