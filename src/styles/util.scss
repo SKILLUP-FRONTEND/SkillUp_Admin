@@ -130,8 +130,6 @@
     justify-content: center;
 
 
-
-
 }
 
 .btnBorder {
@@ -147,7 +145,7 @@
     justify-content: center;
     background-color: white;
 
-    &.delete{
+    &.delete {
         border-color: #ffa2a2;
         color: #e7000b;
     }
@@ -157,11 +155,11 @@
     color: v.$black-32;
 }
 
-.btnOption{
+.btnOption {
     height: 30px;
     padding: 0 12px;
     border-radius: 5px;
-    background-color:#9CA3AF;
+    background-color: #9CA3AF;
     font-weight: 500;
     color: #fff;
     font-size: 18px;
@@ -171,7 +169,7 @@
 
 }
 
-.containerModal{
+.containerModal {
     position: fixed;
     width: 100vw;
     height: 100vh;
@@ -184,20 +182,21 @@
 
 }
 
-.wrapperModal{
+.wrapperModal {
     border-radius: 12px;
     background-color: white;
     padding: 16px;
     max-height: 90vh;
     overflow-y: auto;
 }
-.title-modal{
+
+.title-modal {
     font-size: 18px;
     font-weight: 700;
 }
 
-.btn-modal{
-width: 16px;
+.btn-modal {
+    width: 16px;
     height: 16px;
     background-image: url("/images/iconClose.svg");
     @include mixin.back-center();
@@ -213,4 +212,15 @@ width: 16px;
 
 }
 
+.btn-icon {
+    width: 24px;
+    height: 24px;
+    @include mixin.back-center($size: 16px);
+    background-image: url("/images/iconReload.svg");
+
+}
+
+.fc7a{
+    color: #7a7a7a;
+}
 

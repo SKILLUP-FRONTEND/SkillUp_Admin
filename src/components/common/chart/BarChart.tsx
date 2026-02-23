@@ -6,19 +6,23 @@
   최종 수정일 : 2025-09-02
 */
 
-import { BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
+import {BarChart, Bar, XAxis, YAxis, Tooltip} from "recharts";
 
 export default function BarChartComponent({
-  data,
-}: {
-  data: { month: string; value: number }[];
+                                              data,
+                                              dataKey,
+                                              valueKey,
+                                          }: {
+    data: unknown[];
+    dataKey: string;
+    valueKey: string;
 }) {
-  return (
-    <BarChart width={300} height={180} data={data}>
-      <XAxis dataKey="month" />
-      <YAxis />
-      <Tooltip />
-      <Bar dataKey="value" fill="#8D67FF" radius={[4, 4, 0, 0]} />
-    </BarChart>
-  );
+    return (
+        <BarChart width={300} height={180} data={data}>
+            <XAxis dataKey={dataKey} />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey={valueKey} fill="#8D67FF" radius={[4, 4, 0, 0]} />
+        </BarChart>
+    );
 }

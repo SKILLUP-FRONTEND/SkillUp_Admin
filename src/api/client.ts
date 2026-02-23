@@ -22,6 +22,7 @@ client.interceptors.response.use(
             fetch("/api/logout", {method: "POST"}).then();
             window.location.href = "/login";
         }
+
         return Promise.reject(error);
     }
 );
