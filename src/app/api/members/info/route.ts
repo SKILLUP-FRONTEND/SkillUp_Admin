@@ -4,9 +4,10 @@ import { serverFetch } from "@/lib/serverFetch";
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get('id');
+    const category = searchParams.get('category');
 
 
-    const res = await serverFetch(`/admin/users/${userId}/eventAction/abab/analytics`);
+    const res = await serverFetch(`/admin/users/${userId}/eventAction/${category}/analytics`);
     const text = await res.text();
     let data: unknown;
     try {

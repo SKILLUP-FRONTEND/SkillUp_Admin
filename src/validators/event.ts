@@ -22,6 +22,38 @@ export const eventSchema = z.object({
     description: z.string().nullish(),
     hashTags: z.array(z.string()),
 
+    locationTextDetail : z.string().nullish(),
+
+    latitude : z.number().nullish(),
+    longitude: z.number().nullish(),
+
+
+// {
+//     "contact": "string",
+//     "eventEnd": "2026-02-26T10:01:55.978Z",
+//     "locationText": "string",
+//     "recruitStart": "2026-02-26T10:01:55.978Z",
+//     "hashTags": [
+//     "string"
+// ],
+//     "applyLink": "string",
+//     "eventStart": "2026-02-26T10:01:55.978Z",
+//     "price": 0,
+//     "latitude": 0.1,
+//     "targetRoles": [
+//     "string"
+// ],
+//     "locationLink": "string",
+//     "longitude": 0.1,
+//     "locationTextDetail": "string",
+//     "isFree": true,
+//     "title": "string",
+//     "description": "string",
+//     "isOnline": true,
+//     "recruitEnd": "2026-02-26T10:01:55.978Z",
+//     "category": "CONFERENCE_SEMINAR"
+// }
+
 
 
 }).refine((data) => {
@@ -33,13 +65,21 @@ export const eventSchema = z.object({
     message: "유료 행사는 가격을 입력해야 합니다.",
     path: ["price"],
 }).refine((data) => {
-    if (!data.isOnline && (!data.locationText || data.locationText.trim() === "")) {
+    if (!data.isOnline && (!data.locationText || data.locationText.trim() === "" )) {
+        return false;
+    }
+    return true;
+}, {
+    message: "장소를 선택해주세요",
+    path: ["locationText"],
+}).refine((data) => {
+    if (!data.isOnline && (!data.locationTextDetail || data.locationTextDetail.trim() === "")) {
         return false;
     }
     return true;
 }, {
     message: "장소를 입력해주세요",
-    path: ["locationText"],
+    path: ["locationTextDetail"],
 }).refine((data) => {
     if (data.applyLink && data.applyLink.trim() !== "") {
         const urlRegex = /^(https?:\/\/)[^\s$.?#].[^\s]*$/;

@@ -215,7 +215,7 @@ export default function EventDetailPage() {
 
 
                 <div className={`${styles.boxDetail} mt12 mb12`}>
-                    {detailData ? detailData.locationText : '-'}
+                    {detailData ? detailData.locationText ?? '-' : '-'}
                 </div>
 
                 <RadioBtn option={{label: '온라인', value: true, groupValue: detailData?.isOnline ?? null}}

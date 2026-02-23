@@ -9,6 +9,7 @@ import "@/styles/global.scss";
 import "@/styles/util.scss"
 import GlobalLoading from "@/components/common/loading/GlobalLoading";
 import Portal from "@/components/modal/Portal";
+import Script from 'next/script'
 
 
 export const metadata = {
@@ -20,6 +21,10 @@ export default function RootLayout({children}: { children: ReactNode }) {
     return (
         <html lang="ko">
         <head>
+            <Script
+                strategy="afterInteractive"
+                src={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=hb9lyolgnv&submodules=geocoder`}
+            ></Script>
             <link
                 rel="stylesheet"
                 as="style"

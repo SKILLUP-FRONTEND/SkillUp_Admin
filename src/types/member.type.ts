@@ -24,6 +24,16 @@ export interface MemberModel {
   status: MemberStatus;
 }
 
+export interface MemberCountModel {
+  viewCount: number;
+  saveCount: number;
+  applyCount: number;
+
+
+}
+
+
+
 export interface MemberDetailModel {
   userId: number;
   name: string;

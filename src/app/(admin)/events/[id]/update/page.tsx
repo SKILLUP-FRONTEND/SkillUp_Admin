@@ -30,6 +30,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import Cropper, {Point} from "react-easy-crop";
 import type {Area} from "react-easy-crop";
 import {ALL_HASHTAGS} from "@/types/event.type";
+import DaumPostcode from "react-daum-postcode";
+import {Address} from "react-daum-postcode/lib/loadPostcode";
+import Status = naver.maps.Service.Status;
+import GeocodeResponse = naver.maps.Service.GeocodeResponse;
 
 const ReactQuill = dynamic(() => import('react-quill-new'), {
     ssr: false,
@@ -81,6 +85,46 @@ export default function EventUpdatePage() {
 
     const [thumbnail, setThumbnail] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
+
+    const [isPostcodeOpen, setIsPostcodeOpen] = useState(false);
+
+    const mapRef = useRef<naver.maps.Map | null>(null);
+    const markerRef = useRef<naver.maps.Marker | null>(null);
+
+    const isOnlineRef = useRef(isOnline);
+
+
+    const handleComplete = (data: Address) => {
+        const fullAddress = data.address;
+
+        setIsPostcodeOpen(false);
+        setValue('locationText', fullAddress, {shouldValidate: true});
+
+        if (window.naver && window.naver.maps.Service) {
+            window.naver.maps.Service.geocode({
+                query: fullAddress
+            }, (status: Status, response: GeocodeResponse) => {
+                if (status !== window.naver.maps.Service.Status.OK) return;
+
+                const result = response.v2.addresses[0];
+                const lat = parseFloat(result.y);
+                const lng = parseFloat(result.x);
+                const coords = new window.naver.maps.LatLng(lat, lng);
+
+                setValue('latitude', lat);
+                setValue('longitude', lng);
+
+                if (mapRef.current && markerRef.current) {
+                    mapRef.current.setCenter(coords);
+                    mapRef.current.setZoom(16);
+                    markerRef.current.setPosition(coords);
+                }
+            });
+        }
+
+
+    };
+
 
     const handleZoom = async (zoom: number) => {
         setZoom(zoom);
@@ -202,6 +246,9 @@ export default function EventUpdatePage() {
             setValue('price', data.price, {shouldValidate: true});
             setValue('isOnline', data.isOnline, {shouldValidate: true});
             setValue('locationText', data.locationText, {shouldValidate: true});
+            setValue('locationTextDetail', data.locationTextDetail, {shouldValidate: true});
+            setValue('latitude', data.latitude, {shouldValidate: true});
+            setValue('longitude', data.longitude, {shouldValidate: true});
             setValue('locationLink', data.locationLink, {shouldValidate: true});
             setValue('applyLink', data.applyLink, {shouldValidate: true});
             setValue('contact', data.contact, {shouldValidate: true});
@@ -229,6 +276,84 @@ export default function EventUpdatePage() {
         }
         setValue("hashTags", nArray);
     }
+
+    useEffect(() => {
+        isOnlineRef.current = isOnline;
+
+        // 이 부분은 지도 인터랙션을 제어하는 아주 좋은 코드입니다!
+        if (mapRef.current) {
+            mapRef.current.setOptions({
+                clickable: !isOnline,
+                draggable: !isOnline,
+                scrollWheel: !isOnline
+            });
+        }
+    }, [isOnline]);
+
+    useEffect(() => {
+        const initMap = () => {
+            const mapOptions = {
+                center: new naver.maps.LatLng(37.3595704, 127.105399),
+                zoom: 10,
+            };
+
+            const map = new naver.maps.Map('map', mapOptions);
+
+            const marker = new naver.maps.Marker({
+                position: mapOptions.center,
+                map: map
+            });
+
+            // Ref에 인스턴스 보관 (외부 함수에서 쓰기 위해)
+            mapRef.current = map;
+            markerRef.current = marker;
+
+            naver.maps.Event.addListener(map, 'click', function (e) {
+                if (isOnlineRef.current) {
+                    return;
+                }
+                const latlng = e.coord;
+                marker.setPosition(latlng);
+
+                setValue('latitude', latlng.y, { shouldValidate: true });
+                setValue('longitude', latlng.x, { shouldValidate: true });
+
+                if (naver.maps.Service && naver.maps.Service.reverseGeocode) {
+                    naver.maps.Service.reverseGeocode({
+                        coords: latlng,
+                        orders: [
+                            naver.maps.Service.OrderType.ADDR,
+                            naver.maps.Service.OrderType.ROAD_ADDR
+                        ].join(',')
+                    }, function (status, response) {
+                        console.log(status, response);
+                        if (status !== naver.maps.Service.Status.OK) {
+                            return alert('주소 변환에 실패했습니다.');
+                        }
+                        const items = response.v2.results;
+                        const address = items[0].region.area1.name + " " +
+                            items[0].region.area2.name + " " +
+                            items[0].region.area3.name + " " +
+                            items[0].land.number1;
+
+                        setValue('locationText', address, {shouldValidate: true});
+
+                    });
+                }
+            });
+
+
+        };
+
+        if (window.naver && window.naver.maps) {
+            initMap();
+        } else {
+            const mapScript = document.createElement('script');
+            mapScript.onload = () => initMap();
+            mapScript.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=hb9lyolgnv?submodules=geocoder`;
+            document.head.appendChild(mapScript);
+        }
+    }, []);
 
     useEffect(() => {
         initData().then();
@@ -480,15 +605,34 @@ export default function EventUpdatePage() {
                             <div className={`${styles.textRequired} mt16`}>
                                 장소
                             </div>
-                            <RadioBtn option={{label: '오프라인', value: false, groupValue: isOnline}}
-                                      onChange={(val) => setValue("isOnline", Boolean(val))}
-                            />
+
+
+                            <div className="box-flex mb16">
+                                <RadioBtn option={{label: '오프라인', value: false, groupValue: isOnline}}
+                                          className="mr-auto"
+                                          onChange={(val) => setValue("isOnline", Boolean(val))}
+                                />
+                                <button className="btnDefault mr10" type={"button"}
+                                        disabled={isOnline}
+                                        onClick={() => setIsPostcodeOpen(true)}>주소검색
+                                </button>
+                            </div>
+
+                            <div id="map" style={{width: '100%', height: '500px'}}></div>
+
 
                             <input {...register("locationText")}
                                    disabled={isOnline}
+                                   readOnly={true}
                                    className="input-default mt8" placeholder="장소를 입력해주세요"/>
                             {(errors.locationText && !isOnline) &&
                                 <div className={styles.errorText}>{errors.locationText.message}</div>}
+
+                            <input {...register("locationTextDetail")}
+                                   disabled={isOnline}
+                                   className="input-default mt8" placeholder="장소(상세)를 입력해주세요"/>
+                            {(errors.locationTextDetail && !isOnline) &&
+                                <div className={styles.errorText}>{errors.locationTextDetail.message}</div>}
 
                             <RadioBtn
                                 className="mt16"
@@ -496,6 +640,9 @@ export default function EventUpdatePage() {
                                 onChange={(val) => {
                                     setValue("isOnline", Boolean(val));
                                     setValue("locationText", null);
+                                    setValue("locationTextDetail", null);
+                                    setValue("latitude", null);
+                                    setValue("longitude", null);
                                 }}
                             />
 
@@ -569,6 +716,29 @@ export default function EventUpdatePage() {
                     </div>
                 </div>
             </form>
+            {isPostcodeOpen && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0, left: 0, width: '100%', height: '100%',
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    zIndex: 1000
+                }}>
+                    <div style={{
+                        width: '500px', background: '#fff', padding: '20px', borderRadius: '8px',
+                        position: 'relative'
+                    }}>
+                        <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '10px'}}>
+                            <h3 style={{margin: 0}}>주소 검색</h3>
+                            <button onClick={() => setIsPostcodeOpen(false)}>닫기</button>
+                        </div>
+                        <DaumPostcode
+                            onComplete={handleComplete}
+                            autoClose={false}
+                        />
+                    </div>
+                </div>
+            )}
         </>
     )
         ;
