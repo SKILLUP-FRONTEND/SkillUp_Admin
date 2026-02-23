@@ -253,9 +253,10 @@ export default function BannerUpdatePage() {
                                             zoom={zoom}
                                             aspect={16 / 9}
                                             onCropChange={handleCrop}
-                                            objectFit="cover"
+                                            objectFit="horizontal-cover"
                                             onZoomChange={handleZoom}
                                             onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+
                                         />
                                     </div>
                                 ) : preview ? (

@@ -31,7 +31,7 @@ import {createDraftEvent, createEvent, getEventDetail, registDraftEvent} from "@
 import {useModalStore} from "@/store/modalStore";
 import Cropper, {Point} from "react-easy-crop";
 import type {Area} from "react-easy-crop";
-import { ALL_HASHTAGS} from "@/types/event.type";
+import {ALL_HASHTAGS} from "@/types/event.type";
 
 import DraftModal from "@/components/modal/DraftModal";
 import {AxiosResponse} from "axios";
@@ -333,7 +333,9 @@ export default function EventsCreatePage() {
                             <input
                                 ref={fileInputRef}
                                 className={styles.inputImg}
-                                type={"file"} accept="image/*" onChange={handleFileChange}/>
+                                type={"file"} accept="image/*" onChange={handleFileChange}
+                            />
+
                             <div
                                 className={styles.uploadBox}
                                 onClick={() => {
@@ -343,33 +345,36 @@ export default function EventsCreatePage() {
                                     fileInputRef.current?.click();
                                 }}
                             >
-                                {!imageSrc && (
-                                    <div>
-                                        이미지 업로드
-                                    </div>
-                                )}
+                                {imageSrc ?
 
-                                {imageSrc && (
+                                    (
 
-                                    <div className={styles.inlineCropper}
-                                         onMouseDown={() => (setIsDragging(false))}
-                                         onMouseMove={() => (setIsDragging(true))}
-                                         onTouchStart={() => (setIsDragging(false))}
-                                         onTouchMove={() => (setIsDragging(true))}
+                                        <div className={styles.inlineCropper}
+                                             onMouseDown={() => (setIsDragging(false))}
+                                             onMouseMove={() => (setIsDragging(true))}
+                                             onTouchStart={() => (setIsDragging(false))}
+                                             onTouchMove={() => (setIsDragging(true))}
+                                        >
+                                            <Cropper
+                                                image={imageSrc}
+                                                crop={crop}
+                                                zoom={zoom}
+                                                aspect={16 / 9}
+                                                onCropChange={handleCrop}
+                                                objectFit="horizontal-cover"
+                                                onZoomChange={handleZoom}
+                                                onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+                                            />
+                                        </div>
 
-                                    >
-                                        <Cropper
-                                            image={imageSrc}
-                                            crop={crop}
-                                            zoom={zoom}
-                                            aspect={16 / 9}
-                                            onCropChange={handleCrop}
-                                            objectFit="cover"
-                                            onZoomChange={handleZoom}
-                                            onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
-                                        />
-                                    </div>
-                                )}
+
+                                    ) :
+
+                                    (
+                                        <div>
+                                            이미지 업로드
+                                        </div>
+                                    )}
                             </div>
                             <div className={`${styles.textRequired} mt16`}>
                                 카테고리
@@ -610,7 +615,8 @@ export default function EventsCreatePage() {
                             <div className="box-flex gap8 mt16 fw-wrap">
                                 {ALL_HASHTAGS.map((tag, index) => {
                                     return <button type={"button"} onClick={() => checkHashTag(tag)}
-                                                   className={`${styles.boxHashTag} ${hashTags.includes(tag) ? styles.active : ''} `} key={index}>{tag}
+                                                   className={`${styles.boxHashTag} ${hashTags.includes(tag) ? styles.active : ''} `}
+                                                   key={index}>{tag}
                                     </button>
                                 })}
                             </div>

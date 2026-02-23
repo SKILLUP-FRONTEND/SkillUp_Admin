@@ -207,31 +207,32 @@ export default function BannerCreatePage() {
                                     fileInputRef.current?.click();
                                 }}
                             >
-                                {!imageSrc && (
+                                {imageSrc ?
+                                    (
+
+                                        <div className={styles.inlineCropper}
+                                             onMouseDown={() => (setIsDragging(false))}
+                                             onMouseMove={() => (setIsDragging(true))}
+                                             onTouchStart={() => (setIsDragging(false))}
+                                             onTouchMove={() => (setIsDragging(true))}
+
+                                        >
+                                            <Cropper
+                                                image={imageSrc}
+                                                crop={crop}
+                                                zoom={zoom}
+                                                aspect={16 / 9}
+                                                onCropChange={handleCrop}
+                                                objectFit="horizontal-cover"
+                                                onZoomChange={handleZoom}
+                                                onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+
+                                            />
+                                        </div>
+                                    ):
+                                    (
                                     <div className={styles.uploadLabel}>
                                         이미지 업로드
-                                    </div>
-                                )}
-
-                                {imageSrc && (
-
-                                    <div className={styles.inlineCropper}
-                                         onMouseDown={() => (setIsDragging(false))}
-                                         onMouseMove={() => (setIsDragging(true))}
-                                         onTouchStart={() => (setIsDragging(false))}
-                                         onTouchMove={() => (setIsDragging(true))}
-
-                                    >
-                                        <Cropper
-                                            image={imageSrc}
-                                            crop={crop}
-                                            zoom={zoom}
-                                            aspect={16 / 9}
-                                            onCropChange={handleCrop}
-                                            objectFit="cover"
-                                            onZoomChange={handleZoom}
-                                            onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
-                                        />
                                     </div>
                                 )}
                             </div>

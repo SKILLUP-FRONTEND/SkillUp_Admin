@@ -287,9 +287,10 @@ export default function EventUpdatePage() {
                                                     zoom={zoom}
                                                     aspect={16 / 9}
                                                     onCropChange={handleCrop}
-                                                    objectFit="cover"
+                                                    objectFit="horizontal-cover"
                                                     onZoomChange={handleZoom}
                                                     onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+
                                                 />
                                             </div>
                                         ) :
@@ -362,7 +363,7 @@ export default function EventUpdatePage() {
                                 <div className={styles.errorText}>
                                     행사 기간은 필수입니다.</div>}
 
-                            <div className={`${styles.textRequired} mt16`}>
+                            <div className={`${styles.textRequired} ${styles.noneRequired} mt16`}>
                                 모집 기간
                             </div>
 
@@ -435,9 +436,6 @@ export default function EventUpdatePage() {
 
                                 )}
                             />
-                            {(errors.recruitStart || errors.recruitEnd) &&
-                                <div className={styles.errorText}>모집 기간은 필수입니다.</div>}
-
 
                             <div className={`${styles.textRequired} mt16`}>
                                 참가비
