@@ -315,8 +315,8 @@ export default function EventUpdatePage() {
                 const latlng = e.coord;
                 marker.setPosition(latlng);
 
-                setValue('latitude', latlng.y, { shouldValidate: true });
-                setValue('longitude', latlng.x, { shouldValidate: true });
+                setValue('latitude', latlng.y, {shouldValidate: true});
+                setValue('longitude', latlng.x, {shouldValidate: true});
 
                 if (naver.maps.Service && naver.maps.Service.reverseGeocode) {
                     naver.maps.Service.reverseGeocode({
@@ -373,9 +373,10 @@ export default function EventUpdatePage() {
                             <div className={styles.textRequired}>
                                 행사명
                             </div>
-                            <textarea  {...register("title")} maxLength={40} className="textarea-default"
+                            <input  {...register("title")} maxLength={40} className="input-default"
                                     placeholder="최대 40글자"/>
                             {errors.title && <div className={styles.errorText}>{errors.title.message}</div>}
+
 
 
                             <div className={`${styles.textRequired} ${styles.noneRequired} mt16`}>

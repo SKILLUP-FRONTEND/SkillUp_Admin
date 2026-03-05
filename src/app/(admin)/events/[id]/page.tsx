@@ -105,16 +105,9 @@ export default function EventDetailPage() {
 
             <div className="container-default mb20 pa24">
                 <div className={`${styles.textRequired} ${styles.noneRequired}`}>행사명</div>
-
-
                 <div
                     className={`${styles.boxDetail} mb20`}
-                    style={{
-                        display: 'block',
-                        whiteSpace: 'pre-wrap' // 이 부분을 추가하세요
-                    }}
-                    dangerouslySetInnerHTML={{__html: detailData?.title || '-'}}
-                />
+                >{detailData?.title || '-'}</div>
 
 
                 <div className={styles.titleCard}>
@@ -246,7 +239,7 @@ export default function EventDetailPage() {
 
                 <div className={`${styles.textRequired} ${styles.noneRequired}`}>행사설명</div>
                 <div
-                    className={`${styles.boxDetail} mb20`} style={{display:'block'}}
+                    className={`${styles.boxDetail} mb20`} style={{display: 'block'}}
                     dangerouslySetInnerHTML={{__html: detailData?.description || '-'}}
                 />
                 <div className={`${styles.textRequired} ${styles.noneRequired}`}>해시태그</div>
