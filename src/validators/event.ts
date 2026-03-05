@@ -73,14 +73,6 @@ export const eventSchema = z.object({
     message: "장소를 선택해주세요",
     path: ["locationText"],
 }).refine((data) => {
-    if (!data.isOnline && (!data.locationTextDetail || data.locationTextDetail.trim() === "")) {
-        return false;
-    }
-    return true;
-}, {
-    message: "장소를 입력해주세요",
-    path: ["locationTextDetail"],
-}).refine((data) => {
     if (data.applyLink && data.applyLink.trim() !== "") {
         const urlRegex = /^(https?:\/\/)[^\s$.?#].[^\s]*$/;
         return urlRegex.test(data.applyLink);

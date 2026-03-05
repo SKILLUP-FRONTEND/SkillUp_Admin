@@ -438,7 +438,9 @@ export default function EventsCreatePage() {
                             <div className={styles.textRequired}>
                                 행사명
                             </div>
-                            <input  {...register("title")} maxLength={40} className="input-default"
+                            <textarea  {...register("title")} maxLength={40} className="textarea-default"
+                                       rows={3}
+
                                     placeholder="최대 40글자"/>
                             {errors.title && <div className={styles.errorText}>{errors.title.message}</div>}
 
