@@ -172,15 +172,15 @@ export default function BannerCreatePage() {
                             <div className={styles.textRequired}>
                                 서브타이틀
                             </div>
-                            <input  {...register("subTitle")} maxLength={20} className="input-default"
-                                    placeholder="최대 20글자"/>
+                            <input  {...register("subTitle")} maxLength={30} className="input-default"
+                                    placeholder="최대 30글자"/>
                             {errors.subTitle && <div className={styles.errorText}>{errors.subTitle.message}</div>}
 
                             <div className={`${styles.textRequired} mt16`}>
                                 메인타이틀
                             </div>
-                            <input  {...register("mainTitle")} maxLength={30} className="input-default"
-                                    placeholder="최대 30글자"/>
+                            <textarea  {...register("mainTitle")} maxLength={50} className="textarea-default"
+                                    placeholder="최대 50글자"/>
                             {errors.mainTitle && <div className={styles.errorText}>{errors.mainTitle.message}</div>}
 
                             <div className={`${styles.textRequired} mt16`}>

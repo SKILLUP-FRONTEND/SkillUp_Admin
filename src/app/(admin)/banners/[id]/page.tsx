@@ -105,10 +105,17 @@ export default function BannerDetailPage() {
                     {detailData ? detailData.subTitle : '-'}
                 </div>
 
+
+
                 <div className={`${styles.textRequired} ${styles.noneRequired}`}>메인 타이틀</div>
-                <div className={`${styles.boxDetail} mb20`}>
-                    {detailData ? detailData.mainTitle : '-'}
-                </div>
+                <div
+                    className={`${styles.boxDetail} mb20`}
+                    style={{
+                        display: 'block',
+                        whiteSpace: 'pre-wrap'
+                    }}
+                    dangerouslySetInnerHTML={{__html: detailData?.mainTitle || '-'}}
+                />
 
                 <div className={`${styles.textRequired} ${styles.noneRequired}`}>설명</div>
                 <div className={`${styles.boxDetail} mb20`}>
