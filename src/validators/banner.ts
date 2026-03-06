@@ -2,8 +2,7 @@ import {z} from "zod";
 
 export const bannerSchema = z.object({
     subTitle: z
-        .string()
-        .min(1, "서브 아이틀은 필수입니다."),
+        .string().nullish(),
 
     mainTitle: z
         .string()

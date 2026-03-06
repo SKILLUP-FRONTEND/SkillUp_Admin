@@ -169,7 +169,7 @@ export default function BannerCreatePage() {
                     <div className="flex3">
                         <div className="container-default mb24 pa24">
 
-                            <div className={styles.textRequired}>
+                            <div className={`${styles.textRequired} ${styles.noneRequired}`}>
                                 서브타이틀
                             </div>
                             <input  {...register("subTitle")} maxLength={30} className="input-default"
