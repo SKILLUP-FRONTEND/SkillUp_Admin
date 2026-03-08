@@ -265,14 +265,16 @@ export default function EventUpdatePage() {
     };
 
     const checkHashTag = (data: string) => {
-        if (hashTags.length >= 5) {
-            return;
-        }
+
         let nArray;
         if (hashTags.includes(data)) {
             nArray = hashTags.filter((innerData) => innerData !== data);
         } else {
-            nArray = [...hashTags, data];
+            if (hashTags.length >= 5) {
+                return;
+            }else{
+                nArray = [...hashTags, data];
+            }
         }
         setValue("hashTags", nArray);
     }

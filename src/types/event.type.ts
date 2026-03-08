@@ -48,6 +48,7 @@ export interface EventDetailModel {
     price: number;
     isOnline: boolean;
     locationText: string;
+    locationTextDetail: string;
     locationLink: string;
     latitude: number;
     longitude: number;
