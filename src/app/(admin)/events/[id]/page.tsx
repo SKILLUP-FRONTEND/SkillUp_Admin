@@ -19,6 +19,12 @@ import {EventDetailModel} from "@/types/event.type";
 import {RadioGroup} from "@/components/common/radio/RadioGroup";
 import {RadioBtn} from "@/components/common/radio/RadioBtn";
 import 'react-quill-new/dist/quill.snow.css';
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(() => import('react-quill-new'), {
+    ssr: false,
+
+});
 
 export default function EventDetailPage() {
     const params = useParams();
@@ -242,10 +248,22 @@ export default function EventDetailPage() {
                 </div>
 
                 <div className={`${styles.textRequired} ${styles.noneRequired}`}>행사설명</div>
-                <div
-                    className={`${styles.boxDetail} mb20`} style={{display: 'block'}}
-                    dangerouslySetInnerHTML={{__html: detailData?.description || '-'}}
+
+
+                <ReactQuill
+                    value={detailData?.description ?? ""}
+                    onChange={() => {
+                    }}
+                    readOnly
+                    theme="snow"
+                    placeholder="상세 내용을 입력해주세요."
+                    className="mt8"
+                    modules={{
+                        toolbar: false,
+                    }}
+                    style={{height: 'auto', marginBottom: '30px'}}
                 />
+
                 <div className={`${styles.textRequired} ${styles.noneRequired}`}>해시태그</div>
                 <div className="box-flex gap12">
                     {detailData && detailData.hashTags.map((tag, index) => (
