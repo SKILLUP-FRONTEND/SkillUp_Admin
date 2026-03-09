@@ -107,6 +107,8 @@ export default function EventUpdatePage() {
                 if (status !== window.naver.maps.Service.Status.OK) return;
 
                 const result = response.v2.addresses[0];
+
+                console.log(result);
                 const lat = parseFloat(result.y);
                 const lng = parseFloat(result.x);
                 const coords = new window.naver.maps.LatLng(lat, lng);
@@ -209,10 +211,12 @@ export default function EventUpdatePage() {
             const eventId = Array.isArray(params.id) ? params.id[0] : params.id;
             const response = await updateEvent(data, eventId!, thumbnail,);
             if (response.code == "SUCCESS") {
-                Swal.fire({
+                hideLoading();
+                await Swal.fire({
                     title: '수정되었습니다',
                     confirmButtonText: '확인',
-                }).then(() => router.back());
+                }).then();
+                router.back();
             } else {
                 Swal.fire({
                     title: '수정에 실패했습니다',
@@ -306,7 +310,6 @@ export default function EventUpdatePage() {
                 map: map
             });
 
-            // Ref에 인스턴스 보관 (외부 함수에서 쓰기 위해)
             mapRef.current = map;
             markerRef.current = marker;
 

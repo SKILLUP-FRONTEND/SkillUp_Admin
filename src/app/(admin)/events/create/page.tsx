@@ -323,6 +323,7 @@ export default function EventsCreatePage() {
                 if (status !== window.naver.maps.Service.Status.OK) return;
 
                 const result = response.v2.addresses[0];
+
                 const lat = parseFloat(result.y);
                 const lng = parseFloat(result.x);
                 const coords = new window.naver.maps.LatLng(lat, lng);
