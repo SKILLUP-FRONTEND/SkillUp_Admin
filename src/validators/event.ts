@@ -6,10 +6,10 @@ export const eventSchema = z.object({
         .string().min(1,'행사명은 필수입니다.'),
     category: z.string(),
 
-    eventStart: z.date(),
-    eventEnd: z.date(),
-    recruitStart: z.date().nullish(),
-    recruitEnd: z.date().nullish(),
+    eventStart: z.string(),
+    eventEnd: z.string(),
+    recruitStart: z.string().nullish(),
+    recruitEnd: z.string().nullish(),
     targetRoles:z.array(z.string()).min(1, "직군을 최소 1개 선택해주세요."),
     isFree: z.boolean(),
     price: z.number().or(z.nan()).or(z.undefined()),
@@ -26,34 +26,6 @@ export const eventSchema = z.object({
 
     latitude : z.number().nullish(),
     longitude: z.number().nullish(),
-
-
-// {
-//     "contact": "string",
-//     "eventEnd": "2026-02-26T10:01:55.978Z",
-//     "locationText": "string",
-//     "recruitStart": "2026-02-26T10:01:55.978Z",
-//     "hashTags": [
-//     "string"
-// ],
-//     "applyLink": "string",
-//     "eventStart": "2026-02-26T10:01:55.978Z",
-//     "price": 0,
-//     "latitude": 0.1,
-//     "targetRoles": [
-//     "string"
-// ],
-//     "locationLink": "string",
-//     "longitude": 0.1,
-//     "locationTextDetail": "string",
-//     "isFree": true,
-//     "title": "string",
-//     "description": "string",
-//     "isOnline": true,
-//     "recruitEnd": "2026-02-26T10:01:55.978Z",
-//     "category": "CONFERENCE_SEMINAR"
-// }
-
 
 
 }).refine((data) => {

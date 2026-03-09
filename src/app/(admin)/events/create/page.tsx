@@ -107,7 +107,9 @@ export default function EventsCreatePage() {
     const [draftId, setDraftId] = useState<number | null>(null);
     const quillRef = useRef<ReactQuill>(null);
 
-
+    const getLimitDate = (val: string | null) => {
+        return val ? new Date(String(val).replace('Z', '')) : undefined;
+    };
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -307,10 +309,31 @@ export default function EventsCreatePage() {
             setDraftId(id);
             setValue("title", data.title, {shouldValidate: true});
             setValue("category", data.category, {shouldValidate: true});
-            setValue("eventStart", new Date(data.eventStart), {shouldValidate: true});
-            setValue("eventEnd", new Date(data.eventEnd), {shouldValidate: true});
-            setValue("recruitStart", data.recruitStart != null ? new Date(data.recruitStart) : null, {shouldValidate: true});
-            setValue("recruitEnd", data.recruitEnd != null ? new Date(data.recruitEnd) : null, {shouldValidate: true});
+
+
+            setValue(
+                "eventStart",
+                data.eventStart ? data.eventStart.replace('Z', '') : null,
+                { shouldValidate: true }
+            );
+
+            setValue(
+                "eventEnd",
+                data.eventEnd ? data.eventEnd.replace('Z', '') : null,
+                { shouldValidate: true }
+            );
+
+            setValue(
+                "recruitStart",
+                data.recruitStart ? data.recruitStart.replace('Z', '') : null,
+                { shouldValidate: true }
+            );
+
+            setValue(
+                "recruitEnd",
+                data.recruitEnd ? data.recruitEnd.replace('Z', '') : null,
+                { shouldValidate: true }
+            );
             setValue("targetRoles", data.targetRoles, {shouldValidate: true});
             setValue('isFree', data.isFree, {shouldValidate: true});
             setValue('price', data.price, {shouldValidate: true});
@@ -540,41 +563,76 @@ export default function EventsCreatePage() {
                             </div>
 
                             <div className="box-flex gap8">
+
                                 <Controller
                                     control={control}
                                     name="eventStart"
-                                    render={({field}) => (
-                                        <DatePicker
-                                            placeholderText="시작 날짜"
-                                            selected={field.value}
-                                            onChange={(date: unknown) => {
-                                                field.onChange(date)
-                                            }}
-                                            dateFormat="yyyy-MM-dd"
-                                            locale={'ko'}
-                                            className="input-default"
-                                            maxDate={eventEnd}
-                                        />
-                                    )}
+                                    render={({ field }) => {
+                                        const displayValue = field.value
+                                            ? new Date(String(field.value).replace('Z', ''))
+                                            : null;
+
+                                        const handleUpdate = (date: Date | null) => {
+                                            if (!date) {
+                                                field.onChange(null);
+                                                return;
+                                            }
+
+                                            const pad = (n: number) => n.toString().padStart(2, '0');
+                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+
+                                            field.onChange(isoString);
+                                        };
+
+                                        return (
+                                            <DatePicker
+                                                placeholderText="시작 날짜"
+                                                selected={displayValue}
+                                                onChange={handleUpdate}
+                                                dateFormat="yyyy-MM-dd"
+                                                locale={'ko'}
+                                                className="input-default"
+                                                maxDate={getLimitDate(eventEnd)}
+                                            />
+                                        );
+                                    }}
                                 />
 
                                 <Controller
                                     control={control}
                                     name="eventEnd"
-                                    render={({field}) => (
-                                        <DatePicker
-                                            placeholderText="종료 날짜"
-                                            selected={field.value}
-                                            onChange={(date: unknown) => {
-                                                field.onChange(date)
-                                            }}
-                                            dateFormat="yyyy-MM-dd"
-                                            locale={'ko'}
-                                            minDate={eventStart}
-                                            className="input-default"
-                                        />
-                                    )}
+                                    render={({ field }) => {
+                                        const displayValue = field.value
+                                            ? new Date(String(field.value).replace('Z', ''))
+                                            : null;
+
+                                        const handleUpdate = (date: Date | null) => {
+                                            if (!date) {
+                                                field.onChange(null);
+                                                return;
+                                            }
+
+                                            const pad = (n: number) => n.toString().padStart(2, '0');
+                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+
+                                            field.onChange(isoString);
+                                        };
+
+                                        return (
+                                            <DatePicker
+                                                placeholderText="시작 날짜"
+                                                selected={displayValue}
+                                                onChange={handleUpdate}
+                                                dateFormat="yyyy-MM-dd"
+                                                locale={'ko'}
+                                                className="input-default"
+                                                minDate={getLimitDate(eventStart)}
+                                            />
+                                        );
+                                    }}
                                 />
+
+
                             </div>
                             {(errors.eventStart || errors.eventEnd) &&
                                 <div className={styles.errorText}>행사 기간은 필수입니다.</div>}
@@ -582,76 +640,113 @@ export default function EventsCreatePage() {
                             <div className={`${styles.textRequired} ${styles.noneRequired} mt16`}>
                                 모집 기간
                             </div>
+                            <div>
+                                {recruitStart &&  recruitStart.toString()}
+                            </div>
+                            <div>
+                                {recruitEnd &&  recruitEnd.toString()}
+                            </div>
 
 
                             <Controller
                                 control={control}
                                 name="recruitStart"
-                                render={({field}) => (
-                                    <div className="box-flex gap8 mb8">
-                                        <DatePicker
-                                            selected={field.value}
-                                            onChange={(date: unknown) => {
-                                                field.onChange(date);
-                                            }}
-                                            placeholderText="날짜 선택"
-                                            dateFormat="yyyy-MM-dd"
-                                            locale="ko"
-                                            maxDate={recruitEnd != null ? recruitEnd! : undefined}
-                                            className="input-default"
-                                        />
+                                render={({ field }) => {
+                                    // 💡 1. 표시용: 저장된 ISO 문자열(UTC)을 다시 로컬 Date 객체로 (Z 떼고 인식)
+                                    const displayValue = field.value
+                                        ? new Date(String(field.value).replace('Z', ''))
+                                        : null;
 
-                                        <DatePicker
-                                            selected={field.value}
-                                            onChange={(date: unknown) => {
-                                                field.onChange(date);
-                                            }}
-                                            showTimeSelect
-                                            showTimeSelectOnly
-                                            timeIntervals={15}
-                                            timeCaption="시간"
-                                            dateFormat="HH:mm"
-                                            placeholderText="시간 선택"
-                                            className="input-default"
-                                        />
-                                    </div>
-                                )}
+                                    const handleUpdate = (date: Date | null) => {
+                                        if (!date) {
+                                            field.onChange(null);
+                                            return;
+                                        }
+
+                                        // 💡 2. 저장용: 선택한 년, 월, 일, 시, 분 숫자를 그대로 UTC 문자열로 조립
+                                        const pad = (n: number) => n.toString().padStart(2, '0');
+                                        const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+
+                                        field.onChange(isoString); // "2026-03-09T22:30:00.000Z" (string)
+                                    };
+
+                                    return (
+                                        <div className="box-flex gap8 mb8">
+                                            <DatePicker
+                                                selected={displayValue}
+                                                onChange={handleUpdate}
+                                                placeholderText="날짜 선택"
+                                                dateFormat="yyyy-MM-dd"
+                                                locale="ko"
+                                                className="input-default"
+                                            />
+
+                                            <DatePicker
+                                                selected={displayValue}
+                                                onChange={handleUpdate}
+                                                showTimeSelect
+                                                showTimeSelectOnly
+                                                timeIntervals={15}
+                                                timeCaption="시간"
+                                                dateFormat="HH:mm"
+                                                placeholderText="시간 선택"
+                                                className="input-default"
+                                            />
+                                        </div>
+                                    );
+                                }}
                             />
 
                             <Controller
                                 control={control}
                                 name="recruitEnd"
-                                render={({field}) => (
-                                    <div className="box-flex gap8 ">
-                                        <DatePicker
-                                            placeholderText="종료 날짜"
-                                            selected={field.value}
-                                            onChange={(date: unknown) => {
-                                                field.onChange(date)
-                                            }}
-                                            dateFormat="yyyy-MM-dd"
-                                            locale={'ko'}
-                                            minDate={recruitStart != null ? recruitStart! : undefined}
-                                            className="input-default"
-                                        />
-                                        <DatePicker
-                                            selected={field.value}
-                                            onChange={(date: unknown) => {
-                                                field.onChange(date);
-                                            }}
-                                            showTimeSelect
-                                            showTimeSelectOnly
-                                            timeIntervals={15}
-                                            timeCaption="시간"
-                                            dateFormat="HH:mm"
-                                            placeholderText="시간 선택"
-                                            className="input-default"
-                                        />
-                                    </div>
+                                render={({ field }) => {
+                                    // 💡 1. 표시용: 저장된 ISO 문자열(UTC)을 다시 로컬 Date 객체로 (Z 떼고 인식)
+                                    const displayValue = field.value
+                                        ? new Date(String(field.value).replace('Z', ''))
+                                        : null;
 
+                                    const handleUpdate = (date: Date | null) => {
+                                        if (!date) {
+                                            field.onChange(null);
+                                            return;
+                                        }
 
-                                )}
+                                        // 💡 2. 저장용: 선택한 년, 월, 일, 시, 분 숫자를 그대로 UTC 문자열로 조립
+                                        const pad = (n: number) => n.toString().padStart(2, '0');
+                                        const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+
+                                        field.onChange(isoString); // "2026-03-09T22:30:00.000Z" (string)
+                                    };
+
+                                    return (
+                                        <div className="box-flex gap8 mb8">
+                                            <DatePicker
+                                                selected={displayValue}
+                                                onChange={handleUpdate}
+                                                placeholderText="날짜 선택"
+                                                dateFormat="yyyy-MM-dd"
+                                                locale="ko"
+                                                className="input-default"
+                                            />
+
+                                            <DatePicker
+                                                selected={displayValue}
+                                                onChange={handleUpdate}
+                                                showTimeSelect
+                                                showTimeSelectOnly
+                                                timeIntervals={15}
+                                                timeCaption="시간"
+                                                dateFormat="HH:mm"
+                                                placeholderText="시간 선택"
+                                                className="input-default"
+                                            />
+                                        </div>
+                                    );
+                                }}
                             />
+
+
 
 
                             <div className={`${styles.textRequired} mt16`}>
