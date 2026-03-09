@@ -332,4 +332,20 @@ export const deleteDraftEvent = async (params:object) => {
     return response.data;
 }
 
+export const uploadImg = async (file: File ) => {
+
+    const formData = new FormData();
+
+    formData.append("file", file);
+
+    const response = await client.post("/file/upload", formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
+    return response.data;
+};
+
 

@@ -6,11 +6,10 @@
 */
 "use client";
 
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import styles from "../events.module.scss"
 
 import dynamic from 'next/dynamic';
-import 'react-quill-new/dist/quill.snow.css';
 
 
 import {useForm} from "react-hook-form";
@@ -27,7 +26,7 @@ import {EventFormType, eventSchema} from "@/validators/event";
 import {CheckboxGroup} from "@/components/common/checkbox/CheckboxGroup";
 import {RadioGroup} from "@/components/common/radio/RadioGroup";
 import {RadioBtn} from "@/components/common/radio/RadioBtn";
-import {createDraftEvent, createEvent, getEventDetail, registDraftEvent} from "@/api/client";
+import {createDraftEvent, createEvent, getEventDetail, registDraftEvent, uploadImg} from "@/api/client";
 import {useModalStore} from "@/store/modalStore";
 import Cropper, {Point} from "react-easy-crop";
 import type {Area} from "react-easy-crop";
@@ -39,19 +38,13 @@ import DaumPostcode from "react-daum-postcode";
 import {Address} from "react-daum-postcode/lib/loadPostcode";
 import Status = naver.maps.Service.Status;
 import GeocodeResponse = naver.maps.Service.GeocodeResponse;
+import ReactQuill from 'react-quill-new';
 
-const ReactQuill = dynamic(() => import('react-quill-new'), {
+
+const CustomEditor = dynamic(() => import("@/components/common/editor/CustomEditor"), {
     ssr: false,
+    loading: () => <div className="mt8" style={{height: '250px', backgroundColor: '#f0f0f0'}}/>
 });
-
-const modules = {
-    toolbar: [
-        [{header: [1, 2, false]}],
-        ['bold', 'italic', 'underline', 'strike'],
-        ['image', 'link'], // 이미지 버튼 추가
-        ['clean'],
-    ],
-};
 
 
 export default function EventsCreatePage() {
@@ -112,6 +105,7 @@ export default function EventsCreatePage() {
     const [thumbnail, setThumbnail] = useState<File | null>(null);
 
     const [draftId, setDraftId] = useState<number | null>(null);
+    const quillRef = useRef<ReactQuill>(null);
 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,6 +185,35 @@ export default function EventsCreatePage() {
     }
 
 
+    const imageHandler = () => {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+            const file = input.files ? input.files[0] : null;
+            if (!file) return;
+
+            try {
+                showLoading();
+                const response = await uploadImg(file);
+                const imageUrl = response.data;
+                const quill = quillRef.current?.getEditor();
+                if (quill) {
+                    const range = quill.getSelection();
+                    quill.insertEmbed(range?.index || 0, 'image', imageUrl);
+                }
+            } catch (error) {
+                Swal.fire('이미지 업로드 실패');
+            } finally {
+                hideLoading();
+            }
+        };
+    };
+
+
+
     const onSubmit = async (data: EventFormType, type: EventActionType) => {
 
         showLoading();
@@ -249,7 +272,7 @@ export default function EventsCreatePage() {
         } else {
             if (hashTags.length >= 5) {
                 return;
-            }else{
+            } else {
                 nArray = [...hashTags, data];
             }
 
@@ -738,16 +761,18 @@ export default function EventsCreatePage() {
                             <Controller
                                 control={control}
                                 name="description"
-                                render={({field: {value, onChange,}}) => (
-                                    <ReactQuill
-                                        modules={modules}
+                                render={({field: {value, onChange}}) => (
+
+                                    <CustomEditor
+                                        quillRef={quillRef}
                                         value={value ?? ""}
-                                        onChange={onChange}
-                                        theme="snow"
-                                        placeholder="상세 내용을 입력해주세요."
-                                        className="mt8"
-                                        style={{height: '250px', marginBottom: '60px'}}
-                                    />
+                                        onChange={(content) => {
+                                            if (content !== value) {
+                                                onChange(content);
+                                            }
+                                        }}
+                                        imageHandler={imageHandler}
+                                    ></CustomEditor>
                                 )}
                             />
 
