@@ -298,7 +298,7 @@ export default function Events() {
             <div className="container-default">
                 <div className="box-flex a-center">
                     <div className="title-table mr-auto">
-                        등록된 행사 {returnTotalCount()}명
+                        등록된 행사 {returnTotalCount()}개
                     </div>
 
                     <Dropdown

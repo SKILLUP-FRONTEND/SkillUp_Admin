@@ -212,6 +212,7 @@ export default function EventUpdatePage() {
             const response = await updateEvent(data, eventId!, thumbnail,);
             if (response.code == "SUCCESS") {
                 hideLoading();
+                // router.back();
                 await Swal.fire({
                     title: '수정되었습니다',
                     confirmButtonText: '확인',
