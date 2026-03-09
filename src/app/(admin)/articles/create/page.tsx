@@ -72,10 +72,11 @@ export default function ArticleCreatePage() {
         try {
             const response = await createArticle(data, thumbnail);
             if (response.code == "SUCCESS") {
-                Swal.fire({
+                hideLoading();
+                await Swal.fire({
                     title: '등록되었습니다',
                     confirmButtonText: '확인',
-                }).then();
+                });
                 router.back();
             } else {
                 Swal.fire({

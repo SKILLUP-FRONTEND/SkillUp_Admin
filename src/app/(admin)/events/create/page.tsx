@@ -211,14 +211,15 @@ export default function EventsCreatePage() {
 
             const response = await action(data, thumbnail, draftId);
             if (response.code == "SUCCESS") {
-                Swal.fire({
+                hideLoading();
+                await Swal.fire({
                     title: '등록되었습니다',
                     confirmButtonText: '확인',
-                }).then(() => {
-                    if (type != EventActionType.CREATE_DRAFT) {
-                        router.back();
-                    }
                 });
+
+                if (type != EventActionType.CREATE_DRAFT) {
+                    router.back();
+                }
 
             } else {
                 const failType = returnFailType(response.code);
