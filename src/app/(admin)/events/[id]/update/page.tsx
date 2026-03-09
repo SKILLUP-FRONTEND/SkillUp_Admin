@@ -94,6 +94,28 @@ export default function EventUpdatePage() {
     const isOnlineRef = useRef(isOnline);
 
 
+    const initLatLng = (x:string,y:string) => {
+
+
+        if (window.naver && window.naver.maps.Service) {
+            const lat = parseFloat(y);
+            const lng = parseFloat(x);
+            const coords = new window.naver.maps.LatLng(lat, lng);
+
+            setValue('latitude', lat);
+            setValue('longitude', lng);
+
+            if (mapRef.current && markerRef.current) {
+                mapRef.current.setCenter(coords);
+                mapRef.current.setZoom(16);
+                markerRef.current.setPosition(coords);
+            }
+        }
+
+
+    };
+
+
     const handleComplete = (data: Address) => {
         const fullAddress = data.address;
 
@@ -108,7 +130,6 @@ export default function EventUpdatePage() {
 
                 const result = response.v2.addresses[0];
 
-                console.log(result);
                 const lat = parseFloat(result.y);
                 const lng = parseFloat(result.x);
                 const coords = new window.naver.maps.LatLng(lat, lng);
@@ -259,6 +280,10 @@ export default function EventUpdatePage() {
             setValue('description', data.description, {shouldValidate: true});
             setValue('hashTags', data.hashTags, {shouldValidate: true});
 
+
+            if(data.latitude != null && data.longitude != null){
+                initLatLng(data.longitude, data.latitude);
+            }
 
             setPreview(data.thumbnailUrl);
 
