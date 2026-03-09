@@ -33,7 +33,7 @@ export default function Events() {
         {label: "컨퍼런스/세미나", count: 0, value: "CONFERENCE_SEMINAR"},
         {label: "공모전/해커톤", count: 0, value: "COMPETITION_HACKATHON"},
         {label: "부트캠프/동아리", count: 0, value: "BOOTCAMP_CLUB"},
-        {label: "네트워킹/멘토링", count: 0, value: "NETWORKING_MENTORING"},
+        // {label: "네트워킹/멘토링", count: 0, value: "NETWORKING_MENTORING"},
     ]);
 
 
@@ -330,9 +330,9 @@ export default function Events() {
                     <DataTableColumn prop="title" label="행사명"/>
                     <DataTableColumn prop="category" label="카테고리"/>
                     <DataTableColumn prop="eventPeriodText" label="행사 기간"/>
-                    <DataTableColumn prop="viewsCount" label="조회수"/>
-                    <DataTableColumn prop="bookmarksCount" label="저장수"/>
-                    <DataTableColumn prop="status" label="상태">
+                    <DataTableColumn prop="viewsCount" label="조회수" width={100}/>
+                    <DataTableColumn prop="bookmarksCount" label="저장수" width={100}/>
+                    <DataTableColumn prop="status" label="상태" width={100}>
                         {(row) => <StatusBadge status={returnStatus(row.status)}/>}
                     </DataTableColumn>
                     <DataTableColumn prop="createdAt" label="등록일" width={175}>

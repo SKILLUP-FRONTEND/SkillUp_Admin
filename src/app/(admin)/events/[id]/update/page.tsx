@@ -445,7 +445,7 @@ export default function EventUpdatePage() {
                                 {label: '컨퍼런스/세미나', value: 'CONFERENCE_SEMINAR'},
                                 {label: '공모전/해커톤', value: 'COMPETITION_HACKATHON'},
                                 {label: '부트캠프/동아리', value: 'BOOTCAMP_CLUB'},
-                                {label: '네트워킹/멘토링', value: 'NETWORKING_MENTORING'},
+                                // {label: '네트워킹/멘토링', value: 'NETWORKING_MENTORING'},
                             ]} onChange={(val) => setValue("category", String(val))}
                             />
 
