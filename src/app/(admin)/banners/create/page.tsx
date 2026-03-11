@@ -52,7 +52,7 @@ export default function BannerCreatePage() {
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [crop, setCrop] = useState({x: 0, y: 0});
     const [zoom, setZoom] = useState(1);
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+
 
     const [isDragging, setIsDragging] = useState(false);
 
@@ -104,21 +104,17 @@ export default function BannerCreatePage() {
         });
     };
 
-    const handleZoom = async (zoom: number) => {
-        setZoom(zoom);
-        await handleCropDone();
-    }
 
-    const handleCrop = async (location: Point) => {
-        setCrop(location);
-        await handleCropDone();
-    }
 
-    const handleCropDone = async () => {
-        if (!imageSrc || !croppedAreaPixels) return;
+    const handleCropDone = async (targetPixels: Area) => {
+        if (!imageSrc || !targetPixels) return;
+        try {
+            const croppedFile = await getCroppedImg(imageSrc, targetPixels);
+            setThumbnail(croppedFile);
 
-        const croppedFile = await getCroppedImg(imageSrc, croppedAreaPixels);
-        setThumbnail(croppedFile);
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     const formatDate = (date: Date) => {
@@ -222,10 +218,12 @@ export default function BannerCreatePage() {
                                                 crop={crop}
                                                 zoom={zoom}
                                                 aspect={16 / 9}
-                                                onCropChange={handleCrop}
+                                                onCropChange={setCrop}
+                                                onZoomChange={setZoom}
                                                 objectFit="horizontal-cover"
-                                                onZoomChange={handleZoom}
-                                                onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+                                                onCropComplete={(_, croppedPixels) => {
+                                                    void handleCropDone(croppedPixels);
+                                                }}
 
                                             />
                                         </div>

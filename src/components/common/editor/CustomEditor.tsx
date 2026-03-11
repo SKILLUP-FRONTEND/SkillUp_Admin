@@ -16,7 +16,7 @@ export default function CustomEditor({value, onChange, quillRef, imageHandler}: 
     const modules = useMemo(() => ({
         toolbar: {
             container: [
-                [{header: [1, 2, false]}],
+                [{header: [1, 2,3,4, false]}],
                 ["bold", "italic", "underline", "strike"],
                 ["image", "link"],
                 ["clean"],

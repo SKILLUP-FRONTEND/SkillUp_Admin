@@ -6,7 +6,7 @@
 */
 "use client";
 
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, {useEffect,  useRef, useState} from "react";
 import styles from "../events.module.scss"
 
 import dynamic from 'next/dynamic';
@@ -63,7 +63,6 @@ export default function EventsCreatePage() {
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [crop, setCrop] = useState({x: 0, y: 0});
     const [zoom, setZoom] = useState(1);
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
     const [isDragging, setIsDragging] = useState(false);
     const mapRef = useRef<naver.maps.Map | null>(null);
@@ -158,21 +157,17 @@ export default function EventsCreatePage() {
         });
     };
 
-    const handleZoom = async (zoom: number) => {
-        setZoom(zoom);
-        await handleCropDone();
-    }
 
-    const handleCrop = async (location: Point) => {
-        setCrop(location);
-        await handleCropDone();
-    }
 
-    const handleCropDone = async () => {
-        if (!imageSrc || !croppedAreaPixels) return;
+    const handleCropDone = async (targetPixels: Area) => {
+        if (!imageSrc || !targetPixels) return;
+        try {
+            const croppedFile = await getCroppedImg(imageSrc, targetPixels);
+            setThumbnail(croppedFile);
 
-        const croppedFile = await getCroppedImg(imageSrc, croppedAreaPixels);
-        setThumbnail(croppedFile);
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     const returnFailType = (type: string) => {
@@ -530,10 +525,12 @@ export default function EventsCreatePage() {
                                                 crop={crop}
                                                 zoom={zoom}
                                                 aspect={16 / 9}
-                                                onCropChange={handleCrop}
+                                                onCropChange={setCrop}
+                                                onZoomChange={setZoom}
                                                 objectFit="horizontal-cover"
-                                                onZoomChange={handleZoom}
-                                                onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+                                                onCropComplete={(_, croppedPixels) => {
+                                                    void handleCropDone(croppedPixels);
+                                                }}
                                             />
                                         </div>
 
@@ -640,19 +637,11 @@ export default function EventsCreatePage() {
                             <div className={`${styles.textRequired} ${styles.noneRequired} mt16`}>
                                 모집 기간
                             </div>
-                            <div>
-                                {recruitStart &&  recruitStart.toString()}
-                            </div>
-                            <div>
-                                {recruitEnd &&  recruitEnd.toString()}
-                            </div>
-
 
                             <Controller
                                 control={control}
                                 name="recruitStart"
                                 render={({ field }) => {
-                                    // 💡 1. 표시용: 저장된 ISO 문자열(UTC)을 다시 로컬 Date 객체로 (Z 떼고 인식)
                                     const displayValue = field.value
                                         ? new Date(String(field.value).replace('Z', ''))
                                         : null;
@@ -663,7 +652,7 @@ export default function EventsCreatePage() {
                                             return;
                                         }
 
-                                        // 💡 2. 저장용: 선택한 년, 월, 일, 시, 분 숫자를 그대로 UTC 문자열로 조립
+
                                         const pad = (n: number) => n.toString().padStart(2, '0');
                                         const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
 

@@ -52,6 +52,7 @@ export default function EventUpdatePage() {
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [isDragging, setIsDragging] = useState(false);
     const [imageSrc, setImageSrc] = useState<string | null>(null);
+    const lastRequestId = useRef(0);
 
     const {
         register,
@@ -84,7 +85,6 @@ export default function EventUpdatePage() {
     const isOnline = watch("isOnline");
     const [crop, setCrop] = useState({x: 0, y: 0});
     const [zoom, setZoom] = useState(1);
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
 
     const [thumbnail, setThumbnail] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
@@ -180,33 +180,16 @@ export default function EventUpdatePage() {
 
     };
 
+    const handleCropDone = async (targetPixels: Area) => {
+        if (!imageSrc || !targetPixels) return;
+        try {
+            const croppedFile = await getCroppedImg(imageSrc, targetPixels);
+            setThumbnail(croppedFile);
 
-    const handleZoom = async (zoom: number) => {
-        setZoom(zoom);
-        await handleCropDone();
-    }
-
-    const handleCrop = async (location: Point) => {
-        setCrop(location);
-        await handleCropDone();
-    }
-
-    const handleCropDone = async () => {
-        if (!imageSrc || !croppedAreaPixels) return;
-
-        const croppedFile = await getCroppedImg(imageSrc, croppedAreaPixels);
-        setThumbnail(croppedFile);
+        } catch (e) {
+            console.error(e);
+        }
     };
-    const getLimitDate = (val: string | null) => {
-        return val ? new Date(String(val).replace('Z', '')) : undefined;
-    };
-    const createImage = (url: string) =>
-        new Promise<HTMLImageElement>((resolve, reject) => {
-            const img = new Image();
-            img.addEventListener("load", () => resolve(img));
-            img.addEventListener("error", reject);
-            img.src = url;
-        });
 
 
     const getCroppedImg = async (imageSrc: string, pixelCrop: Area) => {
@@ -238,6 +221,21 @@ export default function EventUpdatePage() {
         });
     };
 
+    const createImage = (url: string) =>
+        new Promise<HTMLImageElement>((resolve, reject) => {
+            const img = new Image();
+            img.addEventListener("load", () => resolve(img));
+            img.addEventListener("error", reject);
+            img.src = url;
+        });
+
+
+
+    const getLimitDate = (val: string | null) => {
+        return val ? new Date(String(val).replace('Z', '')) : undefined;
+    };
+
+
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -250,14 +248,7 @@ export default function EventUpdatePage() {
         reader.readAsDataURL(file);
     };
 
-    const handleActionSubmit = async () => {
-        await handleSubmit(
-            onSubmit,
-            (errors) => {
-                console.log("❌ 검증 실패", errors);
-            }
-        )();
-    }
+
 
     const onSubmit = async (data: EventFormType) => {
 
@@ -299,24 +290,24 @@ export default function EventUpdatePage() {
             setValue(
                 "eventStart",
                 data.eventStart ? data.eventStart.replace('Z', '') : null,
-                { shouldValidate: true }
+                {shouldValidate: true}
             );
 
             setValue(
                 "eventEnd",
                 data.eventEnd ? data.eventEnd.replace('Z', '') : null,
-                { shouldValidate: true }
+                {shouldValidate: true}
             );
             setValue(
                 "recruitStart",
                 data.recruitStart ? data.recruitStart.replace('Z', '') : null,
-                { shouldValidate: true }
+                {shouldValidate: true}
             );
 
             setValue(
                 "recruitEnd",
                 data.recruitEnd ? data.recruitEnd.replace('Z', '') : null,
-                { shouldValidate: true }
+                {shouldValidate: true}
             );
             setValue("targetRoles", data.targetRoles, {shouldValidate: true});
             setValue('isFree', data.isFree, {shouldValidate: true});
@@ -493,10 +484,12 @@ export default function EventUpdatePage() {
                                                     crop={crop}
                                                     zoom={zoom}
                                                     aspect={16 / 9}
-                                                    onCropChange={handleCrop}
+                                                    onCropChange={setCrop}
+                                                    onZoomChange={setZoom}
                                                     objectFit="horizontal-cover"
-                                                    onZoomChange={handleZoom}
-                                                    onCropComplete={(_, croppedPixels) => setCroppedAreaPixels(croppedPixels)}
+                                                    onCropComplete={(_, croppedPixels) => {
+                                                        void handleCropDone(croppedPixels);
+                                                    }}
 
                                                 />
                                             </div>
@@ -534,7 +527,7 @@ export default function EventUpdatePage() {
                                 <Controller
                                     control={control}
                                     name="eventStart"
-                                    render={({ field }) => {
+                                    render={({field}) => {
                                         const displayValue = field.value
                                             ? new Date(String(field.value).replace('Z', ''))
                                             : null;
@@ -557,7 +550,6 @@ export default function EventUpdatePage() {
                                                 selected={displayValue}
                                                 onChange={handleUpdate}
                                                 dateFormat="yyyy-MM-dd"
-                                                locale={'ko'}
                                                 className="input-default"
                                                 maxDate={getLimitDate(eventEnd)}
                                             />
@@ -568,7 +560,7 @@ export default function EventUpdatePage() {
                                 <Controller
                                     control={control}
                                     name="eventEnd"
-                                    render={({ field }) => {
+                                    render={({field}) => {
                                         const displayValue = field.value
                                             ? new Date(String(field.value).replace('Z', ''))
                                             : null;
@@ -591,7 +583,6 @@ export default function EventUpdatePage() {
                                                 selected={displayValue}
                                                 onChange={handleUpdate}
                                                 dateFormat="yyyy-MM-dd"
-                                                locale={'ko'}
                                                 className="input-default"
                                                 minDate={getLimitDate(eventStart)}
                                             />
@@ -613,7 +604,7 @@ export default function EventUpdatePage() {
                             <Controller
                                 control={control}
                                 name="recruitStart"
-                                render={({ field }) => {
+                                render={({field}) => {
                                     // 💡 1. 표시용: 저장된 ISO 문자열(UTC)을 다시 로컬 Date 객체로 (Z 떼고 인식)
                                     const displayValue = field.value
                                         ? new Date(String(field.value).replace('Z', ''))
@@ -639,7 +630,6 @@ export default function EventUpdatePage() {
                                                 onChange={handleUpdate}
                                                 placeholderText="날짜 선택"
                                                 dateFormat="yyyy-MM-dd"
-                                                locale="ko"
                                                 className="input-default"
                                             />
 
@@ -662,7 +652,7 @@ export default function EventUpdatePage() {
                             <Controller
                                 control={control}
                                 name="recruitEnd"
-                                render={({ field }) => {
+                                render={({field}) => {
                                     // 💡 1. 표시용: 저장된 ISO 문자열(UTC)을 다시 로컬 Date 객체로 (Z 떼고 인식)
                                     const displayValue = field.value
                                         ? new Date(String(field.value).replace('Z', ''))
@@ -687,7 +677,6 @@ export default function EventUpdatePage() {
                                                 onChange={handleUpdate}
                                                 placeholderText="날짜 선택"
                                                 dateFormat="yyyy-MM-dd"
-                                                locale="ko"
                                                 className="input-default"
 
                                             />
