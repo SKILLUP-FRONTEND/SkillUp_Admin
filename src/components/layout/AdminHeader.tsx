@@ -39,10 +39,6 @@ export default function AdminHeader() {
     return (
         <header className={styles.adminHeader}>
             <div className={styles.adminHeaderRight}>
-                <div className={styles.adminHeaderNotification}>
-                    <Image src={bellIcon} alt="bell" width={16} height={16}/>
-                    <div className={styles.adminHeaderNotificationCount}>1</div>
-                </div>
                 <h5>{user?.id}</h5>
                 <div style={{ cursor: "pointer" }} onClick={confirmLogout}>
                     로그아웃
