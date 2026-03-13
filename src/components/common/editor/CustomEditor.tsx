@@ -55,7 +55,7 @@ export default function CustomEditor({value, onChange, quillRef, imageHandler}: 
         }, 100); // 100ms마다 에디터 준비 상태 확인
 
         return () => clearInterval(checkEditor);
-    }, [quillRef]);
+    }, [quillRef,value]);
 
     const uploadImage = async (file:File) =>  {
 
