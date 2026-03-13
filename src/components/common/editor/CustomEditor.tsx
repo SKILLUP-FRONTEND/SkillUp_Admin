@@ -6,6 +6,7 @@ import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import {uploadImg} from "@/api/client";
 import Swal from "sweetalert2";
+import {useLoadingStore} from "@/store/loadingStore";
 
 interface Props {
     value: string;
@@ -15,6 +16,9 @@ interface Props {
 }
 
 export default function CustomEditor({value, onChange, quillRef, imageHandler}: Props) {
+    const showLoading = useLoadingStore((s) => s.show);
+    const hideLoading = useLoadingStore((s) => s.hide);
+
     const modules = useMemo(() => ({
         toolbar: {
             container: [
@@ -41,7 +45,7 @@ export default function CustomEditor({value, onChange, quillRef, imageHandler}: 
                     if (files && files.length > 0 && files[0].type.startsWith("image/")) {
                         e.preventDefault();
                         console.log("C+V 성공! 파일:", );
-                        uploadImage(files[0]);
+                        void uploadImage(files[0]);
                     }
                 };
 
@@ -57,7 +61,7 @@ export default function CustomEditor({value, onChange, quillRef, imageHandler}: 
 
 
         try {
-            // showLoading();
+            showLoading();
             const response = await uploadImg(file);
             const imageUrl = response.data;
             const quill = quillRef.current?.getEditor();
@@ -68,7 +72,7 @@ export default function CustomEditor({value, onChange, quillRef, imageHandler}: 
         } catch (error) {
             Swal.fire('이미지 업로드 실패');
         } finally {
-            // hideLoading();
+            hideLoading();
         }
     };
 
