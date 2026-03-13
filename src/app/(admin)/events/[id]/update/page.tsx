@@ -831,7 +831,7 @@ export default function EventUpdatePage() {
                                 )}
                             />
                             <div className={`${styles.textRequired} ${styles.noneRequired} mt16`}>
-                                해시 태그 ( 최대 5개 )
+                                해시 태그 (최대 5개)
                             </div>
 
                             <div className="box-flex gap8 mt16 fw-wrap">
