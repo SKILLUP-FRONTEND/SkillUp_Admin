@@ -55,38 +55,53 @@ export default function CustomEditor({ value, onChange, quillRef, imageHandler }
     }), [imageHandler]);
 
     useEffect(() => {
-        const editor = quillRef.current?.getEditor();
-        if (!editor) return;
-
+        // 핸들러 선언 (메모리 누수 방지를 위해 내부에 선언하거나 useCallback 권장)
         const handlePaste = (e: ClipboardEvent) => {
             const items = e.clipboardData?.items;
             if (!items) return;
 
             for (let i = 0; i < items.length; i++) {
                 if (items[i].type.indexOf("image") !== -1) {
-                    // 이미지가 확인되면 브라우저 기본 동작 즉시 중단
                     e.preventDefault();
-                    e.stopPropagation();
-
+                    e.stopImmediatePropagation();
                     const file = items[i].getAsFile();
-                    if (file) {
-                        void uploadImage(file);
-                    }
-                    return; // 이미지 하나 처리하면 종료
+                    if (file) void uploadImage(file);
+                    return;
                 }
             }
         };
 
-        // 'true'를 주어 캡처링 단계에서 먼저 가로채고,
-        // root뿐만 아니라 에디터 전체 영역에 대해 감시할 수 있도록 합니다.
-        const node = editor.root;
-        node.addEventListener("paste", handlePaste, true);
+        const checkEditor = setInterval(() => {
+            try {
+                // 1. Ref가 존재하는지 먼저 확인
+                if (!quillRef.current) return;
+
+                // 2. getEditor() 호출 시도 (여기서 에러가 발생하므로 try로 감쌈)
+                const editor = quillRef.current.getEditor();
+
+                if (editor && editor.root) {
+                    editor.root.removeEventListener("paste", handlePaste, true);
+                    editor.root.addEventListener("paste", handlePaste, true);
+                    clearInterval(checkEditor); // 성공하면 인터벌 종료
+                }
+            } catch (e) {
+                // 아직 에디터가 준비 안 됨 (Accessing non-instantiated editor)
+                // 무시하고 다음 인터벌을 기다림
+            }
+        }, 200);
 
         return () => {
-            node.removeEventListener("paste", handlePaste, true);
+            clearInterval(checkEditor);
+            try {
+                const editor = quillRef.current?.getEditor();
+                if (editor) {
+                    editor.root.removeEventListener("paste", handlePaste, true);
+                }
+            } catch (e) {
+                // 종료 시 에러 무시
+            }
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [quillRef.current, uploadImage]);
+    }, [quillRef, uploadImage]);
 // ↑ quillRef.current 자체가 설정되었을 때 리스너를 붙이도록 변경
 
     return (
