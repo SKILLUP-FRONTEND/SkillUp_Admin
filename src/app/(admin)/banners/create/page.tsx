@@ -277,7 +277,7 @@ export default function BannerCreatePage() {
                                                 onChange={handleUpdate}
                                                 dateFormat="yyyy-MM-dd"
                                                 className="input-default"
-                                                maxDate={getLimitDate(bannerStart)}
+                                                maxDate={getLimitDate(bannerEnd)}
                                             />
                                         );
                                     }}
