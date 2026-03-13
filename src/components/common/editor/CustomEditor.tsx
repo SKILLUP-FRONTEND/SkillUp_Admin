@@ -55,39 +55,39 @@ export default function CustomEditor({ value, onChange, quillRef, imageHandler }
     }), [imageHandler]);
 
     useEffect(() => {
-        // 1. 이벤트 핸들러 선언
+        const editor = quillRef.current?.getEditor();
+        if (!editor) return;
+
         const handlePaste = (e: ClipboardEvent) => {
-            const clipboardData = e.clipboardData;
-            if (clipboardData && clipboardData.files && clipboardData.files.length > 0) {
-                const file = clipboardData.files[0];
-                if (file.type.startsWith("image/")) {
-                    e.preventDefault(); // 기본 바이너리 삽입 중단
-                    e.stopImmediatePropagation(); // 다른 핸들러로의 전파 중단 (중요!)
-                    void uploadImage(file);
+            const items = e.clipboardData?.items;
+            if (!items) return;
+
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf("image") !== -1) {
+                    // 이미지가 확인되면 브라우저 기본 동작 즉시 중단
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    const file = items[i].getAsFile();
+                    if (file) {
+                        void uploadImage(file);
+                    }
+                    return; // 이미지 하나 처리하면 종료
                 }
             }
         };
 
-        const checkEditor = setInterval(() => {
-            const editor = quillRef.current?.getEditor();
-            if (editor) {
-                // 2. 등록 전 기존 리스너 제거 (중복 방지 안전장치)
-                editor.root.removeEventListener("paste", handlePaste, true);
-                // 3. 캡처링 단계에서 리스너 등록
-                editor.root.addEventListener("paste", handlePaste, true);
-                clearInterval(checkEditor);
-            }
-        }, 100);
+        // 'true'를 주어 캡처링 단계에서 먼저 가로채고,
+        // root뿐만 아니라 에디터 전체 영역에 대해 감시할 수 있도록 합니다.
+        const node = editor.root;
+        node.addEventListener("paste", handlePaste, true);
 
         return () => {
-            clearInterval(checkEditor);
-            const editor = quillRef.current?.getEditor();
-            if (editor) {
-                editor.root.removeEventListener("paste", handlePaste, true);
-            }
+            node.removeEventListener("paste", handlePaste, true);
         };
-        // ⚠️ 의존성 배열에서 value를 제거했습니다. quillRef만 있으면 됩니다.
-    }, [quillRef, uploadImage]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [quillRef.current, uploadImage]);
+// ↑ quillRef.current 자체가 설정되었을 때 리스너를 붙이도록 변경
 
     return (
         <ReactQuill
