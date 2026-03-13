@@ -116,21 +116,16 @@ export default function BannerUpdatePage() {
         reader.readAsDataURL(file);
     };
 
-    const formatDate = (date: Date) => {
-        return date.toISOString().split("T")[0];
+    const getLimitDate = (val: string | null) => {
+        return val ? new Date(String(val).replace('Z', '')) : undefined;
     };
 
     const onSubmit = async (data: BannerFormType) => {
         showLoading();
         try {
             const bannerId = Array.isArray(params.id) ? params.id[0] : params.id;
-            const payload = {
-                ...data,
-                bannerStart: formatDate(data.bannerStart),
-                bannerEnd: formatDate(data.bannerEnd),
-            };
 
-            const response = await updateBanner(payload, bannerId!, thumbnail,);
+            const response = await updateBanner(data, bannerId!, thumbnail,);
             if (response.code == "SUCCESS") {
                 Swal.fire({
                     title: '수정되었습니다',
@@ -162,8 +157,8 @@ export default function BannerUpdatePage() {
             setValue("mainTitle", data.mainTitle, {shouldValidate: true});
             setValue("description", data.description, {shouldValidate: true});
             setValue("bannerLink", data.bannerLink, {shouldValidate: true});
-            setValue("bannerStart", new Date(data.startAt), {shouldValidate: true});
-            setValue("bannerEnd", new Date(data.endAt), {shouldValidate: true});
+            setValue("bannerStart", data.startAt, {shouldValidate: true});
+            setValue("bannerEnd", data.endAt, {shouldValidate: true});
 
             setPreview(data.bannerImageUrl);
 
@@ -282,17 +277,41 @@ export default function BannerUpdatePage() {
                                     control={control}
                                     name="bannerStart"
                                     render={({field}) => (
-                                        <DatePicker
-                                            placeholderText="시작 날짜"
-                                            selected={field.value}
-                                            onChange={(date: unknown) => {
-                                                field.onChange(date)
+                                        <Controller
+                                            control={control}
+                                            name="bannerStart"
+                                            render={({ field }) => {
+                                                const getDisplayValue = (val: unknown) => {
+                                                    if (!val) return null;
+                                                    const date = new Date(String(val).replace('Z', ''));
+                                                    return isNaN(date.getTime()) ? null : date;
+                                                };
+
+                                                const handleUpdate = (date: Date | null) => {
+                                                    if (!date || isNaN(date.getTime())) {
+                                                        if (field.value !== null) field.onChange(null);
+                                                        return;
+                                                    }
+
+                                                    const pad = (n: number) => n.toString().padStart(2, '0');
+                                                    const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+
+                                                    if (field.value !== isoString) {
+                                                        field.onChange(isoString);
+                                                    }
+                                                };
+
+                                                return (
+                                                    <DatePicker
+                                                        placeholderText="시작 날짜"
+                                                        selected={getDisplayValue(field.value)}
+                                                        onChange={handleUpdate}
+                                                        dateFormat="yyyy-MM-dd"
+                                                        className="input-default"
+                                                        maxDate={getLimitDate(bannerStart)}
+                                                    />
+                                                );
                                             }}
-                                            dateFormat="yyyy-MM-dd"
-                                            locale={'ko'}
-                                            className="input-default"
-                                            maxDate={bannerEnd}
-                                            minDate={new Date()}
                                         />
                                     )}
                                 />
@@ -300,19 +319,38 @@ export default function BannerUpdatePage() {
                                 <Controller
                                     control={control}
                                     name="bannerEnd"
-                                    render={({field}) => (
-                                        <DatePicker
-                                            placeholderText="종료"
-                                            selected={field.value}
-                                            onChange={(date: unknown) => {
-                                                field.onChange(date)
-                                            }}
-                                            dateFormat="yyyy-MM-dd"
-                                            locale={'ko'}
-                                            minDate={bannerStart}
-                                            className="input-default"
-                                        />
-                                    )}
+                                    render={({ field }) => {
+                                        const getDisplayValue = (val: unknown) => {
+                                            if (!val) return null;
+                                            const date = new Date(String(val).replace('Z', ''));
+                                            return isNaN(date.getTime()) ? null : date;
+                                        };
+
+                                        const handleUpdate = (date: Date | null) => {
+                                            if (!date || isNaN(date.getTime())) {
+                                                if (field.value !== null) field.onChange(null);
+                                                return;
+                                            }
+
+                                            const pad = (n: number) => n.toString().padStart(2, '0');
+                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+
+                                            if (field.value !== isoString) {
+                                                field.onChange(isoString);
+                                            }
+                                        };
+
+                                        return (
+                                            <DatePicker
+                                                placeholderText="종료 날짜"
+                                                selected={getDisplayValue(field.value)}
+                                                onChange={handleUpdate}
+                                                dateFormat="yyyy-MM-dd"
+                                                className="input-default"
+                                                minDate={getLimitDate(bannerStart)}
+                                            />
+                                        );
+                                    }}
                                 />
                             </div>
 

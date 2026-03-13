@@ -117,9 +117,7 @@ export default function BannerCreatePage() {
         }
     };
 
-    const formatDate = (date: Date) => {
-        return date.toISOString().split("T")[0];
-    };
+
 
     const onSubmit = async (data: BannerFormType) => {
         if (!thumbnail) {
@@ -128,12 +126,8 @@ export default function BannerCreatePage() {
 
         showLoading();
         try {
-            const payload = {
-                ...data,
-                bannerStart: formatDate(data.bannerStart),
-                bannerEnd: formatDate(data.bannerEnd),
-            };
-            const response = await createBanner(payload, thumbnail);
+
+            const response = await createBanner(data, thumbnail);
             if (response.code == "SUCCESS") {
                 Swal.fire({
                     title: '등록되었습니다',
@@ -153,6 +147,10 @@ export default function BannerCreatePage() {
         } finally {
             hideLoading();
         }
+    };
+
+    const getLimitDate = (val: string | null) => {
+        return val ? new Date(String(val).replace('Z', '')) : undefined;
     };
 
     return (
@@ -251,39 +249,79 @@ export default function BannerCreatePage() {
                                 <Controller
                                     control={control}
                                     name="bannerStart"
-                                    render={({field}) => (
-                                        <DatePicker
-                                            placeholderText="시작 날짜"
-                                            selected={field.value}
-                                            onChange={(date: unknown) => {
-                                                field.onChange(date)
-                                            }}
-                                            dateFormat="yyyy-MM-dd"
-                                            locale={'ko'}
-                                            className="input-default"
-                                            maxDate={bannerEnd}
-                                        />
-                                    )}
+                                    render={({ field }) => {
+                                        const getDisplayValue = (val: unknown) => {
+                                            if (!val) return null;
+                                            const date = new Date(String(val).replace('Z', ''));
+                                            return isNaN(date.getTime()) ? null : date;
+                                        };
+
+                                        const handleUpdate = (date: Date | null) => {
+                                            if (!date || isNaN(date.getTime())) {
+                                                if (field.value !== null) field.onChange(null);
+                                                return;
+                                            }
+
+                                            const pad = (n: number) => n.toString().padStart(2, '0');
+                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+
+                                            if (field.value !== isoString) {
+                                                field.onChange(isoString);
+                                            }
+                                        };
+
+                                        return (
+                                            <DatePicker
+                                                placeholderText="시작 날짜"
+                                                selected={getDisplayValue(field.value)}
+                                                onChange={handleUpdate}
+                                                dateFormat="yyyy-MM-dd"
+                                                className="input-default"
+                                                maxDate={getLimitDate(bannerStart)}
+                                            />
+                                        );
+                                    }}
                                 />
+
 
                                 <Controller
                                     control={control}
                                     name="bannerEnd"
-                                    render={({field}) => (
-                                        <DatePicker
-                                            placeholderText="종료"
-                                            selected={field.value}
-                                            onChange={(date: unknown) => {
-                                                field.onChange(date)
-                                            }}
-                                            dateFormat="yyyy-MM-dd"
-                                            locale={'ko'}
-                                            minDate={bannerStart}
+                                    render={({ field }) => {
+                                        const getDisplayValue = (val: unknown) => {
+                                            if (!val) return null;
+                                            const date = new Date(String(val).replace('Z', ''));
+                                            return isNaN(date.getTime()) ? null : date;
+                                        };
 
-                                            className="input-default"
-                                        />
-                                    )}
+                                        const handleUpdate = (date: Date | null) => {
+                                            if (!date || isNaN(date.getTime())) {
+                                                if (field.value !== null) field.onChange(null);
+                                                return;
+                                            }
+
+                                            const pad = (n: number) => n.toString().padStart(2, '0');
+                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+
+                                            if (field.value !== isoString) {
+                                                field.onChange(isoString);
+                                            }
+                                        };
+
+                                        return (
+                                            <DatePicker
+                                                placeholderText="종료 날짜"
+                                                selected={getDisplayValue(field.value)}
+                                                onChange={handleUpdate}
+                                                dateFormat="yyyy-MM-dd"
+                                                className="input-default"
+                                                minDate={getLimitDate(bannerStart)}
+                                            />
+                                        );
+                                    }}
                                 />
+
+
                             </div>
 
 

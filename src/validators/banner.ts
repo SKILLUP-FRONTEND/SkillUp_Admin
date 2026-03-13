@@ -20,11 +20,11 @@ export const bannerSchema = z.object({
 
 
     bannerStart: z
-        .date(),
+        .string(),
 
 
     bannerEnd: z
-        .date(),
+        .string(),
 });
 
 export type BannerFormType = z.infer<typeof bannerSchema>;

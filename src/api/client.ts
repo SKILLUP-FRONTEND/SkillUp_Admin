@@ -153,7 +153,7 @@ export const getBannerDetail = async (params: object) => {
     return response.data;
 }
 
-export const createBanner = async (params: object, file?: File | null) => {
+export const createBanner = async (params: BannerFormType, file?: File | null) => {
 
     const formData = new FormData();
 
@@ -174,7 +174,7 @@ export const createBanner = async (params: object, file?: File | null) => {
 };
 
 
-export const updateBanner = async (params: object, id: string, file?: File | null,) => {
+export const updateBanner = async (params: BannerFormType, id: string, file?: File | null,) => {
 
     const formData = new FormData();
 
