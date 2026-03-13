@@ -587,7 +587,6 @@ export default function EventsCreatePage() {
                                                 selected={displayValue}
                                                 onChange={handleUpdate}
                                                 dateFormat="yyyy-MM-dd"
-                                                locale={'ko'}
                                                 className="input-default"
                                                 maxDate={getLimitDate(eventEnd)}
                                             />
@@ -617,11 +616,10 @@ export default function EventsCreatePage() {
 
                                         return (
                                             <DatePicker
-                                                placeholderText="시작 날짜"
+                                                placeholderText="종료 날짜"
                                                 selected={displayValue}
                                                 onChange={handleUpdate}
                                                 dateFormat="yyyy-MM-dd"
-                                                locale={'ko'}
                                                 className="input-default"
                                                 minDate={getLimitDate(eventStart)}
                                             />

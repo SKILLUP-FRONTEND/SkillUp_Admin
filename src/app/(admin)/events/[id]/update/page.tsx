@@ -579,7 +579,7 @@ export default function EventUpdatePage() {
 
                                         return (
                                             <DatePicker
-                                                placeholderText="시작 날짜"
+                                                placeholderText="종료 날짜"
                                                 selected={displayValue}
                                                 onChange={handleUpdate}
                                                 dateFormat="yyyy-MM-dd"
