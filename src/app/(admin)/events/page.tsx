@@ -335,17 +335,18 @@ export default function Events() {
                     <DataTableColumn prop="status" label="상태" width={100}>
                         {(row) => <StatusBadge status={returnStatus(row.status)}/>}
                     </DataTableColumn>
-                    <DataTableColumn prop="createdAt" label="등록일" width={175}>
+                    <DataTableColumn prop="createdAt" label="등록일" width={200}>
                         {(row) => {
                             const date = new Date(row.createdAt);
                             const formatted = date.toLocaleDateString("ko-KR", {
                                 year: "numeric",
                                 month: "2-digit",
                                 day: "2-digit",
+                                hour : "2-digit",
+                                minute : '2-digit',
                             });
                             return <div>{formatted}</div>;
                         }}
-
                     </DataTableColumn>
                 </DataTable>
                 <Pagination
