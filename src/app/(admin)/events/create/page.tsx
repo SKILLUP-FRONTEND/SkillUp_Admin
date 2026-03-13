@@ -565,26 +565,30 @@ export default function EventsCreatePage() {
                                     control={control}
                                     name="eventStart"
                                     render={({ field }) => {
-                                        const displayValue = field.value
-                                            ? new Date(String(field.value).replace('Z', ''))
-                                            : null;
+                                        const getDisplayValue = (val: unknown) => {
+                                            if (!val) return null;
+                                            const date = new Date(String(val).replace('Z', ''));
+                                            return isNaN(date.getTime()) ? null : date;
+                                        };
 
                                         const handleUpdate = (date: Date | null) => {
-                                            if (!date) {
-                                                field.onChange(null);
+                                            if (!date || isNaN(date.getTime())) {
+                                                if (field.value !== null) field.onChange(null);
                                                 return;
                                             }
 
                                             const pad = (n: number) => n.toString().padStart(2, '0');
                                             const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
 
-                                            field.onChange(isoString);
+                                            if (field.value !== isoString) {
+                                                field.onChange(isoString);
+                                            }
                                         };
 
                                         return (
                                             <DatePicker
                                                 placeholderText="시작 날짜"
-                                                selected={displayValue}
+                                                selected={getDisplayValue(field.value)}
                                                 onChange={handleUpdate}
                                                 dateFormat="yyyy-MM-dd"
                                                 className="input-default"
@@ -598,26 +602,30 @@ export default function EventsCreatePage() {
                                     control={control}
                                     name="eventEnd"
                                     render={({ field }) => {
-                                        const displayValue = field.value
-                                            ? new Date(String(field.value).replace('Z', ''))
-                                            : null;
+                                        const getDisplayValue = (val: unknown) => {
+                                            if (!val) return null;
+                                            const date = new Date(String(val).replace('Z', ''));
+                                            return isNaN(date.getTime()) ? null : date;
+                                        };
 
                                         const handleUpdate = (date: Date | null) => {
-                                            if (!date) {
-                                                field.onChange(null);
+                                            if (!date || isNaN(date.getTime())) {
+                                                if (field.value !== null) field.onChange(null);
                                                 return;
                                             }
 
                                             const pad = (n: number) => n.toString().padStart(2, '0');
                                             const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
 
-                                            field.onChange(isoString);
+                                            if (field.value !== isoString) {
+                                                field.onChange(isoString);
+                                            }
                                         };
 
                                         return (
                                             <DatePicker
                                                 placeholderText="종료 날짜"
-                                                selected={displayValue}
+                                                selected={getDisplayValue(field.value)}
                                                 onChange={handleUpdate}
                                                 dateFormat="yyyy-MM-dd"
                                                 className="input-default"
