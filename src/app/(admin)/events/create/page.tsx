@@ -64,6 +64,8 @@ export default function EventsCreatePage() {
     const [crop, setCrop] = useState({x: 0, y: 0});
     const [zoom, setZoom] = useState(1);
 
+    const [preview, setPreview] = useState<string | null>(null);
+
     const [isDragging, setIsDragging] = useState(false);
     const mapRef = useRef<naver.maps.Map | null>(null);
     const markerRef = useRef<naver.maps.Marker | null>(null);
@@ -352,7 +354,7 @@ export default function EventsCreatePage() {
             setValue('hashTags', data.hashTags, {shouldValidate: true});
 
 
-            // setPreview(data.thumbnailUrl);
+            setPreview(data.thumbnailUrl);
 
         } catch (error) {
         } finally {
@@ -547,11 +549,15 @@ export default function EventsCreatePage() {
 
                                     ) :
 
-                                    (
-                                        <div>
-                                            이미지 업로드
-                                        </div>
-                                    )}
+                                    preview ? (
+                                            <img src={preview} alt="preview" className={styles.previewImg}/>
+                                        ) :
+                                        (
+                                            <div className={styles.uploadLabel}>
+                                                이미지 업로드
+                                            </div>
+                                        )
+                                }
                             </div>
                             <div className={`${styles.textRequired} mt16`}>
                                 카테고리
