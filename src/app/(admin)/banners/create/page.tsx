@@ -263,7 +263,7 @@ export default function BannerCreatePage() {
                                             }
 
                                             const pad = (n: number) => n.toString().padStart(2, '0');
-                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000`;
 
                                             if (field.value !== isoString) {
                                                 field.onChange(isoString);
@@ -301,7 +301,7 @@ export default function BannerCreatePage() {
                                             }
 
                                             const pad = (n: number) => n.toString().padStart(2, '0');
-                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000`;
 
                                             if (field.value !== isoString) {
                                                 field.onChange(isoString);

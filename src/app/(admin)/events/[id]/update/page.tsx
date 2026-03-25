@@ -542,7 +542,7 @@ export default function EventUpdatePage() {
                                             }
 
                                             const pad = (n: number) => n.toString().padStart(2, '0');
-                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000`;
 
                                             if (field.value !== isoString) {
                                                 field.onChange(isoString);
@@ -579,7 +579,7 @@ export default function EventUpdatePage() {
                                             }
 
                                             const pad = (n: number) => n.toString().padStart(2, '0');
-                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+                                            const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000`;
 
                                             if (field.value !== isoString) {
                                                 field.onChange(isoString);
@@ -628,9 +628,9 @@ export default function EventUpdatePage() {
 
                                         // 💡 2. 저장용: 선택한 년, 월, 일, 시, 분 숫자를 그대로 UTC 문자열로 조립
                                         const pad = (n: number) => n.toString().padStart(2, '0');
-                                        const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+                                        const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000`;
 
-                                        field.onChange(isoString); // "2026-03-09T22:30:00.000Z" (string)
+                                        field.onChange(isoString);
                                     };
 
                                     return (
@@ -675,9 +675,9 @@ export default function EventUpdatePage() {
                                         }
 
                                         const pad = (n: number) => n.toString().padStart(2, '0');
-                                        const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000Z`;
+                                        const isoString = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00.000`;
 
-                                        field.onChange(isoString); // "2026-03-09T22:30:00.000Z" (string)
+                                        field.onChange(isoString);
                                     };
 
                                     return (
