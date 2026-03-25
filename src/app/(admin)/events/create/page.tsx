@@ -222,6 +222,7 @@ export default function EventsCreatePage() {
                 [EventActionType.CREATE]: (d, t) => createEvent(d, t),
                 [EventActionType.CREATE_DRAFT]: (d, t) => createDraftEvent(d, t),
                 [EventActionType.REGIST_DRAFT]: (d, t, id) => {
+
                     if (!id) throw new Error("Draft ID가 필요합니다.");
                     return registDraftEvent(d, t, id);
                 },
@@ -284,9 +285,16 @@ export default function EventsCreatePage() {
             type = EventActionType.REGIST_DRAFT;
         }
 
-        await handleSubmit((e) => {
-            onSubmit(e, type);
-        })();
+
+        await handleSubmit(
+            (e) => {
+                console.log("성공", e);
+                onSubmit(e, type);
+            },
+            (errors) => {
+                console.log("실패", errors);
+            }
+        )();
     }
 
     const handleDraftSubmit = async () => {
@@ -301,6 +309,8 @@ export default function EventsCreatePage() {
             showLoading();
             const result = await getEventDetail({id: id});
             const data = result.data;
+
+            console.log(data);
             setDraftId(id);
             setValue("title", data.title, {shouldValidate: true});
             setValue("category", data.category, {shouldValidate: true});
@@ -672,7 +682,6 @@ export default function EventsCreatePage() {
                                                 onChange={handleUpdate}
                                                 placeholderText="날짜 선택"
                                                 dateFormat="yyyy-MM-dd"
-                                                locale="ko"
                                                 className="input-default"
                                             />
 
@@ -721,7 +730,6 @@ export default function EventsCreatePage() {
                                                 onChange={handleUpdate}
                                                 placeholderText="날짜 선택"
                                                 dateFormat="yyyy-MM-dd"
-                                                locale="ko"
                                                 className="input-default"
                                             />
 

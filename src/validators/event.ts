@@ -12,7 +12,7 @@ export const eventSchema = z.object({
     recruitEnd: z.string().nullish(),
     targetRoles:z.array(z.string()).min(1, "직군을 최소 1개 선택해주세요."),
     isFree: z.boolean(),
-    price: z.number().or(z.nan()).or(z.undefined()),
+    price: z.number().nullish(),
     isOnline: z.boolean(),
     locationText: z.string().default("").nullish(),
     locationLink: z.string().nullish(),
