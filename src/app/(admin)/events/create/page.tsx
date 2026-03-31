@@ -178,6 +178,8 @@ export default function EventsCreatePage() {
                 return '주소를 불러오지 못 했습니다.';
             case "COORDINATE_NOT_FOUND":
                 return '주소를 불러오지 못 했습니다.';
+            case 'EVENT_ALREADY_PUBLISHED':
+                return '이미 존재하는 행사명입니다.';
 
         }
         return '등록에 실패했습니다';
